@@ -63,6 +63,37 @@ export const canvasPaletteLight = {
   diffStripRemoved: '#CF2D56CC',
 } as const;
 
+/** IDE `canvas-tokens.d.ts` — present on newer Cursor skills; older snapshots omit these names. */
+export type CanvasHostThemeBrand = 'cursor' | 'grok';
+
+const grokAccentDark = {
+  accent: '#1084FE',
+  buttonBackground: '#1084FE',
+  buttonForeground: '#070707',
+  buttonHoverBackground: '#459FFE',
+  link: '#80BEFE',
+  strokeFocused: '#1084FE',
+} as const;
+
+const grokAccentLight = {
+  accent: '#0C64C1',
+  buttonBackground: '#0C64C1',
+  buttonForeground: '#FAFAFA',
+  buttonHoverBackground: '#1084FE',
+  link: '#0C64C1',
+  strokeFocused: '#0C64C1',
+} as const;
+
+export const canvasPaletteGrokDark: CanvasPalette = {
+  ...canvasPaletteDark,
+  ...grokAccentDark,
+};
+
+export const canvasPaletteGrokLight: CanvasPalette = {
+  ...canvasPaletteLight,
+  ...grokAccentLight,
+};
+
 export interface CanvasPalette {
   readonly foreground: string;
   readonly foregroundSecondary: string;

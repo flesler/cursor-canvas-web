@@ -22,9 +22,9 @@ We implement **one** `cursor/canvas` surface: the IDE SDK snapshot in this repo.
 
 | Script | What it checks |
 |--------|----------------|
-| `pnpm run sync:sdk` | Copy IDE `sdk/*.d.ts` into `test/contract/cursor-sdk/` |
-| `pnpm run test:contract` | `tsc --noEmit` on generated consumer importing every SDK `index.d.ts` export via **this package’s** types |
-| `pnpm run check:sdk-exports` | Name diff: IDE `index.d.ts` vs `dist/shim/cursor-canvas.d.ts` |
+| `pnpm run sync:sdk` | **Manual.** Copy this machine’s IDE `sdk/*.d.ts` into `test/contract/cursor-sdk/`. Commit the snapshot when you intentionally bump the contract target. |
+| `pnpm run test:contract` | Uses the **committed** snapshot only (no live Cursor copy). |
+| `pnpm run check:sdk-live` | Diff this machine’s Cursor SDK vs the built shim. Does not write files. Shim should be a **superset** of both the committed snapshot and the live skill. |
 
 ## Stack
 

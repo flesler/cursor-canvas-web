@@ -72,6 +72,8 @@ export type {
 } from './diff'
 export {
     canvasPaletteDark,
+    canvasPaletteGrokDark,
+    canvasPaletteGrokLight,
     canvasPaletteLight,
     canvasTokens,
     canvasTokensLight,
@@ -81,8 +83,12 @@ export {
     usageColorSequence
 } from './theme'
 export type {
-    CanvasHostTheme, CanvasPalette,
-    CanvasTokens, CategoryPalette,
+    CanvasHostTheme,
+    CanvasHostThemeBrand,
+    CanvasPalette,
+    CanvasTokens,
+    CategoryPalette,
+    ChartPalette,
     Color
 } from './theme'
 export { TodoList, TodoListCard } from './todo'
