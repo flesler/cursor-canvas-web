@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if ! command -v pnpm >/dev/null 2>&1 && [ -s "$HOME/.nvm/nvm.sh" ]; then
+  . "$HOME/.nvm/nvm.sh"
+  nvm use
+fi
+
+if ! pnpm test; then
+  echo "pre-push: test failed"
+  exit 1
+fi
+
+if ! pnpm test:contract:ci; then
+  echo "pre-push: test:contract:ci failed"
+  exit 1
+fi

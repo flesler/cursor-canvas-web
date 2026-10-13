@@ -1,0 +1,24 @@
+#!/bin/sh
+
+if ! command -v pnpm >/dev/null 2>&1 && [ -s "$HOME/.nvm/nvm.sh" ]; then
+  . "$HOME/.nvm/nvm.sh"
+  nvm use
+fi
+
+staged_files=$(git diff --cached --name-only)
+
+if ! pnpm typecheck; then
+  echo "pre-commit: typecheck failed"
+  exit 1
+fi
+
+if ! pnpm lint; then
+  echo "pre-commit: lint failed"
+  exit 1
+fi
+
+for file in $staged_files; do
+  if [ -e "$file" ] || [ -L "$file" ]; then
+    git add -- "$file"
+  fi
+done

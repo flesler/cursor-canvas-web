@@ -51,6 +51,8 @@
     "check:sdk-exports": "node scripts/diff-sdk-exports.mjs",
     "test:contract": "pnpm run build:lib && pnpm run sync:sdk && node scripts/generate-contract-consumer.mjs && pnpm run check:sdk-exports && pnpm exec tsc -p test/contract/tsconfig.json",
     "test:contract:ci": "pnpm run build:lib && node scripts/generate-contract-consumer.mjs && pnpm run check:sdk-exports && pnpm exec tsc -p test/contract/tsconfig.json",
+    "ci:local": "pnpm typecheck && pnpm lint && pnpm test && pnpm test:contract:ci",
+    "prepare": "[ \"$CI\" != \"true\" ] && [ -d node_modules/husky ] && husky || true",
     "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build:lib"
   },
   "peerDependencies": {
@@ -78,6 +80,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
+    "husky": "^9.1.7",
     "jsdom": "^26.0.0",
     "prettier": "^3.5.1",
     "typescript": "^5.7.3",
