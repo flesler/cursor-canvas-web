@@ -1,21 +1,9 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { MantineProvider } from '@mantine/core';
-
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
 
 import { App } from './App';
+import { mountCanvas } from './runtime';
 
-const container = document.getElementById('root');
-if (!container) {
-  throw new Error('Root element #root not found');
-}
-
-createRoot(container).render(
-  <StrictMode>
-    <MantineProvider defaultColorScheme="auto">
-      <App />
-    </MantineProvider>
-  </StrictMode>,
-);
+// Public demo: fixed light (matches README screenshot and typical dashboards).
+// IDE host still controls theme there; use `auto` locally if you prefer OS theme.
+mountCanvas('root', <App />, { defaultColorScheme: 'light' });
