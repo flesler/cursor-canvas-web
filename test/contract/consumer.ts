@@ -126,7 +126,7 @@ import type {
   UsageBarSegment,
 } from 'cursor/canvas';
 
-const _values = {
+const contractValues = {
   BarChart,
   Button,
   Callout,
@@ -181,83 +181,80 @@ const _values = {
   useState,
 };
 
-type _Types = [
-  BarChartProps,
-  ButtonProps,
-  CSSProperties,
-  CalloutProps,
-  CalloutTone,
-  CanvasAction,
+void contractValues;
+
+export type ContractValueExports = typeof contractValues;
+
+export type ContractTypeExports =
+  | BarChartProps
+  | ButtonProps
+  | CSSProperties
+  | CalloutProps
+  | CalloutTone
+  | CanvasAction
+  | CanvasHostTheme
+  | CanvasPalette
+  | CanvasTokens
+  | CardBodyProps
+  | CardHeaderProps
+  | CardProps
+  | CardSize
+  | CardVariant
+  | CategoryPalette
+  | ChartDataPoint
+  | ChartReferenceLine
+  | ChartSeries
+  | ChartTone
+  | CheckboxProps
+  | CodeProps
+  | CollapsibleSectionProps
+  | Color
+  | DAGLayoutEdge
+  | DAGLayoutNode
+  | DAGLayoutOptions
+  | DAGLayoutRank
+  | DAGLayoutResult
+  | DiffLineData
+  | DiffLineType
+  | DiffStatsProps
+  | DiffViewProps
+  | DividerProps
+  | GridProps
+  | H1Props
+  | H2Props
+  | H3Props
+  | IconButtonProps
+  | LineChartProps
+  | LinkProps
+  | PieChartProps
+  | PillProps
+  | PillSize
+  | PillTone
+  | RefObject<HTMLDivElement>
+  | RowProps
+  | SelectOption
+  | SelectProps
+  | SetCanvasState<number>
+  | StackProps
+  | StatProps
+  | StatTone
+  | SwatchProps
+  | TableColumnAlign
+  | TableProps
+  | TableRowTone
+  | TextAreaProps
+  | TextInputProps
+  | TextProps
+  | TextWeight
+  | TodoItem
+  | TodoListCardProps
+  | TodoListProps
+  | TodoStatus
+  | ToggleProps
+  | UsageBarProps
+  | UsageBarSegment;
+
+export type ContractHostThemeExtras = Pick<
   CanvasHostTheme,
-  CanvasPalette,
-  CanvasTokens,
-  CardBodyProps,
-  CardHeaderProps,
-  CardProps,
-  CardSize,
-  CardVariant,
-  CategoryPalette,
-  ChartDataPoint,
-  ChartReferenceLine,
-  ChartSeries,
-  ChartTone,
-  CheckboxProps,
-  CodeProps,
-  CollapsibleSectionProps,
-  Color,
-  DAGLayoutEdge,
-  DAGLayoutNode,
-  DAGLayoutOptions,
-  DAGLayoutRank,
-  DAGLayoutResult,
-  DiffLineData,
-  DiffLineType,
-  DiffStatsProps,
-  DiffViewProps,
-  DividerProps,
-  GridProps,
-  H1Props,
-  H2Props,
-  H3Props,
-  IconButtonProps,
-  LineChartProps,
-  LinkProps,
-  PieChartProps,
-  PillProps,
-  PillSize,
-  PillTone,
-  RowProps,
-  SelectOption,
-  SelectProps,
-  StackProps,
-  StatProps,
-  StatTone,
-  SwatchProps,
-  TableColumnAlign,
-  TableProps,
-  TableRowTone,
-  TextAreaProps,
-  TextInputProps,
-  TextProps,
-  TextWeight,
-  TodoItem,
-  TodoListCardProps,
-  TodoListProps,
-  TodoStatus,
-  ToggleProps,
-  UsageBarProps,
-  UsageBarSegment,
-];
-type _RefObject = RefObject<HTMLDivElement>;
-type _SetCanvasState = SetCanvasState<number>;
-
-const theme = useHostTheme();
-const _themeProbe: unknown = [
-  theme.category.orange,
-  theme.tokens.category.orange,
-  theme.fill.secondary,
-  theme.chart.palette.lightGreen,
-  theme.chart.sequence[0],
-];
-
-export {};
+  'chart' | 'radius' | 'typography' | 'spacing'
+>;
