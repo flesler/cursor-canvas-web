@@ -78,7 +78,10 @@ function seriesColor(tone: ChartTone | undefined, index: number): string {
     : chartColorSequence[index % chartColorSequence.length];
 }
 
-/** Reshape parallel `categories` + `series[]` into Mantine row objects. */
+/**
+ * Fork-only export (not in IDE `index.d.ts`); keeps chart data shaping stable for
+ * Mantine — listed under “fork-only” in `pnpm run check:sdk-exports`.
+ */
 export function reshapeLineChartData(
   categories: string[],
   series: ChartSeries[],

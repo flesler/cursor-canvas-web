@@ -1,9 +1,22 @@
 # IDE SDK compatibility
 
+## Policy
+
+We implement **one** `cursor/canvas` surface: the IDE SDK snapshot in this repo. There is no runtime `v1 → v2` adapter chain.
+
+| Change | What to do |
+|--------|------------|
+| New SDK export / optional prop | Implement in `src/shim/`, `pnpm run sync:sdk`, contract green → **patch** npm |
+| Breaking SDK change | Fix shim or **major** bump; document minimum Cursor / skill date here |
+| Old Cursor / old skill | Not supported on `main`; use an older shim release from git/npm |
+
+**Defensive / back-compat** (extra fields, web-only behavior) lives only at documented boundaries — see `AGENTS.md` — with a short comment or dev log at the call site, not scattered version checks.
+
 ## Snapshot
 
 - **IDE reference:** `~/.cursor/skills-cursor/canvas/sdk/` (synced into `test/contract/cursor-sdk/` via `pnpm run sync:sdk`).
-- **Last synced:** run `pnpm run sync:sdk` and check git history for the date.
+- **Recorded target:** `test/contract/sdk-manifest.json` (date + source path; updated on every sync).
+- **Last synced:** manifest `syncedAt` or git history on `test/contract/cursor-sdk/`.
 
 ## Contract tests
 

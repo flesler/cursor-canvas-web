@@ -330,6 +330,8 @@ export function buildHostTheme(kind: 'light' | 'dark'): CanvasHostTheme {
     tokens,
     palette,
     category,
+    // Back-compat: real IDE canvases read these on useHostTheme(); public hooks.d.ts
+    // is sometimes narrower — see COMPAT.md (not a second theme API version).
     chart: { palette: chartPalette, sequence: chartColorSequence },
     radius: canvasRadius,
     typography: canvasTypography,

@@ -9,4 +9,16 @@ fi
 rm -rf "$DEST"
 mkdir -p "$DEST"
 cp -a "$SRC"/. "$DEST"/
-echo "Synced $(wc -l < "$DEST/index.d.ts") lines of index.d.ts from $SRC"
+LINES=$(wc -l < "$DEST/index.d.ts")
+MANIFEST="$(dirname "$DEST")/sdk-manifest.json"
+node -e "
+const fs = require('fs');
+const manifest = {
+  syncedAt: new Date().toISOString().slice(0, 10),
+  sdkSource: process.argv[1],
+  indexLines: Number(process.argv[2]),
+};
+fs.writeFileSync(process.argv[3], JSON.stringify(manifest, null, 2) + '\n');
+" "$SRC" "$LINES" "$MANIFEST"
+echo "Synced $LINES lines of index.d.ts from $SRC"
+echo "Wrote $MANIFEST"

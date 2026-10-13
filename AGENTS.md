@@ -29,6 +29,17 @@ into the IDE-managed canvases folder so it renders in Cursor too.
   (split into `charts.tsx`, `diff.tsx`, `dag.ts`, `todo.tsx`, `theme.ts`,
   `use-tokens.ts`). Add new canvas API surface there, implemented with Mantine,
   mirroring the SDK declarations, and re-export it from the barrel.
+- **SDK upkeep:** `pnpm run sync:sdk` copies the IDE declarations into
+  `test/contract/cursor-sdk/` and updates `sdk-manifest.json`. Release policy
+  and intentional IDE vs web gaps: [`COMPAT.md`](./COMPAT.md). We do **not** keep
+  parallel implementations per Cursor version.
+- **Back-compat / defensive behavior** only at these boundaries (comment or dev
+  log when behavior differs from the IDE):
+  - `theme.ts` — `buildHostTheme()` extra tokens some canvases read on
+    `useHostTheme()` though `hooks.d.ts` is narrower
+  - `cursor-canvas.tsx` — `useCanvasState` (`localStorage`), `useCanvasAction`
+    (no-op + dev log)
+  - `charts.tsx` — Mantine/Recharts mapping; fork-only `reshapeLineChartData`
 - Semantic colors go through `tone` → `src/shim/theme.ts` (`toneColor`), never
   hard-coded in components.
 - Two settings must stay in sync when changing the alias: `resolve.alias` in
