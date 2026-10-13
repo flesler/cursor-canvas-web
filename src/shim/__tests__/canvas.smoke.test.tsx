@@ -12,7 +12,7 @@ describe('DemoCanvas showcase', () => {
     renderWithProvider(<DemoCanvas />);
 
     expect(
-      screen.getByRole('heading', { name: 'Cursor Canvas on the Web' }),
+      screen.getByRole('heading', { name: 'Cursor Canvas SDK showcase' }),
     ).toBeInTheDocument();
     expect(screen.getByText('live')).toBeInTheDocument();
     expect(
@@ -33,6 +33,7 @@ describe('DemoCanvas showcase', () => {
       'Typography & text',
       'Forms (state persists via useCanvasState)',
       'Theme tokens (useHostTheme)',
+      'Data imports (JSON, YAML, TSV, CSV, JSONL)',
     ]) {
       expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
     }
@@ -47,7 +48,7 @@ describe('DemoCanvas showcase', () => {
       'Write a .canvas.tsx that imports only cursor/canvas.',
       'Vite + tsconfig redirect cursor/canvas at build time.',
       'Mantine implements the same API, props, and tones.',
-      'Static Vite build published to GitHub Pages.',
+      'open-canvas generate → HTML, PNG, PDF beside the canvas.',
     ]) {
       expect(screen.getByText(step)).toBeInTheDocument();
     }
@@ -184,7 +185,7 @@ describe('DemoCanvas showcase', () => {
       expect(screen.getByText(key)).toBeInTheDocument();
     }
     expect(
-      screen.getByRole('link', { name: 'deployed to GitHub Pages' }),
+      screen.getByRole('link', { name: 'open-canvas' }),
     ).toBeInTheDocument();
   });
 });

@@ -256,15 +256,34 @@ export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
     value: point.value,
     color: seriesColor(point.tone, index),
   }));
-  const common = {
-    data: mantineData,
-    size,
-    withTooltip: true as const,
-    style,
-  };
-  return donut ? (
-    <DonutChart {...common} />
+  const chart = donut ? (
+    <DonutChart
+      data={mantineData}
+      size={size}
+      withTooltip
+      style={style}
+    />
   ) : (
-    <MantinePieChart {...common} withLabelsLine={false} />
+    <MantinePieChart
+      data={mantineData}
+      size={size}
+      withTooltip
+      withLabelsLine={false}
+      style={style}
+    />
+  );
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: size,
+        minHeight: size,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {chart}
+    </div>
   );
 }

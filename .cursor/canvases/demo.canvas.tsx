@@ -1,62 +1,174 @@
-/**
- * Showcase canvas — authored against `cursor/canvas` ONLY.
- *
- * This is the single source of truth: the web app imports it directly and the
- * same file is copied into the IDE-managed canvases folder, so Cursor and
- * GitHub Pages render identical source. It doubles as living documentation —
- * a gallery of every shim module, leading with the visuals and ending with a
- * short "how it works". In the IDE `cursor/canvas` is the real SDK; in the web
- * build it is aliased to a Mantine-backed shim.
- */
 import {
-    BarChart,
-    Button,
-    Callout,
-    Card,
-    CardBody,
-    CardHeader,
-    Checkbox,
-    Code,
-    CollapsibleSection,
-    DiffStats,
-    DiffView,
-    Divider,
-    Grid,
-    H1,
-    H2,
-    H3,
-    IconButton,
-    LineChart,
-    Link,
-    PieChart,
-    Pill,
-    Row,
-    Select,
-    Spacer,
-    Stack,
-    Stat,
-    Swatch,
-    Table,
-    Text,
-    TextArea,
-    TextInput,
-    TodoList,
-    TodoListCard,
-    Toggle,
-    UsageBar,
-    colorPalette,
-    computeDAGLayout,
-    mergeStyle,
-    useCanvasAction,
-    useCanvasState,
-    useHostTheme,
-    useMemo,
-    type ChartSeries,
-    type Color,
-    type DiffLineData,
-    type StackProps,
-    type TodoItem,
-} from 'cursor/canvas'
+  BarChart,
+  Button,
+  Callout,
+  Card,
+  CardBody,
+  CardHeader,
+  Checkbox,
+  Code,
+  CollapsibleSection,
+  DiffStats,
+  DiffView,
+  Divider,
+  Grid,
+  H1,
+  H2,
+  H3,
+  IconButton,
+  LineChart,
+  Link,
+  PieChart,
+  Pill,
+  Row,
+  Select,
+  Spacer,
+  Stack,
+  Stat,
+  Swatch,
+  Table,
+  Text,
+  TextArea,
+  TextInput,
+  TodoList,
+  TodoListCard,
+  Toggle,
+  UsageBar,
+  colorPalette,
+  computeDAGLayout,
+  mergeStyle,
+  useCanvasAction,
+  useCanvasState,
+  useHostTheme,
+  useMemo,
+  type ChartSeries,
+  type Color,
+  type DiffLineData,
+  type StackProps,
+  type TodoItem,
+} from 'cursor/canvas';
+
+const daily = [
+  { date: '2026-10-05', deploys: '582', totalDurationP90Sec: '388' },
+  { date: '2026-10-06', deploys: '601', totalDurationP90Sec: '401' },
+  { date: '2026-10-07', deploys: '593', totalDurationP90Sec: '395' },
+  { date: '2026-10-08', deploys: '612', totalDurationP90Sec: '407' },
+  { date: '2026-10-09', deploys: '598', totalDurationP90Sec: '412' },
+  { date: '2026-10-10', deploys: '604', totalDurationP90Sec: '418' },
+  { date: '2026-10-11', deploys: '597', totalDurationP90Sec: '421' },
+];
+const deployEvents = [
+  { date: '2026-10-09', app: 'app-aurora-7f3', durationSec: 2847 },
+  { date: '2026-10-10', app: 'app-mint-2c1', durationSec: 2292 },
+  { date: '2026-10-11', app: 'app-orbit-9aa', durationSec: 1904 },
+];
+const outlierRows = [
+  {
+    app: 'app-aurora-7f3',
+    stack: 'node-20',
+    total: '47m 27s',
+    peak_rss: '4.6 GB',
+    files_pack: '892k',
+  },
+  {
+    app: 'app-mint-2c1',
+    stack: 'dockerfile',
+    total: '38m 12s',
+    peak_rss: '3.9 GB',
+    files_pack: '1.1M',
+  },
+  {
+    app: 'app-orbit-9aa',
+    stack: 'python-3.12',
+    total: '31m 44s',
+    peak_rss: '3.2 GB',
+    files_pack: '214k',
+  },
+  {
+    app: 'app-harbor-4d8',
+    stack: 'ruby-3.3',
+    total: '28m 06s',
+    peak_rss: '2.8 GB',
+    files_pack: '156k',
+  },
+  {
+    app: 'app-crest-1b0',
+    stack: 'go-1.22',
+    total: '24m 51s',
+    peak_rss: '2.4 GB',
+    files_pack: '98k',
+  },
+  {
+    app: 'app-lumen-6e2',
+    stack: 'node-20',
+    total: '22m 33s',
+    peak_rss: '3.1 GB',
+    files_pack: '402k',
+  },
+  {
+    app: 'app-pine-8c4',
+    stack: 'dockerfile',
+    total: '21m 18s',
+    peak_rss: '2.9 GB',
+    files_pack: '678k',
+  },
+  {
+    app: 'app-drift-3f7',
+    stack: 'python-3.12',
+    total: '19m 57s',
+    peak_rss: '2.6 GB',
+    files_pack: '187k',
+  },
+];
+const phaseRssMb = {
+  rows: [
+    { phase: 'clone', p90: 680 },
+    { phase: 'deps', p90: 1843 },
+    { phase: 'compile', p90: 2104 },
+    { phase: 'assets', p90: 1320 },
+    { phase: 'pack', p90: 918 },
+    { phase: 'release', p90: 520 },
+  ],
+};
+const report = {
+  meta: {
+    title: 'Build plane — 7-day OLAP',
+    periodStart: '2026-10-05',
+    periodEnd: '2026-10-11',
+    deployCount: 4187,
+  },
+  kpis: [
+    { label: 'Deploys (7d)', value: '4,187', hint: 'successful only' },
+    { label: 'Total duration p50', value: '89s', hint: 'wall clock' },
+    { label: 'Total duration p90', value: '412s', hint: 'wall clock' },
+    { label: 'Total duration max', value: '47m 27s', hint: 'single outlier' },
+    { label: 'Peak RSS p90', value: '2.1 GB', hint: 'compile phase' },
+    { label: 'Files (deps) p90', value: '118k', hint: 'workspace' },
+  ],
+  durationByPhase: {
+    rows: [
+      { phase: 'clone', p50: 11.6, p90: 27.8 },
+      { phase: 'deps', p50: 44.2, p90: 211.4 },
+      { phase: 'compile', p50: 37.1, p90: 164.7 },
+      { phase: 'assets', p50: 21.3, p90: 94.2 },
+      { phase: 'pack', p50: 7.8, p90: 23.6 },
+      { phase: 'release', p50: 5.9, p90: 13.8 },
+    ],
+  },
+};
+/** Bar/line height in the charts grid; pie `size` matches for visual parity. */
+const SHOWCASE_CHART_HEIGHT = 200;
+
+const OUTLIER_TABLE = {
+  headers: ['App', 'Stack', 'Total', 'Peak RSS', 'Files@pack'],
+  rows: outlierRows.map((r) => [
+    r.app,
+    r.stack,
+    r.total,
+    r.peak_rss,
+    r.files_pack,
+  ]),
+};
 
 /* --------------------------------------------------------------- demo data */
 
@@ -72,7 +184,11 @@ const REQUESTS: ChartSeries[] = [
 const CATEGORIES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const UPTIME: ChartSeries[] = [
-  { name: 'uptime %', data: [99.2, 99.5, 99.1, 99.8, 99.6, 99.9], tone: 'success' },
+  {
+    name: 'uptime %',
+    data: [99.2, 99.5, 99.1, 99.8, 99.6, 99.9],
+    tone: 'success',
+  },
 ];
 const TRAFFIC_SHARE: ChartSeries[] = [
   { name: 'Web', data: [40, 45, 50], tone: 'info' },
@@ -158,8 +274,8 @@ const STEPS: { n: string; title: string; desc: string }[] = [
   },
   {
     n: '4',
-    title: 'Deploy',
-    desc: 'Static Vite build published to GitHub Pages.',
+    title: 'Export',
+    desc: 'open-canvas generate → HTML, PNG, PDF beside the canvas.',
   },
 ];
 
@@ -280,7 +396,7 @@ function DagDiagram() {
 
 /* --------------------------------------------------------------------- main */
 
-export default function DemoCanvas() {
+export default function ShowcaseCanvas() {
   const dispatch = useCanvasAction();
   const [env, setEnv] = useCanvasState('show.env', 'production');
   const [filter, setFilter] = useCanvasState('show.filter', '');
@@ -293,17 +409,30 @@ export default function DemoCanvas() {
   const theme = useHostTheme();
   const dimmed = useMemo(
     () =>
-      new Set(
-        TODOS.filter((t) => t.status === 'completed').map((t) => t.id),
-      ),
+      new Set(TODOS.filter((t) => t.status === 'completed').map((t) => t.id)),
     [],
   );
+
+  const { meta, kpis, durationByPhase } = report;
+  const cap = { color: theme.text.tertiary, fontSize: 12 };
+  const rssRows =
+    (phaseRssMb as { rows?: Array<{ phase: string; p90: number }> }).rows ?? [];
+  const phases = durationByPhase.rows.map((r) => r.phase);
+  const durationSeries: ChartSeries[] = [
+    { name: 'p50', data: durationByPhase.rows.map((r) => r.p50), tone: 'info' },
+    {
+      name: 'p90',
+      data: durationByPhase.rows.map((r) => r.p90),
+      tone: 'warning',
+    },
+  ];
+  const dayLabels = daily.map((d) => d.date.slice(5));
 
   return (
     <Stack gap={20}>
       {/* Header --------------------------------------------------------- */}
       <Row gap={12}>
-        <H1>Cursor Canvas on the Web</H1>
+        <H1>Cursor Canvas SDK showcase</H1>
         <Spacer />
         <Pill tone="info" active={live}>
           {live ? 'live' : 'paused'}
@@ -322,10 +451,9 @@ export default function DemoCanvas() {
       </Row>
 
       <Text tone="secondary">
-        A real Cursor canvas, rendered on the web. It imports only{' '}
-        <Code>cursor/canvas</Code>; a build-time alias swaps that module for a
-        Mantine-backed shim, so one file renders in the IDE and on GitHub Pages.
-        Everything below is one component gallery exercising each shim module.
+        Full <Code>cursor/canvas</Code> gallery plus <Code>./data/*</Code>{' '}
+        imports (JSON, YAML, TSV, CSV, JSONL) — one file for verify, smoke, and
+        exports.
       </Text>
 
       {/* How it works (stepped explanation, not a callout) -------------- */}
@@ -383,37 +511,48 @@ export default function DemoCanvas() {
           </Row>
 
           {tab === 'charts' && (
-            <Grid columns={2} gap={16}>
-              <Card>
-                <CardHeader>Latency (ms)</CardHeader>
-                <CardBody>
-                  <LineChart
-                    categories={CATEGORIES}
-                    series={LATENCY}
-                    height={200}
-                    valueSuffix="ms"
-                  />
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>Requests by source</CardHeader>
-                <CardBody>
-                  <BarChart
-                    categories={CATEGORIES}
-                    series={REQUESTS}
-                    height={200}
-                    stacked
-                  />
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>Test outcomes</CardHeader>
-                <CardBody>
-                  <Row justify="center">
-                    <PieChart data={OUTCOMES} donut size={180} />
-                  </Row>
-                </CardBody>
-              </Card>
+            <Stack gap={16}>
+              <Grid columns={3} gap={16} align="start">
+                <Card>
+                  <CardHeader>Latency (ms)</CardHeader>
+                  <CardBody>
+                    <LineChart
+                      categories={CATEGORIES}
+                      series={LATENCY}
+                      height={SHOWCASE_CHART_HEIGHT}
+                      valueSuffix="ms"
+                    />
+                  </CardBody>
+                </Card>
+                <Card>
+                  <CardHeader>Requests by source</CardHeader>
+                  <CardBody>
+                    <BarChart
+                      categories={CATEGORIES}
+                      series={REQUESTS}
+                      height={SHOWCASE_CHART_HEIGHT}
+                      stacked
+                    />
+                  </CardBody>
+                </Card>
+                <Card>
+                  <CardHeader>Test outcomes</CardHeader>
+                  <CardBody
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minHeight: SHOWCASE_CHART_HEIGHT,
+                    }}
+                  >
+                    <PieChart
+                      data={OUTCOMES}
+                      donut
+                      size={SHOWCASE_CHART_HEIGHT}
+                    />
+                  </CardBody>
+                </Card>
+              </Grid>
               <Card>
                 <CardHeader>Callout tones</CardHeader>
                 <CardBody>
@@ -436,7 +575,7 @@ export default function DemoCanvas() {
                   </Stack>
                 </CardBody>
               </Card>
-            </Grid>
+            </Stack>
           )}
 
           {tab === 'table' && (
@@ -502,9 +641,7 @@ export default function DemoCanvas() {
                 yMin={99}
                 yMax={100}
                 valueSuffix="%"
-                referenceLines={[
-                  { value: 99.9, label: 'SLO', tone: 'danger' },
-                ]}
+                referenceLines={[{ value: 99.9, label: 'SLO', tone: 'danger' }]}
               />
             </CardBody>
           </Card>
@@ -591,7 +728,7 @@ export default function DemoCanvas() {
 
       {/* Disclosure & tasks -------------------------------------------- */}
       <Section title="Disclosure & tasks">
-        <Grid columns={2} gap={16}>
+        <Grid columns={2} gap={16} align="start">
           <Stack gap={8}>
             <CollapsibleSection
               title="Tools"
@@ -615,7 +752,11 @@ export default function DemoCanvas() {
                 </Text>
               </CollapsibleSection>
             </CollapsibleSection>
-            <TodoListCard todos={TODOS} dimmedTodoIds={dimmed} defaultExpanded />
+            <TodoListCard
+              todos={TODOS}
+              dimmedTodoIds={dimmed}
+              defaultExpanded
+            />
           </Stack>
           <Card>
             <CardHeader>TodoList (selectable)</CardHeader>
@@ -801,13 +942,117 @@ export default function DemoCanvas() {
         </Row>
       </Section>
 
+      <Section title="Data imports (JSON, YAML, TSV, CSV, JSONL)">
+        <Stack gap={12}>
+          <Text size="small" tone="secondary">
+            {meta.periodStart} → {meta.periodEnd} ·{' '}
+            {meta.deployCount.toLocaleString()} deploys · {deployEvents.length}{' '}
+            tail events in JSONL
+          </Text>
+          <Grid columns={3} gap={12}>
+            {kpis.map((k) => (
+              <Card key={k.label}>
+                <CardBody>
+                  <Stat value={k.value} label={k.label} />
+                  {k.hint && (
+                    <Text style={{ ...cap, marginTop: 4 }}>{k.hint}</Text>
+                  )}
+                </CardBody>
+              </Card>
+            ))}
+          </Grid>
+          <Callout tone="danger" title="Deps dominates p90; watch tail latency">
+            Deps ~51% of p90 wall time (211s of 412s). Max 47m 27s is 6.9× p90 —
+            check cache and workspace size.
+          </Callout>
+          <Grid columns={2} gap={16}>
+            <Card>
+              <CardHeader>Phase duration (p50 vs p90)</CardHeader>
+              <CardBody>
+                <Text style={cap}>Y: seconds</Text>
+                <BarChart
+                  categories={phases}
+                  series={durationSeries}
+                  height={260}
+                  valueSuffix="s"
+                />
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader>Peak RSS by phase (p90)</CardHeader>
+              <CardBody>
+                <Text style={cap}>Y: megabytes</Text>
+                <BarChart
+                  categories={rssRows.map((r) => r.phase)}
+                  series={[
+                    {
+                      name: 'p90',
+                      data: rssRows.map((r) => r.p90),
+                      tone: 'danger',
+                    },
+                  ]}
+                  height={260}
+                  valueSuffix=" MB"
+                />
+              </CardBody>
+            </Card>
+          </Grid>
+          <Grid columns={2} gap={16}>
+            <Card>
+              <CardHeader>Daily total duration p90</CardHeader>
+              <CardBody>
+                <LineChart
+                  categories={dayLabels}
+                  series={[
+                    {
+                      name: 'p90',
+                      data: daily.map((d) => Number(d.totalDurationP90Sec)),
+                      tone: 'info',
+                    },
+                  ]}
+                  height={220}
+                  valueSuffix="s"
+                />
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader>Daily deploy volume</CardHeader>
+              <CardBody>
+                <BarChart
+                  categories={dayLabels}
+                  series={[
+                    {
+                      name: 'deploys',
+                      data: daily.map((d) => Number(d.deploys)),
+                      tone: 'neutral',
+                    },
+                  ]}
+                  height={220}
+                />
+              </CardBody>
+            </Card>
+          </Grid>
+          <Card>
+            <CardHeader>Slowest deploys (top 8)</CardHeader>
+            <CardBody>
+              <Table
+                headers={OUTLIER_TABLE.headers}
+                columnAlign={['left', 'left', 'right', 'right', 'right']}
+                rows={OUTLIER_TABLE.rows}
+                striped
+              />
+            </CardBody>
+          </Card>
+        </Stack>
+      </Section>
+
       <Divider />
       <Text size="small" tone="tertiary">
-        Imports only <Code>cursor/canvas</Code> · colors from{' '}
-        <Code>useHostTheme()</Code> · category hues from <Code>colorPalette</Code>{' '}
-        ({Object.keys(colorPalette).length} hues) ·{' '}
-        <Link href="https://pages.github.com/">deployed to GitHub Pages</Link> ·
-        one file renders in both the IDE and the browser.
+        <Code>cursor/canvas</Code> + relative data files · colors from{' '}
+        <Code>useHostTheme()</Code> · category hues from{' '}
+        <Code>colorPalette</Code> ({Object.keys(colorPalette).length} hues) ·{' '}
+        <Link href="https://github.com/flesler/open-canvas">open-canvas</Link> ·
+        same file in the IDE, CLI verify, and static exports.
       </Text>
     </Stack>
   );
