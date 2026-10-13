@@ -12,89 +12,87 @@
  * IDE and the web build.
  */
 import {
-  type CSSProperties,
-  type ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
+    ActionIcon,
+    Alert,
+    Badge,
+    Group,
+    Button as MantineButton,
+    Card as MantineCard,
+    Checkbox as MantineCheckbox,
+    Divider as MantineDivider,
+    Select as MantineSelect,
+    Stack as MantineStack,
+    Table as MantineTable,
+    Text as MantineText,
+    Textarea as MantineTextarea,
+    TextInput as MantineTextInput,
+    Switch,
+    Title,
+} from '@mantine/core'
 import {
-  ActionIcon,
-  Alert,
-  Badge,
-  Button as MantineButton,
-  Card as MantineCard,
-  Checkbox as MantineCheckbox,
-  Divider as MantineDivider,
-  Group,
-  Select as MantineSelect,
-  Stack as MantineStack,
-  Switch,
-  Table as MantineTable,
-  Text as MantineText,
-  Textarea as MantineTextarea,
-  TextInput as MantineTextInput,
-  Title,
-} from '@mantine/core';
+    createContext,
+    useCallback,
+    useContext,
+    useState,
+    type CSSProperties,
+    type ReactNode,
+} from 'react'
 
-import { toneColor, usageColorSequence, type Color } from './theme';
-import { useHostTheme } from './use-tokens';
+import { toneColor, usageColorSequence, type Color } from './theme'
+import { useHostTheme } from './use-tokens'
 
 /* --------------------------------------------------------------- re-exports */
 
-export type { CSSProperties, RefObject } from 'react';
-export { useEffect, useMemo, useRef, useState } from 'react';
+export { useEffect, useMemo, useRef, useState } from 'react'
+export type { CSSProperties, RefObject } from 'react'
+export { BarChart, LineChart, PieChart, reshapeLineChartData } from './charts'
+export type {
+    BarChartProps,
+    ChartDataPoint,
+    ChartReferenceLine,
+    ChartSeries,
+    ChartTone,
+    LineChartProps,
+    PieChartProps
+} from './charts'
+export { computeDAGLayout } from './dag'
+export type {
+    DAGLayoutEdge,
+    DAGLayoutNode,
+    DAGLayoutOptions,
+    DAGLayoutRank,
+    DAGLayoutResult
+} from './dag'
+export { DiffStats, DiffView } from './diff'
+export type {
+    DiffLineData,
+    DiffLineType,
+    DiffStatsProps,
+    DiffViewProps
+} from './diff'
 export {
-  canvasPaletteDark,
-  canvasPaletteLight,
-  canvasTokens,
-  canvasTokensLight,
-  categoryPaletteDark,
-  categoryPaletteLight,
-  colorPalette,
-  usageColorSequence,
-} from './theme';
+    canvasPaletteDark,
+    canvasPaletteLight,
+    canvasTokens,
+    canvasTokensLight,
+    categoryPaletteDark,
+    categoryPaletteLight,
+    colorPalette,
+    usageColorSequence
+} from './theme'
 export type {
-  CanvasPalette,
-  CanvasTokens,
-  CanvasHostTheme,
-  CategoryPalette,
-  Color,
-} from './theme';
-export { BarChart, LineChart, PieChart, reshapeLineChartData } from './charts';
+    CanvasHostTheme, CanvasPalette,
+    CanvasTokens, CategoryPalette,
+    Color
+} from './theme'
+export { TodoList, TodoListCard } from './todo'
 export type {
-  BarChartProps,
-  ChartDataPoint,
-  ChartReferenceLine,
-  ChartSeries,
-  ChartTone,
-  LineChartProps,
-  PieChartProps,
-} from './charts';
-export { DiffStats, DiffView } from './diff';
-export type {
-  DiffLineData,
-  DiffLineType,
-  DiffStatsProps,
-  DiffViewProps,
-} from './diff';
-export { computeDAGLayout } from './dag';
-export type {
-  DAGLayoutEdge,
-  DAGLayoutNode,
-  DAGLayoutOptions,
-  DAGLayoutRank,
-  DAGLayoutResult,
-} from './dag';
-export { TodoList, TodoListCard } from './todo';
-export type {
-  TodoItem,
-  TodoListCardProps,
-  TodoListProps,
-  TodoStatus,
-} from './todo';
-export { useHostTheme } from './use-tokens';
+    TodoItem,
+    TodoListCardProps,
+    TodoListProps,
+    TodoStatus
+} from './todo'
+export { useHostTheme } from './use-tokens'
 
 /* ------------------------------------------------------------------ hooks */
 
@@ -634,10 +632,10 @@ export type TableRowTone =
   | 'info'
   | 'neutral';
 export interface TableProps {
-  headers: ReactNode[];
-  rows: ReactNode[][];
-  columnAlign?: Array<TableColumnAlign | undefined>;
-  rowTone?: Array<TableRowTone | undefined>;
+  headers: readonly ReactNode[];
+  rows: readonly (readonly ReactNode[])[];
+  columnAlign?: readonly (TableColumnAlign | undefined)[];
+  rowTone?: readonly (TableRowTone | undefined)[];
   framed?: boolean;
   striped?: boolean;
   stickyHeader?: boolean;

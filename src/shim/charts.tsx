@@ -5,17 +5,17 @@
  * flat `data` array for pie); Mantine wants an array of row objects plus a
  * series descriptor. We reshape here and map `tone` -> color.
  */
-import type { CSSProperties } from 'react';
-import type { ChartReferenceLineProps } from '@mantine/charts';
+import type { ChartReferenceLineProps } from '@mantine/charts'
 import {
-  AreaChart,
-  BarChart as MantineBarChart,
-  LineChart as MantineLineChart,
-  PieChart as MantinePieChart,
-  DonutChart,
-} from '@mantine/charts';
+    AreaChart,
+    DonutChart,
+    BarChart as MantineBarChart,
+    LineChart as MantineLineChart,
+    PieChart as MantinePieChart,
+} from '@mantine/charts'
+import type { CSSProperties } from 'react'
 
-import { chartColorSequence, toneHex } from './theme';
+import { chartColorSequence, toneHex } from './theme'
 
 export type ChartTone = 'success' | 'danger' | 'warning' | 'info' | 'neutral';
 
