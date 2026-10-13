@@ -9,52 +9,54 @@
  * build it is aliased to a Mantine-backed shim.
  */
 import {
-  BarChart,
-  Button,
-  Callout,
-  Card,
-  CardBody,
-  CardHeader,
-  Checkbox,
-  Code,
-  CollapsibleSection,
-  DiffStats,
-  DiffView,
-  Divider,
-  Grid,
-  H1,
-  H2,
-  H3,
-  IconButton,
-  LineChart,
-  Link,
-  PieChart,
-  Pill,
-  Row,
-  Select,
-  Spacer,
-  Stack,
-  Stat,
-  Swatch,
-  Table,
-  Text,
-  TextArea,
-  TextInput,
-  Toggle,
-  TodoList,
-  TodoListCard,
-  UsageBar,
-  colorPalette,
-  computeDAGLayout,
-  mergeStyle,
-  useCanvasAction,
-  useCanvasState,
-  useHostTheme,
-  type ChartSeries,
-  type Color,
-  type DiffLineData,
-  type TodoItem,
-} from 'cursor/canvas';
+    BarChart,
+    Button,
+    Callout,
+    Card,
+    CardBody,
+    CardHeader,
+    Checkbox,
+    Code,
+    CollapsibleSection,
+    DiffStats,
+    DiffView,
+    Divider,
+    Grid,
+    H1,
+    H2,
+    H3,
+    IconButton,
+    LineChart,
+    Link,
+    PieChart,
+    Pill,
+    Row,
+    Select,
+    Spacer,
+    Stack,
+    Stat,
+    Swatch,
+    Table,
+    Text,
+    TextArea,
+    TextInput,
+    TodoList,
+    TodoListCard,
+    Toggle,
+    UsageBar,
+    colorPalette,
+    computeDAGLayout,
+    mergeStyle,
+    useCanvasAction,
+    useCanvasState,
+    useHostTheme,
+    useMemo,
+    type ChartSeries,
+    type Color,
+    type DiffLineData,
+    type StackProps,
+    type TodoItem,
+} from 'cursor/canvas'
 
 /* --------------------------------------------------------------- demo data */
 
@@ -68,6 +70,21 @@ const REQUESTS: ChartSeries[] = [
   { name: 'Cloud', data: [8, 9, 14, 11, 16, 21], tone: 'neutral' },
 ];
 const CATEGORIES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+const UPTIME: ChartSeries[] = [
+  { name: 'uptime %', data: [99.2, 99.5, 99.1, 99.8, 99.6, 99.9], tone: 'success' },
+];
+const TRAFFIC_SHARE: ChartSeries[] = [
+  { name: 'Web', data: [40, 45, 50], tone: 'info' },
+  { name: 'API', data: [35, 30, 25], tone: 'success' },
+  { name: 'Batch', data: [25, 25, 25], tone: 'neutral' },
+];
+const SHARE_WEEKS = ['W1', 'W2', 'W3'];
+const QUEUE: ChartSeries[] = [
+  { name: 'ready', data: [12, 8, 15, 6], tone: 'neutral' },
+  { name: 'retry', data: [3, 5, 2, 4], tone: 'warning' },
+];
+const QUEUE_STAGES = ['ingest', 'build', 'test', 'ship'];
 
 const OUTCOMES = [
   { label: 'Passing', value: 68, tone: 'success' as const },
@@ -175,7 +192,7 @@ function Section({
   children,
 }: {
   title: string;
-  children: JSX.Element;
+  children: StackProps['children'];
 }) {
   return (
     <Stack gap={10}>
@@ -274,8 +291,12 @@ export default function DemoCanvas() {
   const [selectedTodo, setSelectedTodo] = useCanvasState('show.todo', '3');
 
   const theme = useHostTheme();
-  const dimmed = new Set(
-    TODOS.filter((t) => t.status === 'completed').map((t) => t.id),
+  const dimmed = useMemo(
+    () =>
+      new Set(
+        TODOS.filter((t) => t.status === 'completed').map((t) => t.id),
+      ),
+    [],
   );
 
   return (
@@ -406,6 +427,12 @@ export default function DemoCanvas() {
                     <Callout tone="danger" title="Failing">
                       1 service degraded.
                     </Callout>
+                    <Callout tone="info" title="Info">
+                      Contract tests track the IDE SDK snapshot.
+                    </Callout>
+                    <Callout tone="neutral">
+                      Neutral callout for secondary notices.
+                    </Callout>
                   </Stack>
                 </CardBody>
               </Card>
@@ -457,6 +484,82 @@ export default function DemoCanvas() {
             </Card>
           )}
         </Stack>
+      </Section>
+
+      {/* Chart axis / guides (exercises referenceLines, fill, normalized) */}
+      <Section title="Chart guides & axes">
+        <Grid columns={2} gap={16}>
+          <Card>
+            <CardHeader>Uptime % (SLO line, fill, tight axis)</CardHeader>
+            <CardBody>
+              <LineChart
+                categories={CATEGORIES}
+                series={UPTIME}
+                height={180}
+                fill
+                showValues
+                beginAtZero={false}
+                yMin={99}
+                yMax={100}
+                valueSuffix="%"
+                referenceLines={[
+                  { value: 99.9, label: 'SLO', tone: 'danger' },
+                ]}
+              />
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>Traffic share (normalized)</CardHeader>
+            <CardBody>
+              <BarChart
+                categories={SHARE_WEEKS}
+                series={TRAFFIC_SHARE}
+                height={180}
+                normalized
+                stacked
+                valueSuffix="%"
+              />
+            </CardBody>
+          </Card>
+          <Card variant="borderless">
+            <CardHeader>Queue depth (horizontal stacked)</CardHeader>
+            <CardBody>
+              <BarChart
+                categories={QUEUE_STAGES}
+                series={QUEUE}
+                height={160}
+                horizontal
+                stacked
+                showValues
+              />
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>Grouped bars + budget line</CardHeader>
+            <CardBody>
+              <BarChart
+                categories={CATEGORIES.slice(0, 4)}
+                series={[
+                  {
+                    name: 'Actual',
+                    data: [180, 210, 195, 240],
+                    tone: 'info',
+                  },
+                  {
+                    name: 'Forecast',
+                    data: [200, 200, 200, 200],
+                    tone: 'neutral',
+                  },
+                ]}
+                height={180}
+                yMax={280}
+                referenceLines={[
+                  { value: 200, label: 'Budget', tone: 'warning' },
+                ]}
+              />
+            </CardBody>
+          </Card>
+        </Grid>
       </Section>
 
       {/* Graph ---------------------------------------------------------- */}
@@ -553,6 +656,8 @@ export default function DemoCanvas() {
                 <Pill tone="neutral" keyboardHint="⇧Tab">
                   hint
                 </Pill>
+                <Pill tone="deleted">deleted</Pill>
+                <Pill tone="renamed">renamed</Pill>
               </Row>
             </Stack>
           </CardBody>
@@ -632,6 +737,36 @@ export default function DemoCanvas() {
 
       {/* Theme tokens --------------------------------------------------- */}
       <Section title="Theme tokens (useHostTheme)">
+        <Stack gap={10}>
+          <Text size="small" tone="secondary">
+            Chart palette keys (some IDE canvases read{' '}
+            <Code>theme.chart.palette</Code>):
+          </Text>
+          <Row gap={10} wrap>
+            {(
+              [
+                ['green', theme.chart.palette.green],
+                ['blue', theme.chart.palette.blue],
+                ['neutralLine', theme.chart.palette.neutralLine],
+              ] as const
+            ).map(([key, hex]) => (
+              <Row key={key} gap={6}>
+                <span
+                  style={{
+                    width: 16,
+                    height: 16,
+                    borderRadius: 4,
+                    background: hex,
+                    border: `1px solid ${theme.stroke.secondary}`,
+                  }}
+                />
+                <Text size="small" tone="tertiary">
+                  chart.{key}
+                </Text>
+              </Row>
+            ))}
+          </Row>
+        </Stack>
         <Row gap={10} wrap>
           {(['primary', 'secondary', 'tertiary', 'quaternary'] as const).map(
             (key) => (

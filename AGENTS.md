@@ -77,7 +77,8 @@ CI (`.github/workflows/ci.yml`) runs typecheck + lint + test on every push/PR.
 - TypeScript strict; no `any`.
 - Prettier: single quotes, trailing commas, semicolons, 80 cols.
 - Tests live in `src/shim/__tests__/`. Cover new shim helpers, hook behavior,
-  and a smoke render of any canvas.
+  and a smoke render of `.cursor/canvases/demo.canvas.tsx` (max SDK surface).
+  When adding shim API, extend the demo + `canvas.smoke.test.tsx` assertions.
 - After editing `.cursor/canvases/*.canvas.tsx`, copy it into the managed
   folder so the IDE picks up the change.
 - Comments explain intent/trade-offs, not what the code obviously does.

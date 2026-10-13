@@ -46,3 +46,6 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+      - name: Contract (committed SDK snapshot)
+        run: pnpm test:contract:ci

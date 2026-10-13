@@ -1,7 +1,7 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { fireEvent, screen } from '@testing-library/react';
-import { renderWithProvider } from '../../test/render';
-import DemoCanvas from '../../../.cursor/canvases/demo.canvas';
+import { fireEvent, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it } from 'vitest'
+import DemoCanvas from '../../../.cursor/canvases/demo.canvas'
+import { renderWithProvider } from '../../test/render'
 
 // useCanvasState persists the active tab to localStorage; clear it so each test
 // starts from the canvas's default tab ('charts').
@@ -26,6 +26,7 @@ describe('DemoCanvas showcase', () => {
     for (const title of [
       'How it works',
       'Charts, tables & context',
+      'Chart guides & axes',
       'Graph layout (computeDAGLayout)',
       'Diff',
       'Disclosure & tasks',
@@ -71,6 +72,20 @@ describe('DemoCanvas showcase', () => {
     // Callout tones.
     expect(screen.getByText('Deployed')).toBeInTheDocument();
     expect(screen.getByText('Failing')).toBeInTheDocument();
+    expect(screen.getByText('Contract tests track the IDE SDK snapshot.')).toBeInTheDocument();
+    expect(
+      screen.getByText('Neutral callout for secondary notices.'),
+    ).toBeInTheDocument();
+  });
+
+  it('renders chart guide section headers (axis, SLO, normalized, horizontal)', () => {
+    renderWithProvider(<DemoCanvas />);
+
+    expect(screen.getByText('Uptime % (SLO line, fill, tight axis)')).toBeInTheDocument();
+    expect(screen.getByText('Traffic share (normalized)')).toBeInTheDocument();
+    expect(screen.getByText('Queue depth (horizontal stacked)')).toBeInTheDocument();
+    expect(screen.getByText('Grouped bars + budget line')).toBeInTheDocument();
+    // Reference-line labels render in real layout (Playwright), not jsdom charts.
   });
 
   it('reveals the data Table when the "table" tab is selected', () => {
@@ -135,6 +150,8 @@ describe('DemoCanvas showcase', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Semibold emphasis.')).toBeInTheDocument();
     expect(screen.getByText('Italic remark.')).toBeInTheDocument();
+    expect(screen.getByText('deleted')).toBeInTheDocument();
+    expect(screen.getByText('renamed')).toBeInTheDocument();
   });
 
   it('renders the form controls wired to useCanvasState', () => {
@@ -160,6 +177,9 @@ describe('DemoCanvas showcase', () => {
       'text.secondary',
       'text.tertiary',
       'text.quaternary',
+      'chart.green',
+      'chart.blue',
+      'chart.neutralLine',
     ]) {
       expect(screen.getByText(key)).toBeInTheDocument();
     }

@@ -6,7 +6,9 @@ Deploy **Cursor canvases** to the web.
 
 A Cursor canvas is a `.tsx` that imports only from `cursor/canvas`. That module isn't an installable package; it's provided by the Cursor IDE at compile time, so a canvas can't build or render anywhere outside the IDE. This project is an open, **Mantine-backed shim** of `cursor/canvas`. A build-time Vite alias swaps the module for the shim, so the same `.tsx` renders in the Cursor IDE and on the web. No converter, no fork of your source.
 
-**Upstream demo:** <https://thisismydesign.github.io/cursor-canvas-web/> (this fork uses the same demo canvas; deploy your own `dist/` from `pnpm build`)
+**Live demo (this fork):** <https://flesler.github.io/cursor-canvas-web/> — built from
+[`.cursor/canvases/demo.canvas.tsx`](./.cursor/canvases/demo.canvas.tsx) (max SDK showcase + vitest smoke).
+**Upstream reference:** <https://thisismydesign.github.io/cursor-canvas-web/>
 
 ![The demo canvas rendered on the web](docs/demo-screenshot.png)
 
@@ -138,7 +140,7 @@ single source of truth: the web app imports it directly, and the same file is
 copied into Cursor's managed canvases folder so it renders in the IDE too.
 
 The deployed result lives at
-<https://thisismydesign.github.io/cursor-canvas-web/>.
+<https://flesler.github.io/cursor-canvas-web/>.
 
 `deploy.yml` builds and publishes to GitHub Pages on push to `main` via
 `configure-pages` / `upload-pages-artifact` / `deploy-pages`. The Vite `base`
@@ -204,7 +206,7 @@ publish only needs:
 
 ```bash
 npm login
-npm publish --access public
+npm publish --access public --tag latest
 ```
 
 `--access public` is required for the scoped package. Publishing needs 2FA

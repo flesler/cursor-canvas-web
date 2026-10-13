@@ -50,6 +50,7 @@
     "sync:sdk": "bash scripts/sync-cursor-sdk-snapshot.sh",
     "check:sdk-exports": "node scripts/diff-sdk-exports.mjs",
     "test:contract": "pnpm run build:lib && pnpm run sync:sdk && node scripts/generate-contract-consumer.mjs && pnpm run check:sdk-exports && pnpm exec tsc -p test/contract/tsconfig.json",
+    "test:contract:ci": "pnpm run build:lib && node scripts/generate-contract-consumer.mjs && pnpm run check:sdk-exports && pnpm exec tsc -p test/contract/tsconfig.json",
     "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build:lib"
   },
   "peerDependencies": {
