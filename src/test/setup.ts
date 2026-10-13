@@ -3,7 +3,10 @@ import { cleanup } from '@testing-library/react';
 import { afterEach } from 'vitest';
 
 // Node 25+ may install a stub `localStorage` that is not a Storage (no clear/getItem).
-if (typeof localStorage === 'undefined' || typeof localStorage.clear !== 'function') {
+if (
+  typeof localStorage === 'undefined' ||
+  typeof localStorage.clear !== 'function'
+) {
   const store = new Map<string, string>();
   const memoryStorage: Storage = {
     get length() {
