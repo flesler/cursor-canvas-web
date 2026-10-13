@@ -1,10 +1,12 @@
 # cursor-canvas-web
 
+> **Fork** of [`@thisismydesign/cursor-canvas-web`](https://github.com/thisismydesign/cursor-canvas-web) ([npm](https://www.npmjs.com/package/@thisismydesign/cursor-canvas-web)), published as **`@flesler/cursor-canvas-web`**. We keep the shim aligned with the Cursor IDE `cursor/canvas` SDK (see [`COMPAT.md`](./COMPAT.md), `pnpm test:contract`) and track current stack versions — **Mantine 8** and **Recharts 2 or 3** — instead of the upstream Mantine 7 line.
+
 Deploy **Cursor canvases** to the web.
 
 A Cursor canvas is a `.tsx` that imports only from `cursor/canvas`. That module isn't an installable package; it's provided by the Cursor IDE at compile time, so a canvas can't build or render anywhere outside the IDE. This project is an open, **Mantine-backed shim** of `cursor/canvas`. A build-time Vite alias swaps the module for the shim, so the same `.tsx` renders in the Cursor IDE and on the web. No converter, no fork of your source.
 
-**Live example:** <https://thisismydesign.github.io/cursor-canvas-web/>
+**Upstream demo:** <https://thisismydesign.github.io/cursor-canvas-web/> (this fork uses the same demo canvas; deploy your own `dist/` from `pnpm build`)
 
 ![The demo canvas rendered on the web](docs/demo-screenshot.png)
 
@@ -17,7 +19,7 @@ implemented with Mantine. A Vite alias (plus a matching tsconfig path) resolves
 and your canvas source never changes.
 
 ```
-your.canvas.tsx          Vite alias +          @thisismydesign/cursor-canvas-web
+your.canvas.tsx          Vite alias +          @flesler/cursor-canvas-web
 imports "cursor/canvas" -> tsconfig paths    -> Mantine core + @mantine/charts
                                              -> Vite build -> any static host
 ```
@@ -28,17 +30,17 @@ compiles and renders unchanged in the Cursor IDE.
 ## Install
 
 ```bash
-pnpm add @thisismydesign/cursor-canvas-web
-# peer deps your app must supply:
-pnpm add react react-dom @mantine/core @mantine/charts recharts
+pnpm add @flesler/cursor-canvas-web
+# peer deps your app must supply (Mantine 8 + matching charts styles):
+pnpm add react react-dom @mantine/core@^8 @mantine/charts@^8 recharts@^2
 ```
 
 The package ships two entry points:
 
 | Import                                      | Provides                                      |
 | ------------------------------------------- | --------------------------------------------- |
-| `@thisismydesign/cursor-canvas-web`         | The `cursor/canvas` shim (components, hooks). |
-| `@thisismydesign/cursor-canvas-web/runtime` | `CanvasRoot` + `mountCanvas` web host glue.   |
+| `@flesler/cursor-canvas-web`         | The `cursor/canvas` shim (components, hooks). |
+| `@flesler/cursor-canvas-web/runtime` | `CanvasRoot` + `mountCanvas` web host glue.   |
 
 ## Use it in your project
 
@@ -51,7 +53,7 @@ canvas sources pure while resolving the bare specifier to the shim:
 // vite.config.ts — runtime
 resolve: {
   alias: {
-    'cursor/canvas': '@thisismydesign/cursor-canvas-web',
+    'cursor/canvas': '@flesler/cursor-canvas-web',
   },
 }
 ```
@@ -59,7 +61,7 @@ resolve: {
 ```jsonc
 // tsconfig.json — types
 "paths": {
-  "cursor/canvas": ["./node_modules/@thisismydesign/cursor-canvas-web"]
+  "cursor/canvas": ["./node_modules/@flesler/cursor-canvas-web"]
 }
 ```
 
@@ -69,7 +71,7 @@ Use the `mountCanvas` helper (it wraps `MantineProvider` for you):
 
 ```tsx
 // src/main.tsx
-import { mountCanvas } from '@thisismydesign/cursor-canvas-web/runtime';
+import { mountCanvas } from '@flesler/cursor-canvas-web/runtime';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
 import MyCanvas from '../.cursor/canvases/my.canvas';
@@ -80,7 +82,7 @@ mountCanvas('root', <MyCanvas />);
 Or, if you manage your own React root, wrap the tree with `CanvasRoot`:
 
 ```tsx
-import { CanvasRoot } from '@thisismydesign/cursor-canvas-web/runtime';
+import { CanvasRoot } from '@flesler/cursor-canvas-web/runtime';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
 
@@ -113,9 +115,12 @@ The shim implements the **full public `cursor/canvas` surface**:
 - Charts: `LineChart`, `BarChart`, `PieChart`
 - Rich: `Swatch`, `UsageBar`, `CollapsibleSection`, `TodoList`/`TodoListCard`,
   `DiffView`/`DiffStats`, `computeDAGLayout`
-- Hooks: `useCanvasState`, `useHostTheme`, `useCanvasAction`
-- Tokens: `colorPalette`, `usageColorSequence`, `canvasTokens(Light)`,
-  `canvasPalette(Dark|Light)`
+- Hooks: `useCanvasState`, `useHostTheme`, `useCanvasAction` (+ React
+  `useState` / `useEffect` / `useRef` / `useMemo` re-exported from the barrel)
+- Tokens: `categoryPalette(Dark|Light)`, `colorPalette`, `usageColorSequence`,
+  `canvasTokens(Light)`, `canvasPalette(Dark|Light)`; `useHostTheme()` also
+  exposes `category`, `chart.palette` / `chart.sequence`, `radius`, `typography`,
+  and `spacing` (see `COMPAT.md` for IDE vs web)
 
 Known fidelity gaps (behavior is reproduced, not the exact renderer):
 `DiffView` skips Shiki syntax highlighting (plain-text fallback), and
@@ -157,6 +162,8 @@ Validation gate:
 pnpm typecheck      # tsc --noEmit, strict
 pnpm lint           # eslint
 pnpm test           # vitest run
+pnpm test:contract  # IDE SDK snapshot + export parity + consumer tsc
+pnpm sync:sdk       # refresh test/contract/cursor-sdk from ~/.cursor/skills-cursor/canvas/sdk
 pnpm build          # typecheck + vite build -> dist/
 ```
 

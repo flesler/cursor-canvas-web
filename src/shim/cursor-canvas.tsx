@@ -12,88 +12,87 @@
  * IDE and the web build.
  */
 import {
-  type CSSProperties,
-  type ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
+    ActionIcon,
+    Alert,
+    Badge,
+    Group,
+    Button as MantineButton,
+    Card as MantineCard,
+    Checkbox as MantineCheckbox,
+    Divider as MantineDivider,
+    Select as MantineSelect,
+    Stack as MantineStack,
+    Table as MantineTable,
+    Text as MantineText,
+    Textarea as MantineTextarea,
+    TextInput as MantineTextInput,
+    Switch,
+    Title,
+} from '@mantine/core'
 import {
-  ActionIcon,
-  Alert,
-  Badge,
-  Button as MantineButton,
-  Card as MantineCard,
-  Checkbox as MantineCheckbox,
-  Divider as MantineDivider,
-  Group,
-  Select as MantineSelect,
-  Stack as MantineStack,
-  Switch,
-  Table as MantineTable,
-  Text as MantineText,
-  Textarea as MantineTextarea,
-  TextInput as MantineTextInput,
-  Title,
-} from '@mantine/core';
+    createContext,
+    useCallback,
+    useContext,
+    useState,
+    type CSSProperties,
+    type ReactNode,
+} from 'react'
 
-import {
-  colorPalette,
-  toneColor,
-  usageColorSequence,
-  type Color,
-} from './theme';
-import { useHostTheme } from './use-tokens';
+import { toneColor, usageColorSequence, type Color } from './theme'
+import { useHostTheme } from './use-tokens'
 
 /* --------------------------------------------------------------- re-exports */
 
+export { useEffect, useMemo, useRef, useState } from 'react'
+export type { CSSProperties, RefObject } from 'react'
+export { BarChart, LineChart, PieChart, reshapeLineChartData } from './charts'
+export type {
+    BarChartProps,
+    ChartDataPoint,
+    ChartReferenceLine,
+    ChartSeries,
+    ChartTone,
+    LineChartProps,
+    PieChartProps
+} from './charts'
+export { computeDAGLayout } from './dag'
+export type {
+    DAGLayoutEdge,
+    DAGLayoutNode,
+    DAGLayoutOptions,
+    DAGLayoutRank,
+    DAGLayoutResult
+} from './dag'
+export { DiffStats, DiffView } from './diff'
+export type {
+    DiffLineData,
+    DiffLineType,
+    DiffStatsProps,
+    DiffViewProps
+} from './diff'
 export {
-  canvasPaletteDark,
-  canvasPaletteLight,
-  canvasTokens,
-  canvasTokensLight,
-  colorPalette,
-  usageColorSequence,
-} from './theme';
+    canvasPaletteDark,
+    canvasPaletteLight,
+    canvasTokens,
+    canvasTokensLight,
+    categoryPaletteDark,
+    categoryPaletteLight,
+    colorPalette,
+    usageColorSequence
+} from './theme'
 export type {
-  CanvasPalette,
-  CanvasTokens,
-  CanvasHostTheme,
-  Color,
-} from './theme';
-export { BarChart, LineChart, PieChart, reshapeLineChartData } from './charts';
+    CanvasHostTheme, CanvasPalette,
+    CanvasTokens, CategoryPalette,
+    Color
+} from './theme'
+export { TodoList, TodoListCard } from './todo'
 export type {
-  BarChartProps,
-  ChartDataPoint,
-  ChartSeries,
-  ChartTone,
-  LineChartProps,
-  PieChartProps,
-} from './charts';
-export { DiffStats, DiffView } from './diff';
-export type {
-  DiffLineData,
-  DiffLineType,
-  DiffStatsProps,
-  DiffViewProps,
-} from './diff';
-export { computeDAGLayout } from './dag';
-export type {
-  DAGLayoutEdge,
-  DAGLayoutNode,
-  DAGLayoutOptions,
-  DAGLayoutRank,
-  DAGLayoutResult,
-} from './dag';
-export { TodoList, TodoListCard } from './todo';
-export type {
-  TodoItem,
-  TodoListCardProps,
-  TodoListProps,
-  TodoStatus,
-} from './todo';
-export { useHostTheme } from './use-tokens';
+    TodoItem,
+    TodoListCardProps,
+    TodoListProps,
+    TodoStatus
+} from './todo'
+export { useHostTheme } from './use-tokens'
 
 /* ------------------------------------------------------------------ hooks */
 
@@ -142,7 +141,17 @@ export function useCanvasState<T>(
 
 export type CanvasAction =
   | { type: 'openAgent'; agentId: string }
-  | { type: 'newComposerChat'; userPrompt?: string };
+  | { type: 'newComposerChat'; userPrompt?: string }
+  | {
+      type: 'openFile';
+      path: string;
+      selection?: {
+        startLineNumber: number;
+        startColumn: number;
+        endLineNumber?: number;
+        endColumn?: number;
+      };
+    };
 
 /**
  * IDE actions are not available on the web host, so the returned dispatch is a
@@ -925,6 +934,7 @@ export interface SwatchProps {
   style?: CSSProperties;
 }
 export function Swatch({ color, style }: SwatchProps) {
+  const theme = useHostTheme();
   return (
     <span
       style={{
@@ -932,7 +942,7 @@ export function Swatch({ color, style }: SwatchProps) {
         width: 14,
         height: 14,
         borderRadius: 4,
-        background: colorPalette[color],
+        background: theme.category[color],
         flex: '0 0 auto',
         ...style,
       }}
@@ -989,7 +999,7 @@ export function UsageBar({
               ? segment.value
               : 0;
           const color =
-            colorPalette[
+            theme.category[
               segment.color ??
                 usageColorSequence[index % usageColorSequence.length]
             ];

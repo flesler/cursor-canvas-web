@@ -1,7 +1,8 @@
 {
-  "name": "@thisismydesign/cursor-canvas-web",
+  "name": "@flesler/cursor-canvas-web",
   "private": false,
-  "version": "0.3.0",
+  "version": "0.4.0",
+  "repository": "github:flesler/cursor-canvas-web",
   "type": "module",
   "description": "Deploy your Cursor canvases to the web.",
   "license": "MIT",
@@ -46,20 +47,23 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "sync:sdk": "bash scripts/sync-cursor-sdk-snapshot.sh",
+    "check:sdk-exports": "node scripts/diff-sdk-exports.mjs",
+    "test:contract": "pnpm run build:lib && pnpm run sync:sdk && node scripts/generate-contract-consumer.mjs && pnpm run check:sdk-exports && pnpm exec tsc -p test/contract/tsconfig.json",
     "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build:lib"
   },
   "peerDependencies": {
-    "@mantine/charts": "^7.17.0 || ^8.0.0",
-    "@mantine/core": "^7.17.0 || ^8.0.0",
+    "@mantine/charts": "^8.3.0",
+    "@mantine/core": "^8.3.0",
     "react": "^18.3.1 || ^19.0.0",
     "react-dom": "^18.3.1 || ^19.0.0",
-    "recharts": "^2.15.0"
+    "recharts": "^2.15.0 || ^3.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
-    "@mantine/charts": "^7.17.0",
-    "@mantine/core": "^7.17.0",
-    "@mantine/hooks": "^7.17.0",
+    "@mantine/charts": "^8.3.1",
+    "@mantine/core": "^8.3.1",
+    "@mantine/hooks": "^8.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^2.15.0",

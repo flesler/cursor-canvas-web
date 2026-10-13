@@ -6,6 +6,7 @@
  * series descriptor. We reshape here and map `tone` -> color.
  */
 import type { CSSProperties } from 'react';
+import type { ChartReferenceLineProps } from '@mantine/charts';
 import {
   AreaChart,
   BarChart as MantineBarChart,
@@ -26,7 +27,20 @@ export type ChartSeries = {
   tone?: ChartTone;
 };
 
-export type BarChartProps = {
+export type ChartReferenceLine = {
+  value: number;
+  label?: string;
+  tone?: ChartTone;
+};
+
+type ValueAxisProps = {
+  beginAtZero?: boolean;
+  yMin?: number;
+  yMax?: number;
+  referenceLines?: ChartReferenceLine[];
+};
+
+export type BarChartProps = ValueAxisProps & {
   categories: string[];
   series: ChartSeries[];
   height?: number;
@@ -34,15 +48,20 @@ export type BarChartProps = {
   horizontal?: boolean;
   normalized?: boolean;
   valueSuffix?: string;
+  valuePrefix?: string;
+  showValues?: boolean;
   style?: CSSProperties;
 };
 
-export type LineChartProps = {
+export type LineChartProps = ValueAxisProps & {
   categories: string[];
   series: ChartSeries[];
   height?: number;
   fill?: boolean;
   valueSuffix?: string;
+  valuePrefix?: string;
+  showValues?: boolean;
+  showHoverGuide?: boolean;
   style?: CSSProperties;
 };
 
@@ -66,7 +85,9 @@ export function reshapeLineChartData(
 ): Record<string, string | number>[] {
   return categories.map((category, index) => {
     const row: Record<string, string | number> = { category };
-    for (const s of series) row[s.name] = s.data[index] ?? 0;
+    for (const s of series) {
+      row[s.name] = s.data[index] ?? 0;
+    }
     return row;
   });
 }
@@ -78,8 +99,64 @@ function toMantineSeries(series: ChartSeries[]) {
   }));
 }
 
-function suffixFormatter(valueSuffix?: string) {
-  return valueSuffix ? (value: number) => `${value}${valueSuffix}` : undefined;
+function valueFormatter(valueSuffix?: string, valuePrefix?: string) {
+  if (!valueSuffix && !valuePrefix) {
+    return undefined;
+  }
+  return (value: number) => `${valuePrefix ?? ''}${value}${valueSuffix ?? ''}`;
+}
+
+function mantineReferenceLines(
+  lines: ChartReferenceLine[] | undefined,
+  horizontal: boolean,
+): ChartReferenceLineProps[] | undefined {
+  if (!lines?.length) {
+    return undefined;
+  }
+  return lines.map((line) => ({
+    ...(horizontal ? { x: line.value } : { y: line.value }),
+    label: line.label,
+    color: line.tone ? toneHex[line.tone] : toneHex.neutral,
+  }));
+}
+
+type AxisChartProps = {
+  yAxisProps?: { domain: [number | string, number | string] };
+  xAxisProps?: { domain: [number | string, number | string] };
+  referenceLines?: ChartReferenceLineProps[];
+};
+
+function valueAxisChartProps(
+  opts: ValueAxisProps & {
+    horizontal?: boolean;
+    stacked?: boolean;
+    normalized?: boolean;
+  },
+): AxisChartProps {
+  const ref = mantineReferenceLines(opts.referenceLines, !!opts.horizontal);
+  if (opts.stacked || opts.normalized) {
+    return { referenceLines: ref };
+  }
+  const beginAtZero = opts.beginAtZero !== false;
+  const domain: [number | string, number | string] = [
+    opts.yMin ?? (beginAtZero ? 0 : 'auto'),
+    opts.yMax ?? 'auto',
+  ];
+  if (opts.horizontal) {
+    return { xAxisProps: { domain }, referenceLines: ref };
+  }
+  return { yAxisProps: { domain }, referenceLines: ref };
+}
+
+function defaultShowBarValues(
+  showValues: boolean | undefined,
+  series: ChartSeries[],
+  categories: string[],
+): boolean {
+  if (showValues !== undefined) {
+    return showValues;
+  }
+  return series.length === 1 && categories.length <= 8;
 }
 
 export function LineChart({
@@ -88,10 +165,24 @@ export function LineChart({
   height = 240,
   fill,
   valueSuffix,
+  valuePrefix,
+  showValues,
+  showHoverGuide = true,
+  beginAtZero,
+  yMin,
+  yMax,
+  referenceLines,
   style,
 }: LineChartProps) {
   const data = reshapeLineChartData(categories, series);
   const mantineSeries = toMantineSeries(series);
+  const axis = valueAxisChartProps({
+    beginAtZero,
+    yMin,
+    yMax,
+    referenceLines,
+    horizontal: false,
+  });
   const common = {
     h: height,
     data,
@@ -99,7 +190,10 @@ export function LineChart({
     series: mantineSeries,
     curveType: 'monotone' as const,
     withLegend: series.length > 1,
-    valueFormatter: suffixFormatter(valueSuffix),
+    valueFormatter: valueFormatter(valueSuffix, valuePrefix),
+    withPointLabels: showValues ?? categories.length <= 20,
+    tooltipProps: showHoverGuide ? undefined : { cursor: false },
+    ...axis,
     style,
   };
   return fill ? <AreaChart {...common} /> : <MantineLineChart {...common} />;
@@ -113,10 +207,29 @@ export function BarChart({
   horizontal,
   normalized,
   valueSuffix,
+  valuePrefix,
+  showValues,
+  beginAtZero,
+  yMin,
+  yMax,
+  referenceLines,
   style,
 }: BarChartProps) {
   const data = reshapeLineChartData(categories, series);
   const type = normalized ? 'percent' : stacked ? 'stacked' : 'default';
+  const axis = valueAxisChartProps({
+    beginAtZero,
+    yMin,
+    yMax,
+    referenceLines,
+    horizontal,
+    stacked,
+    normalized,
+  });
+  const withBarValueLabel =
+    !stacked &&
+    !normalized &&
+    defaultShowBarValues(showValues, series, categories);
   return (
     <MantineBarChart
       h={height}
@@ -126,13 +239,15 @@ export function BarChart({
       type={type}
       orientation={horizontal ? 'vertical' : 'horizontal'}
       withLegend={series.length > 1}
-      valueFormatter={suffixFormatter(valueSuffix)}
+      valueFormatter={valueFormatter(valueSuffix, valuePrefix)}
+      withBarValueLabel={withBarValueLabel}
+      {...axis}
       style={style}
     />
   );
 }
 
-export function PieChart({ data, size = 180, donut, style }: PieChartProps) {
+export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
   const mantineData = data.map((point, index) => ({
     name: point.label,
     value: point.value,

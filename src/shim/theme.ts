@@ -23,6 +23,7 @@ export const canvasPaletteDark = {
   strokePrimary: '#E4E4E433',
   strokeSecondary: '#E4E4E41F',
   strokeTertiary: '#E4E4E414',
+  strokeFocused: '#599CE7',
   accent: '#599CE7',
   buttonBackground: '#599CE7',
   buttonForeground: '#191c22',
@@ -50,6 +51,7 @@ export const canvasPaletteLight = {
   strokePrimary: '#14141433',
   strokeSecondary: '#1414141F',
   strokeTertiary: '#14141414',
+  strokeFocused: '#3685BF',
   accent: '#3685BF',
   buttonBackground: '#3685BF',
   buttonForeground: '#FCFCFC',
@@ -77,6 +79,7 @@ export interface CanvasPalette {
   readonly strokePrimary: string;
   readonly strokeSecondary: string;
   readonly strokeTertiary: string;
+  readonly strokeFocused: string;
   readonly accent: string;
   readonly buttonBackground: string;
   readonly buttonForeground: string;
@@ -88,7 +91,44 @@ export interface CanvasPalette {
   readonly diffStripRemoved: string;
 }
 
-function buildTokens(palette: CanvasPalette) {
+export type Color =
+  | 'gray'
+  | 'purple'
+  | 'green'
+  | 'yellow'
+  | 'cyan'
+  | 'pink'
+  | 'blue'
+  | 'orange'
+  | 'red';
+
+export type CategoryPalette = Readonly<Record<Color, string>>;
+
+export const categoryPaletteDark: CategoryPalette = {
+  gray: '#8888A8E0',
+  purple: '#7B64B8F0',
+  green: '#1F8A65E8',
+  yellow: '#E8C030E0',
+  cyan: '#2A9A8AE0',
+  pink: '#C85898E0',
+  blue: '#2E79B5E0',
+  orange: '#F0A040E0',
+  red: '#C04848E0',
+};
+
+export const categoryPaletteLight: CategoryPalette = {
+  gray: '#8888A8E0',
+  purple: '#7B64B8F0',
+  green: '#1F8A65E8',
+  yellow: '#E8C030E0',
+  cyan: '#2A9A8AE0',
+  pink: '#C85898E0',
+  blue: '#2E79B5E0',
+  orange: '#F0A088E0',
+  red: '#CF2D56E0',
+};
+
+function buildTokens(palette: CanvasPalette, category: CategoryPalette) {
   return {
     bg: {
       editor: palette.editor,
@@ -107,6 +147,7 @@ function buildTokens(palette: CanvasPalette) {
       primary: palette.strokePrimary,
       secondary: palette.strokeSecondary,
       tertiary: palette.strokeTertiary,
+      focused: palette.strokeFocused,
     },
     fill: {
       primary: palette.fillPrimary,
@@ -125,26 +166,23 @@ function buildTokens(palette: CanvasPalette) {
       stripAdded: palette.diffStripAdded,
       stripRemoved: palette.diffStripRemoved,
     },
+    category,
   };
 }
 
 export type CanvasTokens = ReturnType<typeof buildTokens>;
 
-export const canvasTokens = buildTokens(canvasPaletteDark);
-export const canvasTokensLight = buildTokens(canvasPaletteLight);
+export const canvasTokens = buildTokens(
+  canvasPaletteDark,
+  categoryPaletteDark,
+);
+export const canvasTokensLight = buildTokens(
+  canvasPaletteLight,
+  categoryPaletteLight,
+);
 
-/** Shared 7-hue category palette for `Swatch`, `UsageBar`, etc. */
-export const colorPalette = {
-  gray: '#8888A8E0',
-  purple: '#7B64B8F0',
-  green: '#1F8A65E8',
-  yellow: '#E8C030E0',
-  pink: '#C85898E0',
-  blue: '#2E79B5E0',
-  orange: '#F0A040E0',
-} as const;
-
-export type Color = keyof typeof colorPalette;
+/** Legacy name; prefer `useHostTheme().category`. */
+export const colorPalette = categoryPaletteDark;
 
 /** Auto-color rotation for `UsageBar` segments without an explicit color. */
 export const usageColorSequence: readonly Color[] = [
@@ -152,10 +190,75 @@ export const usageColorSequence: readonly Color[] = [
   'purple',
   'green',
   'yellow',
+  'cyan',
   'pink',
   'orange',
+  'red',
   'gray',
 ];
+
+/** Chart palette keys (IDE `canvas-tokens.d.ts` — not re-exported from SDK `index.d.ts`). */
+export const chartPalette = {
+  green: '#1F8A65E8',
+  darkGreen: '#0D855AE0',
+  lightGreen: '#52B896E0',
+  mintGreen: '#7DCAB0E0',
+  blue: '#2E79B5E0',
+  lightBlue: '#70B0D8E0',
+  indigo: '#5A6CC0F0',
+  lightIndigo: '#9AAADCE0',
+  purple: '#7B64B8F0',
+  lightPurple: '#AA98D8E0',
+  warmPink: '#C85898E0',
+  lightPink: '#E8A0C4E0',
+  brightOrange: '#F0A040E0',
+  deepOrange: '#C06028E0',
+  goldenYellow: '#E8C030E0',
+  darkAmber: '#C04848E0',
+  warmPeach: '#F0A088E0',
+  vibrantTeal: '#2A9A8AE0',
+  muted: '#8888A8E0',
+  neutralLine: '#888899D0',
+} as const;
+
+export type ChartPalette = typeof chartPalette;
+
+/** Typography / spacing / radius from IDE `theme.d.ts` (available on `useHostTheme()`). */
+export const canvasTypography = {
+  h1: { fontSize: '24px', lineHeight: '30px', fontWeight: 590 },
+  h2: { fontSize: '18px', lineHeight: '24px', fontWeight: 590 },
+  h3: { fontSize: '16px', lineHeight: '22px', fontWeight: 590 },
+  body: { fontSize: '14px', lineHeight: '20px', fontWeight: 400 },
+  small: { fontSize: '12px', lineHeight: '16px', fontWeight: 400 },
+} as const;
+
+export const canvasSpacing = {
+  '0.5': 2,
+  '1': 4,
+  '1.5': 6,
+  '2': 8,
+  '2.5': 10,
+  '3': 12,
+  '3.5': 14,
+  '4': 16,
+  '4.5': 18,
+  '5': 20,
+  '6': 24,
+  '7': 28,
+  '8': 32,
+  '9': 36,
+  '10': 40,
+} as const;
+
+export const canvasRadius = {
+  none: 0,
+  xs: 2,
+  sm: 4,
+  md: 6,
+  lg: 8,
+  xl: 12,
+  full: 9999,
+} as const;
 
 /** Ordered hues for automatic chart-series coloring. */
 export const chartColorSequence: readonly string[] = [
@@ -205,10 +308,31 @@ export interface CanvasHostTheme extends CanvasTokens {
   readonly kind: string;
   readonly tokens: CanvasTokens;
   readonly palette: CanvasPalette;
+  readonly category: CategoryPalette;
+  /** Used by some IDE canvases for custom SVG; see COMPAT.md. */
+  readonly chart: {
+    readonly palette: ChartPalette;
+    readonly sequence: readonly string[];
+  };
+  readonly radius: typeof canvasRadius;
+  readonly typography: typeof canvasTypography;
+  readonly spacing: typeof canvasSpacing;
 }
 
 export function buildHostTheme(kind: 'light' | 'dark'): CanvasHostTheme {
   const tokens = kind === 'dark' ? canvasTokens : canvasTokensLight;
   const palette = kind === 'dark' ? canvasPaletteDark : canvasPaletteLight;
-  return { ...tokens, kind, tokens, palette };
+  const category =
+    kind === 'dark' ? categoryPaletteDark : categoryPaletteLight;
+  return {
+    ...tokens,
+    kind,
+    tokens,
+    palette,
+    category,
+    chart: { palette: chartPalette, sequence: chartColorSequence },
+    radius: canvasRadius,
+    typography: canvasTypography,
+    spacing: canvasSpacing,
+  };
 }
