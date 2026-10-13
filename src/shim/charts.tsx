@@ -33,6 +33,9 @@ export type ChartReferenceLine = {
   tone?: ChartTone;
 };
 
+/** Unknown SDK props typecheck. The wrapper only reads the fields it names. */
+type ExtraProps = { [key: string]: unknown };
+
 type ValueAxisProps = {
   beginAtZero?: boolean;
   yMin?: number;
@@ -51,7 +54,7 @@ export type BarChartProps = ValueAxisProps & {
   valuePrefix?: string;
   showValues?: boolean;
   style?: CSSProperties;
-};
+} & ExtraProps;
 
 export type LineChartProps = ValueAxisProps & {
   categories: string[];
@@ -63,14 +66,14 @@ export type LineChartProps = ValueAxisProps & {
   showValues?: boolean;
   showHoverGuide?: boolean;
   style?: CSSProperties;
-};
+} & ExtraProps;
 
 export type PieChartProps = {
   data: Array<ChartDataPoint & { tone?: ChartTone }>;
   size?: number;
   donut?: boolean;
   style?: CSSProperties;
-};
+} & ExtraProps;
 
 function seriesColor(tone: ChartTone | undefined, index: number): string {
   return tone

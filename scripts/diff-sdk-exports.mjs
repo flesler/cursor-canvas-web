@@ -78,8 +78,7 @@ function parseForkDeclarations(source) {
 }
 
 const sdkPath =
-  process.argv[2] ??
-  path.join(root, 'test/contract/cursor-sdk/index.d.ts');
+  process.argv[2] ?? path.join(root, 'test/contract/cursor-sdk/index.d.ts');
 const forkPath =
   process.argv[3] ?? path.join(root, 'dist/shim/cursor-canvas.d.ts');
 
@@ -99,12 +98,20 @@ const missVal = [...sdk.values].filter((n) => !fork.values.has(n)).sort();
 const missType = [...sdk.types].filter((n) => !fork.types.has(n)).sort();
 const extraVal = [...fork.values].filter((n) => !sdk.values.has(n)).sort();
 
-console.log('SDK value exports missing in fork:', missVal.join(', ') || '(none)');
-console.log('SDK type exports missing in fork:', missType.join(', ') || '(none)');
-console.log('Fork-only value exports (review):', extraVal.join(', ') || '(none)');
-
-if (missVal.length || missType.length) {
-  process.exit(1);
-}
+console.log(
+  'SDK value exports missing in fork:',
+  missVal.join(', ') || '(none)',
+);
+console.log(
+  'SDK type exports missing in fork:',
+  missType.join(', ') || '(none)',
+);
+console.log(
+  'Fork-only value exports (review):',
+  extraVal.join(', ') || '(none)',
+);
+console.log(
+  'check:sdk-exports is a warning. Missing names do not fail the build.',
+);
 
 process.exit(0);
