@@ -6,8 +6,8 @@
  * series descriptor. We reshape here and map `tone` -> color.
  */
 import type {
-  ChartReferenceLineProps,
-  LineChartCurveType,
+    ChartReferenceLineProps,
+    LineChartCurveType,
 } from '@mantine/charts'
 import {
     AreaChart,
@@ -376,6 +376,35 @@ function pieLegendSeries(
   }));
 }
 
+function DonutCenterLabel({
+  total,
+  family,
+  primary,
+  subtitle,
+}: {
+  total: number;
+  family: string;
+  primary: string;
+  subtitle: string;
+}) {
+  return (
+    <text
+      x="50%"
+      y="50%"
+      textAnchor="middle"
+      dominantBaseline="central"
+      fontFamily={family}
+    >
+      <tspan x="50%" dy="-0.4em" fontSize={20} fontWeight={600} fill={primary}>
+        {total}
+      </tspan>
+      <tspan x="50%" dy="1.55em" fontSize={16} fontWeight={500} fill={subtitle}>
+        Total
+      </tspan>
+    </text>
+  );
+}
+
 export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
   const [highlighted, setHighlighted] = useState<string | null>(null);
   const theme = useHostTheme();
@@ -400,10 +429,16 @@ export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
       size={size}
       thickness={pieDonutThickness(size)}
       withTooltip
-      chartLabel={total}
       cellProps={(cell) => pieCellProps(cell.name)}
       {...pieAngles}
-    />
+    >
+      <DonutCenterLabel
+        total={total}
+        family={theme.typography.fontFamily}
+        primary={theme.text.primary}
+        subtitle={theme.text.secondary}
+      />
+    </DonutChart>
   ) : (
     <MantinePieChart
       data={mantineData}
