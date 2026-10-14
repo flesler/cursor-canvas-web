@@ -141,7 +141,7 @@ export function TodoListCard({
           gap: 8,
           width: '100%',
           padding: '6px 10px',
-          background: 'transparent',
+          background: theme.fill.secondary,
           border: 'none',
           cursor: 'pointer',
           color: theme.text.secondary,

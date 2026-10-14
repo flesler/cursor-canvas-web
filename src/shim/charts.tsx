@@ -5,40 +5,55 @@
  * flat `data` array for pie); Mantine wants an array of row objects plus a
  * series descriptor. We reshape here and map `tone` -> color.
  */
-import type { ChartReferenceLineProps } from '@mantine/charts';
+import type {
+  ChartReferenceLineProps,
+  LineChartCurveType,
+} from '@mantine/charts'
 import {
-  AreaChart,
-  DonutChart,
-  BarChart as MantineBarChart,
-  LineChart as MantineLineChart,
-  PieChart as MantinePieChart,
-} from '@mantine/charts';
-import { toneHex } from './theme';
-import { useHostTheme } from './use-tokens';
+    AreaChart,
+    ChartLegend,
+    DonutChart,
+    BarChart as MantineBarChart,
+    LineChart as MantineLineChart,
+    PieChart as MantinePieChart,
+} from '@mantine/charts'
+import { useState } from 'react'
+import { toneHex } from './theme'
+import { useHostTheme } from './use-tokens'
 
 export type {
-  BarChartProps,
-  ChartDataPoint,
-  ChartReferenceLine,
-  ChartSeries,
-  ChartTone,
-  LineChartProps,
-  PieChartProps,
-} from '../vendor/canvas-sdk/chart-primitives.js';
+    BarChartProps,
+    ChartDataPoint,
+    ChartReferenceLine,
+    ChartSeries,
+    ChartTone,
+    LineChartProps,
+    PieChartProps
+} from '../vendor/canvas-sdk/chart-primitives.js'
 
 import type {
-  BarChartProps,
-  ChartReferenceLine,
-  ChartSeries,
-  ChartTone,
-  LineChartProps,
-  PieChartProps,
-} from '../vendor/canvas-sdk/chart-primitives.js';
+    BarChartProps,
+    ChartReferenceLine,
+    ChartSeries,
+    ChartTone,
+    LineChartProps,
+    PieChartProps,
+} from '../vendor/canvas-sdk/chart-primitives.js'
 
 type ValueAxisProps = Pick<
   BarChartProps,
   'beginAtZero' | 'yMin' | 'yMax' | 'referenceLines'
 >;
+
+/** Mantine cartesian charts default legend to top; IDE places it below, centered. */
+const CHART_LEGEND_PROPS = {
+  verticalAlign: 'bottom' as const,
+  align: 'center' as const,
+};
+
+const CHART_LEGEND_STYLES = {
+  legend: { justifyContent: 'center' },
+} as const;
 
 function useSeriesColor(): (
   tone: ChartTone | undefined,
@@ -48,6 +63,13 @@ function useSeriesColor(): (
   const sequence = theme.chart.sequence;
   return (tone, index) =>
     tone ? toneHex[tone] : sequence[index % sequence.length];
+}
+
+/** IDE charts use host foreground for axes/legends, not Mantine `dimmed`. */
+function useChartColorProps(): { textColor: string; barLabelColor: string } {
+  const theme = useHostTheme();
+  const text = theme.text.primary;
+  return { textColor: text, barLabelColor: text };
 }
 
 /**
@@ -78,9 +100,6 @@ function toMantineSeries(
 }
 
 function valueFormatter(valueSuffix?: string, valuePrefix?: string) {
-  if (!valueSuffix && !valuePrefix) {
-    return undefined;
-  }
   return (value: number) => `${valuePrefix ?? ''}${value}${valueSuffix ?? ''}`;
 }
 
@@ -137,6 +156,72 @@ function defaultShowBarValues(
   return series.length === 1 && categories.length <= 8;
 }
 
+const HORIZONTAL_CATEGORY_LABEL_MAX = 14;
+
+function truncateCategoryAxisLabel(text: string): string {
+  if (text.length <= HORIZONTAL_CATEGORY_LABEL_MAX) {
+    return text;
+  }
+  return `${text.slice(0, HORIZONTAL_CATEGORY_LABEL_MAX - 1)}…`;
+}
+
+function horizontalCategoryAxisTick(props: {
+  x?: string | number;
+  y?: string | number;
+  payload?: { value?: string | number };
+}) {
+  const x = typeof props.x === 'number' ? props.x : Number(props.x) || 0;
+  const y = typeof props.y === 'number' ? props.y : Number(props.y) || 0;
+  const full = String(props.payload?.value ?? '');
+  const display = truncateCategoryAxisLabel(full);
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={-10}
+        y={0}
+        dy={4}
+        textAnchor="end"
+        fill="currentColor"
+        fontSize={12}
+      >
+        <title>{full}</title>
+        {display}
+      </text>
+    </g>
+  );
+}
+
+function barValueLabelProps(barLabelColor: string) {
+  return {
+    fontWeight: 700,
+    fill: barLabelColor,
+  };
+}
+
+function horizontalBarProps() {
+  return {
+    yAxisProps: {
+      tick: horizontalCategoryAxisTick,
+      width: 96,
+    },
+    barChartProps: {
+      margin: { right: 32 },
+    },
+  };
+}
+
+/** Room above vertical bars so value labels are not clipped. */
+function verticalBarLabelProps() {
+  return {
+    barChartProps: {
+      margin: { top: 22 },
+    },
+  };
+}
+
+/** Shim-only: IDE line/area charts use straight segments unless `smooth` is set. */
+export type LineChartShimProps = LineChartProps & { smooth?: boolean };
+
 export function LineChart({
   categories,
   series,
@@ -151,8 +236,10 @@ export function LineChart({
   yMax,
   referenceLines,
   style,
-}: LineChartProps) {
+  smooth,
+}: LineChartShimProps) {
   const seriesColor = useSeriesColor();
+  const chartColors = useChartColorProps();
   const data = reshapeLineChartData(categories, series);
   const mantineSeries = toMantineSeries(series, seriesColor);
   const axis = valueAxisChartProps({
@@ -167,11 +254,17 @@ export function LineChart({
     data,
     dataKey: 'category',
     series: mantineSeries,
-    curveType: 'monotone' as const,
+    curveType: (smooth ? 'monotone' : 'linear') as LineChartCurveType,
     withLegend: series.length > 1,
+    legendProps: CHART_LEGEND_PROPS,
     valueFormatter: valueFormatter(valueSuffix, valuePrefix),
     withPointLabels: showValues ?? categories.length <= 20,
     tooltipProps: showHoverGuide ? undefined : { cursor: false },
+    styles: {
+      ...CHART_LEGEND_STYLES,
+      legendItemName: { color: chartColors.textColor },
+    },
+    ...chartColors,
     ...axis,
     style,
   };
@@ -195,6 +288,7 @@ export function BarChart({
   style,
 }: BarChartProps) {
   const seriesColor = useSeriesColor();
+  const chartColors = useChartColorProps();
   const data = reshapeLineChartData(categories, series);
   const type = normalized ? 'percent' : stacked ? 'stacked' : 'default';
   const axis = valueAxisChartProps({
@@ -219,44 +313,148 @@ export function BarChart({
       type={type}
       orientation={horizontal ? 'vertical' : 'horizontal'}
       withLegend={series.length > 1}
+      legendProps={CHART_LEGEND_PROPS}
       valueFormatter={valueFormatter(valueSuffix, valuePrefix)}
       withBarValueLabel={withBarValueLabel}
+      {...(withBarValueLabel
+        ? { valueLabelProps: barValueLabelProps(chartColors.barLabelColor) }
+        : {})}
+      {...(horizontal
+        ? horizontalBarProps()
+        : withBarValueLabel
+          ? verticalBarLabelProps()
+          : {})}
+      styles={{
+        ...CHART_LEGEND_STYLES,
+        legendItemName: { color: chartColors.textColor },
+      }}
+      {...chartColors}
       {...axis}
       style={style}
     />
   );
 }
 
+/** Match IDE pie orientation (Recharts default is 180° off). */
+const PIE_START_ANGLE = 180;
+const PIE_END_ANGLE = 540;
+
+function formatPieSlicePercent(value: number, total: number): string {
+  if (total <= 0) {
+    return '0%';
+  }
+  const percent = (value / total) * 100;
+  if (percent < 10 && Math.abs(percent - Math.round(percent)) > 0.05) {
+    return `${percent.toFixed(1)}%`;
+  }
+  return `${Math.round(percent)}%`;
+}
+
+function pieDonutThickness(size: number): number {
+  return Math.max(28, Math.round(size * 0.22));
+}
+
+function pieLegendPayload(
+  items: { name: string; color: string }[],
+): Record<string, unknown>[] {
+  return items.map((item) => ({
+    dataKey: item.name,
+    value: item.name,
+    color: item.color,
+    type: 'circle',
+  }));
+}
+
+function pieLegendSeries(
+  items: { name: string; color: string; value: number }[],
+  total: number,
+) {
+  return items.map((item) => ({
+    name: item.name,
+    color: item.color,
+    label: `${item.name} ${formatPieSlicePercent(item.value, total)}`,
+  }));
+}
+
 export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
+  const [highlighted, setHighlighted] = useState<string | null>(null);
+  const theme = useHostTheme();
   const seriesColor = useSeriesColor();
   const mantineData = data.map((point, index) => ({
     name: point.label,
     value: point.value,
     color: seriesColor(point.tone, index),
   }));
+  const total = mantineData.reduce((sum, row) => sum + row.value, 0);
+  const pieAngles = {
+    startAngle: PIE_START_ANGLE,
+    endAngle: PIE_END_ANGLE,
+  };
+  const pieCellProps = (name: string) => ({
+    opacity:
+      highlighted === null || highlighted === name ? 1 : 0.35,
+  });
   const chart = donut ? (
-    <DonutChart data={mantineData} size={size} withTooltip style={style} />
+    <DonutChart
+      data={mantineData}
+      size={size}
+      thickness={pieDonutThickness(size)}
+      withTooltip
+      chartLabel={total}
+      cellProps={(cell) => pieCellProps(cell.name)}
+      {...pieAngles}
+    />
   ) : (
     <MantinePieChart
       data={mantineData}
       size={size}
       withTooltip
       withLabelsLine={false}
-      style={style}
+      cellProps={(cell) => pieCellProps(cell.name)}
+      {...pieAngles}
     />
   );
   return (
     <div
       style={{
         width: '100%',
-        height: size,
-        minHeight: size,
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        ...style,
       }}
     >
-      {chart}
+      <div
+        style={{
+          width: '100%',
+          height: size,
+          minHeight: size,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {chart}
+      </div>
+      <ChartLegend
+        payload={pieLegendPayload(mantineData)}
+        series={pieLegendSeries(mantineData, total)}
+        legendPosition="bottom"
+        centered
+        onHighlight={setHighlighted}
+        mt="sm"
+        w="100%"
+        styles={{
+          legend: {
+            justifyContent: 'center',
+            gap: 12,
+            color: theme.text.primary,
+          },
+          legendItemName: {
+            color: theme.text.primary,
+          },
+        }}
+      />
     </div>
   );
 }

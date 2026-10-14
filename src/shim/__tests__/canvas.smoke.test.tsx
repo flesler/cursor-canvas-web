@@ -71,9 +71,12 @@ describe('DemoCanvas showcase', () => {
     expect(screen.getByText('Latency (ms)')).toBeInTheDocument();
     expect(screen.getByText('Requests by source')).toBeInTheDocument();
     expect(screen.getByText('Test outcomes')).toBeInTheDocument();
+    expect(screen.getByText(/75%/)).toBeInTheDocument();
+    expect(screen.getByText(/9\.9%/)).toBeInTheDocument();
+    expect(screen.getByText('Total')).toBeInTheDocument();
     // Callout tones.
     expect(screen.getByText('Deployed')).toBeInTheDocument();
-    expect(screen.getByText('Failing')).toBeInTheDocument();
+    expect(screen.getByText('1 service degraded.')).toBeInTheDocument();
     expect(
       screen.getByText('Contract tests track the IDE SDK snapshot.'),
     ).toBeInTheDocument();

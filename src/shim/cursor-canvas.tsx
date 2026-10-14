@@ -12,66 +12,66 @@
  * IDE and the web build.
  */
 import {
-  ActionIcon,
-  Alert,
-  Badge,
-  Group,
-  Button as MantineButton,
-  Card as MantineCard,
-  Checkbox as MantineCheckbox,
-  Divider as MantineDivider,
-  Select as MantineSelect,
-  Stack as MantineStack,
-  Table as MantineTable,
-  Text as MantineText,
-  Textarea as MantineTextarea,
-  TextInput as MantineTextInput,
-  Switch,
-  Title,
+    ActionIcon,
+    Alert,
+    Badge,
+    Group,
+    Button as MantineButton,
+    Card as MantineCard,
+    Checkbox as MantineCheckbox,
+    Divider as MantineDivider,
+    Select as MantineSelect,
+    Stack as MantineStack,
+    Table as MantineTable,
+    Text as MantineText,
+    Textarea as MantineTextarea,
+    TextInput as MantineTextInput,
+    Switch,
+    Title,
 } from '@mantine/core'
 import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-  type CSSProperties,
+    createContext,
+    useCallback,
+    useContext,
+    useState,
+    type CSSProperties,
 } from 'react'
 
 import type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js'
 import type {
-  CheckboxProps,
-  IconButtonProps,
-  SelectProps,
-  TextAreaProps,
-  TextInputProps,
-  ToggleProps,
+    CheckboxProps,
+    IconButtonProps,
+    SelectProps,
+    TextAreaProps,
+    TextInputProps,
+    ToggleProps,
 } from '../vendor/canvas-sdk/form-primitives.js'
 import type {
-  CanvasAction,
-  SetCanvasState,
+    CanvasAction,
+    SetCanvasState,
 } from '../vendor/canvas-sdk/hooks.js'
 import type { SwatchProps } from '../vendor/canvas-sdk/swatch.js'
 import type {
-  ButtonProps,
-  CalloutProps,
-  CardBodyProps,
-  CardHeaderProps,
-  CardProps,
-  CodeProps,
-  DividerProps,
-  GridProps,
-  H1Props,
-  H2Props,
-  H3Props,
-  LinkProps,
-  PillProps,
-  RowProps,
-  StackProps,
-  StatProps,
-  TableProps,
-  TableRowTone,
-  TextProps,
-  TextWeight,
+    ButtonProps,
+    CalloutProps,
+    CardBodyProps,
+    CardHeaderProps,
+    CardProps,
+    CodeProps,
+    DividerProps,
+    GridProps,
+    H1Props,
+    H2Props,
+    H3Props,
+    LinkProps,
+    PillProps,
+    RowProps,
+    StackProps,
+    StatProps,
+    TableProps,
+    TableRowTone,
+    TextProps,
+    TextWeight,
 } from '../vendor/canvas-sdk/ui-primitives.js'
 import type { UsageBarProps } from '../vendor/canvas-sdk/usage-bar.js'
 
@@ -83,107 +83,107 @@ import { useHostTheme } from './use-tokens'
 export { useEffect, useMemo, useRef, useState } from 'react'
 export type { CSSProperties, RefObject } from 'react'
 export type {
-  CanvasHostThemeBrand,
-  CategoryPalette,
-  ChartPalette,
-  Color
+    CanvasHostThemeBrand,
+    CategoryPalette,
+    ChartPalette,
+    Color
 } from '../vendor/canvas-sdk/canvas-tokens.js'
 export type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js'
 export type {
-  CheckboxProps,
-  IconButtonProps,
-  SelectOption,
-  SelectProps,
-  TextAreaProps,
-  TextInputProps,
-  ToggleProps
+    CheckboxProps,
+    IconButtonProps,
+    SelectOption,
+    SelectProps,
+    TextAreaProps,
+    TextInputProps,
+    ToggleProps
 } from '../vendor/canvas-sdk/form-primitives.js'
 export type {
-  CanvasAction,
-  CanvasHostTheme,
-  SetCanvasState
+    CanvasAction,
+    CanvasHostTheme,
+    SetCanvasState
 } from '../vendor/canvas-sdk/hooks.js'
 export type { SwatchProps } from '../vendor/canvas-sdk/swatch.js'
 export type {
-  CanvasPalette,
-  CanvasTokens
+    CanvasPalette,
+    CanvasTokens
 } from '../vendor/canvas-sdk/theme.js'
 export type {
-  ButtonProps,
-  CalloutProps,
-  CalloutTone,
-  CardBodyProps,
-  CardHeaderProps,
-  CardProps,
-  CardSize,
-  CardVariant,
-  CodeProps,
-  DividerProps,
-  GridProps,
-  H1Props,
-  H2Props,
-  H3Props,
-  LinkProps,
-  PillProps,
-  PillSize,
-  PillTone,
-  RowProps,
-  StackProps,
-  StatProps,
-  StatTone,
-  TableColumnAlign,
-  TableProps,
-  TableRowTone,
-  TextProps,
-  TextWeight
+    ButtonProps,
+    CalloutProps,
+    CalloutTone,
+    CardBodyProps,
+    CardHeaderProps,
+    CardProps,
+    CardSize,
+    CardVariant,
+    CodeProps,
+    DividerProps,
+    GridProps,
+    H1Props,
+    H2Props,
+    H3Props,
+    LinkProps,
+    PillProps,
+    PillSize,
+    PillTone,
+    RowProps,
+    StackProps,
+    StatProps,
+    StatTone,
+    TableColumnAlign,
+    TableProps,
+    TableRowTone,
+    TextProps,
+    TextWeight
 } from '../vendor/canvas-sdk/ui-primitives.js'
 export type {
-  UsageBarProps,
-  UsageBarSegment
+    UsageBarProps,
+    UsageBarSegment
 } from '../vendor/canvas-sdk/usage-bar.js'
 export { BarChart, LineChart, PieChart } from './charts'
 export type {
-  BarChartProps,
-  ChartDataPoint,
-  ChartReferenceLine,
-  ChartSeries,
-  ChartTone,
-  LineChartProps,
-  PieChartProps
+    BarChartProps,
+    ChartDataPoint,
+    ChartReferenceLine,
+    ChartSeries,
+    ChartTone,
+    LineChartProps,
+    PieChartProps
 } from './charts'
 export { computeDAGLayout } from './dag'
 export type {
-  DAGLayoutEdge,
-  DAGLayoutNode,
-  DAGLayoutOptions,
-  DAGLayoutRank,
-  DAGLayoutResult
+    DAGLayoutEdge,
+    DAGLayoutNode,
+    DAGLayoutOptions,
+    DAGLayoutRank,
+    DAGLayoutResult
 } from './dag'
 export { DiffStats, DiffView } from './diff'
 export type {
-  DiffLineData,
-  DiffLineType,
-  DiffStatsProps,
-  DiffViewProps
+    DiffLineData,
+    DiffLineType,
+    DiffStatsProps,
+    DiffViewProps
 } from './diff'
 export {
-  canvasPaletteDark,
-  canvasPaletteGrokDark,
-  canvasPaletteGrokLight,
-  canvasPaletteLight,
-  canvasTokens,
-  canvasTokensLight,
-  categoryPaletteDark,
-  categoryPaletteLight,
-  colorPalette,
-  usageColorSequence
+    canvasPaletteDark,
+    canvasPaletteGrokDark,
+    canvasPaletteGrokLight,
+    canvasPaletteLight,
+    canvasTokens,
+    canvasTokensLight,
+    categoryPaletteDark,
+    categoryPaletteLight,
+    colorPalette,
+    usageColorSequence
 } from './theme'
 export { TodoList, TodoListCard } from './todo'
 export type {
-  TodoItem,
-  TodoListCardProps,
-  TodoListProps,
-  TodoStatus
+    TodoItem,
+    TodoListCardProps,
+    TodoListProps,
+    TodoStatus
 } from './todo'
 export { useHostTheme } from './use-tokens'
 
@@ -501,7 +501,7 @@ export function CardHeader({ children, trailing, style }: CardHeaderProps) {
         borderBottom: `1px solid ${host.stroke.secondary}`,
         fontSize: host.typography.small.fontSize,
         fontWeight: host.typography.h3.fontWeight,
-        color: host.text.tertiary,
+        color: host.text.primary,
         fontFamily: host.typography.fontFamily,
         cursor: collapsible ? 'pointer' : undefined,
         userSelect: collapsible ? 'none' : undefined,

@@ -117,6 +117,7 @@ export function CanvasMantineRoot({
       forceColorScheme={polarity}
     >
       <div
+        data-cursor-canvas-host
         style={{
           minHeight: 'inherit',
           background: host.bg.editor,
@@ -124,6 +125,12 @@ export function CanvasMantineRoot({
           fontFamily: host.typography.fontFamily,
         }}
       >
+        {/* Canvas-authored responsive SVGs (e.g. DAG): IDE scales to width; do not clamp max-height. */}
+        <style>{`
+          [data-cursor-canvas-host] svg[viewBox][width='100%'] {
+            max-height: unset !important;
+          }
+        `}</style>
         {children}
       </div>
     </MantineProvider>
