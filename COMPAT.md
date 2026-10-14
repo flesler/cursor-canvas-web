@@ -29,6 +29,7 @@ Published npm **types** resolve to `src/vendor/canvas-sdk/index.d.ts` (subpath `
 | `pnpm run sync:sdk`       | **Manual.** Copy IDE `sdk/*.d.ts` into `src/vendor/canvas-sdk/`, refresh `manifest.json`, restore `internal/canvas-action-dispatch.d.ts` stub if the skill bundle omits `internal/`. |
 | `pnpm run test:contract`  | Strict export parity (`src/shim/cursor-canvas.tsx` vs vendored `index.d.ts`), consumer `tsc`, then `build:lib`.                                                                      |
 | `pnpm run check:sdk-live` | Diff live Cursor SDK vs the shim barrel (does not write files).                                                                                                                      |
+| `pnpm run test:render-compat` | **Local only** when vendor differs from HEAD: contract on synced tree, then smoke with HEAD vendor + current shim. Not CI. See `.cursor/skills/sdk-sync-compat/SKILL.md`. |
 
 ## Stack
 
@@ -45,8 +46,9 @@ Published npm **types** resolve to `src/vendor/canvas-sdk/index.d.ts` (subpath `
 | Host theme SSE / workbench overrides                 | live host                                                                              | Mantine light/dark only                                                 |
 | `useHostTheme().chart`                               | Not in public `hooks.d.ts` today; some canvases use `theme.chart.palette.*` at runtime | `{ palette: chartPalette, sequence: chartColorSequence }`               |
 | `useHostTheme().radius` / `.typography` / `.spacing` | Declared in `theme.d.ts`, not on `CanvasHostTheme` in `hooks.d.ts`                     | Exposed for canvases that read layout tokens from the theme hook        |
+| `Pill` `tone`                                        | Deprecated; IDE renders neutral only                                                   | Accepts `tone` for older canvases; ignored at render (neutral styling)  |
 | `reshapeLineChartData`                               | Not in IDE `index.d.ts`                                                                | Internal helper in `charts.tsx` (not barrel-exported)                   |
-| `canvasPaletteGrokDark` / `Light`                    | Not in IDE `index.d.ts`                                                                | Internal palettes in `theme.ts` (not barrel-exported)                   |
+| Host `brand: grok`                                   | Grok palettes, chart sequence, Sand radii/typography                                   | `resolveTheme` / `useHostTheme`; web defaults to `cursor` + Mantine scheme |
 
 ## open-canvas
 

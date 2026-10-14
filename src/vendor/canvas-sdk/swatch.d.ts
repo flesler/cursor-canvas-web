@@ -37,4 +37,3 @@ export type SwatchProps = {
  * ```
  */
 export declare function Swatch({ color, style }: SwatchProps): JSX.Element;
-//# sourceMappingURL=swatch.d.ts.map

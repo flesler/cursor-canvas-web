@@ -270,4 +270,3 @@ export declare function LineChart({ categories, series, height, fill, valueSuffi
  */
 export declare function PieChart({ data, size, donut, style, }: PieChartProps): JSX.Element;
 export {};
-//# sourceMappingURL=chart-primitives.d.ts.map

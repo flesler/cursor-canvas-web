@@ -192,4 +192,3 @@ export type IconButtonProps = {
  * ```
  */
 export declare function IconButton({ children, onClick, disabled, title, variant, size, style, }: IconButtonProps): JSX.Element;
-//# sourceMappingURL=form-primitives.d.ts.map

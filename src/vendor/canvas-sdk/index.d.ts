@@ -63,4 +63,3 @@ mergeStyle, Pill, Row, Spacer, Stack, Stat, Table, Text, } from "./ui-primitives
 /** Usage bar — segmented progress meter with optional labels above. */
 export type { UsageBarProps, UsageBarSegment } from "./usage-bar.js";
 export { UsageBar } from "./usage-bar.js";
-//# sourceMappingURL=index.d.ts.map

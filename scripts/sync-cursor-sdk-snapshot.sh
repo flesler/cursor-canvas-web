@@ -20,6 +20,9 @@ else
   cp "$STUB" "$DEST/internal/canvas-action-dispatch.d.ts"
 fi
 find "$DEST" -type f \( -name '*.test.d.ts' -o -name '*.d.ts.map' \) -delete
+while IFS= read -r -d '' f; do
+  sed -i -e '/^[[:space:]]*\/\/#[[:space:]]*sourceMappingURL=/d' "$f"
+done < <(find "$DEST" -type f -name '*.d.ts' -print0)
 if [[ ! -f "$CANVAS_SKILL" ]]; then
   echo "sync-cursor-sdk: missing $CANVAS_SKILL" >&2
   exit 1

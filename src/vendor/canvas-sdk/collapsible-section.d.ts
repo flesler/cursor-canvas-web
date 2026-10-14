@@ -64,4 +64,3 @@ export type CollapsibleSectionProps = {
  * ```
  */
 export declare function CollapsibleSection({ title, leading, count, trailing, children, defaultOpen, style, }: CollapsibleSectionProps): JSX.Element;
-//# sourceMappingURL=collapsible-section.d.ts.map

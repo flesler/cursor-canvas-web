@@ -53,4 +53,3 @@ export type UsageBarProps = {
  * ```
  */
 export declare function UsageBar({ segments, total, topLeftLabel, topRightLabel, style, }: UsageBarProps): JSX.Element;
-//# sourceMappingURL=usage-bar.d.ts.map

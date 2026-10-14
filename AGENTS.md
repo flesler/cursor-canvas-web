@@ -64,11 +64,14 @@ Node + pnpm are pinned in `.tool-versions` (managed by mise). Run
 ## Validation gate (run before finishing changes)
 
 ```bash
-pnpm typecheck   # tsc --noEmit, strict
-pnpm lint        # eslint flat config
-pnpm test        # vitest run
-pnpm build       # full static build
+pnpm typecheck          # tsc --noEmit, strict
+pnpm lint               # eslint flat config
+pnpm test               # vitest run
+pnpm test:contract      # export parity + consumer tsc + build:lib
+pnpm build              # full static build
 ```
+
+After `pnpm run sync:sdk`: `pnpm ci:local`, then `pnpm run test:render-compat` (see `.cursor/skills/sdk-sync-compat/SKILL.md`).
 
 CI (`.github/workflows/ci.yml`) runs typecheck + lint + test on every push/PR.
 `deploy.yml` publishes `dist/` to GitHub Pages on push to `main`.

@@ -171,4 +171,3 @@ export type { CanvasAction };
  * ```
  */
 export declare function useCanvasAction(): (action: CanvasAction) => void;
-//# sourceMappingURL=hooks.d.ts.map

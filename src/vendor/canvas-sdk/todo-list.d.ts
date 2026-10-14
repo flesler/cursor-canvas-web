@@ -46,4 +46,3 @@ export type TodoListCardProps = {
  * ```
  */
 export declare function TodoListCard({ todos, dimmedTodoIds, defaultExpanded, onTodoClick, style, }: TodoListCardProps): JSX.Element | null;
-//# sourceMappingURL=todo-list.d.ts.map

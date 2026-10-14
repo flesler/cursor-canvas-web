@@ -127,4 +127,3 @@ export type DiffViewProps = {
  * ```
  */
 export declare function DiffView({ lines, path, language, showLineNumbers, coloredLineNumbers, showAccentStrip, style, }: DiffViewProps): JSX.Element;
-//# sourceMappingURL=diff-view.d.ts.map

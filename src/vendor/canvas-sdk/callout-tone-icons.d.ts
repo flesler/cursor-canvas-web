@@ -8,4 +8,3 @@ export declare function CalloutToneIcon({ tone, color, }: {
     color: string;
 }): JSX.Element;
 export {};
-//# sourceMappingURL=callout-tone-icons.d.ts.map

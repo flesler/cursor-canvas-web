@@ -15,6 +15,7 @@ describe('useHostTheme', () => {
     const { result } = renderHook(() => useHostTheme(), { wrapper });
     const theme = result.current;
     expect(theme.kind).toBe('dark');
+    expect(theme.brand).toBe('cursor');
     expect(theme.category.orange).toMatch(/^#/);
     expect(theme.tokens.category.orange).toBe(theme.category.orange);
     expect(theme.chart.palette.lightGreen).toBe('#52B896E0');

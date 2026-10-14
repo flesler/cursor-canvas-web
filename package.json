@@ -60,6 +60,7 @@
     "test:contract:ci": "pnpm run test:contract",
     "sync:demo": "bash scripts/sync-demo-canvas.sh",
     "demo:screenshot": "bash scripts/readme-screenshot.sh",
+    "test:render-compat": "bash scripts/test-render-compat.sh",
     "ci:local": "pnpm typecheck && pnpm lint && pnpm test && pnpm test:contract:ci",
     "prepare": "[ \"$CI\" != \"true\" ] && [ -d node_modules/husky ] && husky || true",
     "prepublishOnly": "pnpm typecheck && pnpm test && pnpm run check:sdk-exports && pnpm build:lib"

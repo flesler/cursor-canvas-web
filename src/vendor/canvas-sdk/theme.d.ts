@@ -105,4 +105,3 @@ export declare const canvasRadiusGrok: CanvasRadius;
 export declare const canvasTypographyGrok: CanvasTypography;
 export declare function canvasRadiusForBrand(brand: CanvasHostThemeBrand): CanvasRadius;
 export declare function canvasTypographyForBrand(brand: CanvasHostThemeBrand): CanvasTypography;
-//# sourceMappingURL=theme.d.ts.map

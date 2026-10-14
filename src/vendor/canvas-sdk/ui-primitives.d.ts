@@ -567,4 +567,3 @@ export type CalloutProps = {
  * ```
  */
 export declare function Callout({ children, tone, title, icon, style, }: CalloutProps): JSX.Element;
-//# sourceMappingURL=ui-primitives.d.ts.map

@@ -257,4 +257,3 @@ export declare function chartThemeForBrand(brand: CanvasHostThemeBrand): {
     palette: ChartPalette;
     sequence: readonly string[];
 };
-//# sourceMappingURL=canvas-tokens.d.ts.map

@@ -13,7 +13,8 @@ import {
   LineChart as MantineLineChart,
   PieChart as MantinePieChart,
 } from '@mantine/charts';
-import { chartColorSequence, toneHex } from './theme';
+import { toneHex } from './theme';
+import { useHostTheme } from './use-tokens';
 
 export type {
   BarChartProps,
@@ -39,10 +40,14 @@ type ValueAxisProps = Pick<
   'beginAtZero' | 'yMin' | 'yMax' | 'referenceLines'
 >;
 
-function seriesColor(tone: ChartTone | undefined, index: number): string {
-  return tone
-    ? toneHex[tone]
-    : chartColorSequence[index % chartColorSequence.length];
+function useSeriesColor(): (
+  tone: ChartTone | undefined,
+  index: number,
+) => string {
+  const theme = useHostTheme();
+  const sequence = theme.chart.sequence;
+  return (tone, index) =>
+    tone ? toneHex[tone] : sequence[index % sequence.length];
 }
 
 /**
@@ -62,7 +67,10 @@ export function reshapeLineChartData(
   });
 }
 
-function toMantineSeries(series: ChartSeries[]) {
+function toMantineSeries(
+  series: ChartSeries[],
+  seriesColor: (tone: ChartTone | undefined, index: number) => string,
+) {
   return series.map((s, index) => ({
     name: s.name,
     color: seriesColor(s.tone, index),
@@ -144,8 +152,9 @@ export function LineChart({
   referenceLines,
   style,
 }: LineChartProps) {
+  const seriesColor = useSeriesColor();
   const data = reshapeLineChartData(categories, series);
-  const mantineSeries = toMantineSeries(series);
+  const mantineSeries = toMantineSeries(series, seriesColor);
   const axis = valueAxisChartProps({
     beginAtZero,
     yMin,
@@ -185,6 +194,7 @@ export function BarChart({
   referenceLines,
   style,
 }: BarChartProps) {
+  const seriesColor = useSeriesColor();
   const data = reshapeLineChartData(categories, series);
   const type = normalized ? 'percent' : stacked ? 'stacked' : 'default';
   const axis = valueAxisChartProps({
@@ -205,7 +215,7 @@ export function BarChart({
       h={height}
       data={data}
       dataKey="category"
-      series={toMantineSeries(series)}
+      series={toMantineSeries(series, seriesColor)}
       type={type}
       orientation={horizontal ? 'vertical' : 'horizontal'}
       withLegend={series.length > 1}
@@ -218,6 +228,7 @@ export function BarChart({
 }
 
 export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
+  const seriesColor = useSeriesColor();
   const mantineData = data.map((point, index) => ({
     name: point.label,
     value: point.value,
