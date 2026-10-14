@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.2] — 2026-10-14
+
+- Donut charts: center total + “Total” label via host typography and text colors (not Mantine `chartLabel` only).
+
 ## [1.1.1] — 2026-10-14
 
 - Charts: horizontal bar category ticks, pie/donut legend highlight, line `smooth`, reference lines, and value-axis defaults closer to IDE.
