@@ -83,7 +83,9 @@ import { useHostTheme } from './use-tokens';
 export { useEffect, useMemo, useRef, useState } from 'react';
 export type { CSSProperties, RefObject } from 'react';
 export type {
+  CanvasHostThemeBrand,
   CategoryPalette,
+  ChartPalette,
   Color,
 } from '../vendor/canvas-sdk/canvas-tokens.js';
 export type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js';
@@ -166,6 +168,8 @@ export type {
 } from './diff';
 export {
   canvasPaletteDark,
+  canvasPaletteGrokDark,
+  canvasPaletteGrokLight,
   canvasPaletteLight,
   canvasTokens,
   canvasTokensLight,

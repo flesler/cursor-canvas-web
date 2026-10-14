@@ -38,6 +38,8 @@ import {
   Toggle,
   UsageBar,
   canvasPaletteDark,
+  canvasPaletteGrokDark,
+  canvasPaletteGrokLight,
   canvasPaletteLight,
   canvasTokens,
   canvasTokensLight,
@@ -64,6 +66,7 @@ import type {
   CalloutTone,
   CanvasAction,
   CanvasHostTheme,
+  CanvasHostThemeBrand,
   CanvasPalette,
   CanvasTokens,
   CardBodyProps,
@@ -73,6 +76,7 @@ import type {
   CardVariant,
   CategoryPalette,
   ChartDataPoint,
+  ChartPalette,
   ChartReferenceLine,
   ChartSeries,
   ChartTone,
@@ -163,6 +167,8 @@ const contractValues = {
   Toggle,
   UsageBar,
   canvasPaletteDark,
+  canvasPaletteGrokDark,
+  canvasPaletteGrokLight,
   canvasPaletteLight,
   canvasTokens,
   canvasTokensLight,
@@ -193,6 +199,7 @@ export type ContractTypeExports =
   | CalloutTone
   | CanvasAction
   | CanvasHostTheme
+  | CanvasHostThemeBrand
   | CanvasPalette
   | CanvasTokens
   | CardBodyProps
@@ -202,6 +209,7 @@ export type ContractTypeExports =
   | CardVariant
   | CategoryPalette
   | ChartDataPoint
+  | ChartPalette
   | ChartReferenceLine
   | ChartSeries
   | ChartTone
