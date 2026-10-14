@@ -15,7 +15,8 @@ description: Read before syncing canvas-sdk or checking cross-snapshot render co
 2. Wire new `index.d.ts` exports in `src/shim/` if needed.
 3. `pnpm ci:local` — typecheck, lint, test, contract on the **new** vendor tree.
 4. `pnpm run test:render-compat` — copies vendor aside, runs gates, swaps in a **temp** copy of HEAD’s SDK (via `git archive` only — no `checkout`/`stash`), `typecheck` + `pnpm test`, then **always** restores the starting vendor tree on exit (success or failure).
-5. Commit vendor + shim together.
+5. `pnpm run test:demo-screenshots` — full-page PNGs via open-canvas (`1280` wide; height follows demo + shim). Compares to committed `docs/demo-*.png` (MD5). Restoring old PNGs without updating the shim will fail (e.g. height drift after `CanvasMantineRoot` / host tokens). After review: `pnpm run test:demo-screenshots:update`.
+6. Commit vendor + shim (+ updated `docs/demo-*.png` when visuals changed) together.
 
 If you already committed the sync: **once**, `git reset --soft HEAD^` to put the release back in the index/worktree, run steps 3–4, recommit. No `HEAD^` automation in scripts.
 

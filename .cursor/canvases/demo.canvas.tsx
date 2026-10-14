@@ -1,4 +1,4 @@
-import { BarChart, Button, Callout, Card, CardBody, CardHeader, Checkbox, Code, CollapsibleSection, DiffStats, DiffView, Divider, Grid, H1, H2, H3, IconButton, LineChart, Link, PieChart, Pill, Row, Select, Spacer, Stack, Stat, Swatch, Table, Text, TextArea, TextInput, TodoList, TodoListCard, Toggle, UsageBar, colorPalette, computeDAGLayout, mergeStyle, useCanvasAction, useCanvasState, useEffect, useHostTheme, useMemo, useRef, useState, type ChartSeries, type Color, type DiffLineData, type StackProps, type TodoItem } from 'cursor/canvas'
+import { BarChart, Button, Callout, Card, CardBody, CardHeader, Checkbox, Code, CollapsibleSection, DiffStats, DiffView, Divider, Grid, H1, H2, H3, IconButton, LineChart, Link, PieChart, Pill, Row, Select, Spacer, Stack, Stat, Swatch, Table, Text, TextArea, TextInput, TodoList, TodoListCard, Toggle, UsageBar, canvasPaletteGrokDark, canvasPaletteGrokLight, colorPalette, computeDAGLayout, mergeStyle, useCanvasAction, useCanvasState, useEffect, useHostTheme, useMemo, useRef, useState, type ChartSeries, type Color, type DiffLineData, type StackProps, type TodoItem } from 'cursor/canvas'
 
 const daily = [{"date":"2026-10-05","deploys":"582","totalDurationP90Sec":"388"},{"date":"2026-10-06","deploys":"601","totalDurationP90Sec":"401"},{"date":"2026-10-07","deploys":"593","totalDurationP90Sec":"395"},{"date":"2026-10-08","deploys":"612","totalDurationP90Sec":"407"},{"date":"2026-10-09","deploys":"598","totalDurationP90Sec":"412"},{"date":"2026-10-10","deploys":"604","totalDurationP90Sec":"418"},{"date":"2026-10-11","deploys":"597","totalDurationP90Sec":"421"}]
 const deployEvents = [{"date":"2026-10-09","app":"app-aurora-7f3","durationSec":2847},{"date":"2026-10-10","app":"app-mint-2c1","durationSec":2292},{"date":"2026-10-11","app":"app-orbit-9aa","durationSec":1904}]
@@ -271,6 +271,8 @@ export default function ShowcaseCanvas() {
 	)
 
 	const { meta, kpis, durationByPhase } = report
+  const grokPalette =
+    theme.kind === 'light' ? canvasPaletteGrokLight : canvasPaletteGrokDark
 	const cap = { color: theme.text.tertiary, fontSize: 12 }
 	const rssRows = (phaseRssMb as { rows?: Array<{ phase: string; p90: number }> }).rows ?? []
 	const phases = durationByPhase.rows.map(r => r.phase)
@@ -815,6 +817,72 @@ export default function ShowcaseCanvas() {
 					)}
 				</Row>
 			</Section>
+
+      <Section title="Host brand (Cursor vs Grok)">
+        <Stack gap={10}>
+          <Row gap={8} wrap>
+            <Pill active={theme.brand === 'cursor'}>brand: {theme.brand}</Pill>
+            <Text size="small" tone="secondary">
+              <Code>useHostTheme().brand</Code> from the host (open-canvas{' '}
+              <Code>--brand grok</Code> for README Grok shots).
+            </Text>
+          </Row>
+          <Row gap={16} wrap>
+            <Card size="base">
+              <CardHeader>
+                <Text weight="semibold">Active accent (host)</Text>
+              </CardHeader>
+              <CardBody>
+                <Row gap={8}>
+                  <span
+                    style={{
+                      width: 120,
+                      height: 32,
+                      borderRadius: theme.radius.md,
+                      background: theme.palette.accent,
+                      border: `1px solid ${theme.stroke.secondary}`,
+                    }}
+                  />
+                  <Text size="small" tone="secondary">
+                    {theme.palette.accent}
+                  </Text>
+                </Row>
+              </CardBody>
+            </Card>
+            {theme.brand === 'cursor' ? (
+              <Card size="base" variant="borderless">
+                <CardHeader>
+                  <Text weight="semibold">Grok reference</Text>
+                </CardHeader>
+                <CardBody>
+                  <Row gap={8}>
+                    <span
+                      style={{
+                        width: 120,
+                        height: 32,
+                        borderRadius: 8,
+                        background: grokPalette.accent,
+                        border: `1px solid ${theme.stroke.secondary}`,
+                      }}
+                    />
+                    <Text size="small" tone="secondary">
+                      {grokPalette.accent}
+                    </Text>
+                  </Row>
+                </CardBody>
+              </Card>
+            ) : null}
+          </Row>
+          <BarChart
+            categories={['A', 'B', 'C']}
+            series={[
+              { name: 's1', data: [3, 5, 2] },
+              { name: 's2', data: [2, 4, 6] },
+            ]}
+            height={140}
+          />
+        </Stack>
+      </Section>
 
 			<Section title="Data imports (JSON, YAML, TSV, CSV, JSONL)">
 				<Stack gap={12}>

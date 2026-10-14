@@ -1,12 +1,12 @@
-import { describe, expect, it } from 'vitest';
-import { renderHook } from '@testing-library/react';
-import { MantineProvider } from '@mantine/core';
-import type { ReactNode } from 'react';
-import { useHostTheme } from 'cursor/canvas';
+import { renderHook } from '@testing-library/react'
+import { useHostTheme } from 'cursor/canvas'
+import type { ReactNode } from 'react'
+import { describe, expect, it } from 'vitest'
+import { CanvasMantineRoot } from '../canvas-mantine-root'
 
 function wrapper({ children }: { children: ReactNode }) {
   return (
-    <MantineProvider defaultColorScheme="dark">{children}</MantineProvider>
+    <CanvasMantineRoot defaultColorScheme="dark">{children}</CanvasMantineRoot>
   );
 }
 
@@ -28,7 +28,7 @@ describe('useHostTheme', () => {
 
   it('switches category table for light scheme', () => {
     const lightWrap = ({ children }: { children: ReactNode }) => (
-      <MantineProvider defaultColorScheme="light">{children}</MantineProvider>
+      <CanvasMantineRoot defaultColorScheme="light">{children}</CanvasMantineRoot>
     );
     const dark = renderHook(() => useHostTheme(), { wrapper }).result.current;
     const light = renderHook(() => useHostTheme(), {

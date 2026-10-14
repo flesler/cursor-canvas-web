@@ -10,9 +10,10 @@
  *   import '@mantine/core/styles.css';
  *   import '@mantine/charts/styles.css';
  */
-import { StrictMode, type ReactNode } from 'react';
-import { createRoot, type Root } from 'react-dom/client';
-import { MantineProvider, type MantineColorScheme } from '@mantine/core';
+import { type MantineColorScheme } from '@mantine/core'
+import { StrictMode, type ReactNode } from 'react'
+import { createRoot, type Root } from 'react-dom/client'
+import { CanvasMantineRoot } from '../shim/canvas-mantine-root'
 
 export interface CanvasRootProps {
   children: ReactNode;
@@ -20,20 +21,8 @@ export interface CanvasRootProps {
   defaultColorScheme?: MantineColorScheme;
 }
 
-/**
- * Wraps a canvas in the `MantineProvider` the shim components require. Use this
- * when you manage your own React root (e.g. inside an existing app tree).
- */
-export function CanvasRoot({
-  children,
-  defaultColorScheme = 'auto',
-}: CanvasRootProps) {
-  return (
-    <MantineProvider defaultColorScheme={defaultColorScheme}>
-      {children}
-    </MantineProvider>
-  );
-}
+/** @deprecated Use `CanvasMantineRoot` — same behavior. */
+export const CanvasRoot = CanvasMantineRoot;
 
 export interface MountCanvasOptions {
   defaultColorScheme?: MantineColorScheme;
@@ -43,7 +32,7 @@ export interface MountCanvasOptions {
 
 /**
  * One-call entry for a standalone page: resolves the container (element or id),
- * mounts the canvas inside `CanvasRoot`, and returns the React root so callers
+ * mounts the canvas inside `CanvasMantineRoot`, and returns the React root so callers
  * can `unmount()` later.
  */
 export function mountCanvas(
@@ -66,7 +55,9 @@ export function mountCanvas(
 
   const root = createRoot(element);
   const tree = (
-    <CanvasRoot defaultColorScheme={defaultColorScheme}>{canvas}</CanvasRoot>
+    <CanvasMantineRoot defaultColorScheme={defaultColorScheme}>
+      {canvas}
+    </CanvasMantineRoot>
   );
   root.render(strict ? <StrictMode>{tree}</StrictMode> : tree);
   return root;

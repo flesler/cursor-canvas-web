@@ -1,7 +1,7 @@
-import { fireEvent, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it } from 'vitest';
-import DemoCanvas from '../../../.cursor/canvases/demo.canvas';
-import { renderWithProvider } from '../../test/render';
+import { fireEvent, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it } from 'vitest'
+import DemoCanvas from '../../../.cursor/canvases/demo.canvas'
+import { renderWithProvider } from '../../test/render'
 
 // useCanvasState persists the active tab to localStorage; clear it so each test
 // starts from the canvas's default tab ('charts').
@@ -33,6 +33,7 @@ describe('DemoCanvas showcase', () => {
       'Typography & text',
       'Forms (state persists via useCanvasState)',
       'Theme tokens (useHostTheme)',
+      'Host brand (Cursor vs Grok)',
       'Data imports (JSON, YAML, TSV, CSV, JSONL)',
     ]) {
       expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();

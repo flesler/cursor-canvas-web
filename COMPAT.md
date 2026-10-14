@@ -30,6 +30,7 @@ Published npm **types** resolve to `src/vendor/canvas-sdk/index.d.ts` (subpath `
 | `pnpm run test:contract`  | Strict export parity (`src/shim/cursor-canvas.tsx` vs vendored `index.d.ts`), consumer `tsc`, then `build:lib`.                                                                      |
 | `pnpm run check:sdk-live` | Diff live Cursor SDK vs the shim barrel (does not write files).                                                                                                                      |
 | `pnpm run test:render-compat` | **Local only** when vendor differs from HEAD: contract on synced tree, then smoke with HEAD vendor + current shim. Not CI. See `.cursor/skills/sdk-sync-compat/SKILL.md`. |
+| `pnpm run test:demo-screenshots` | **Local only** (needs sibling open-canvas): render demo light/dark, compare to `docs/demo-*.png`. `test:demo-screenshots:update` refreshes baselines after review. |
 
 ## Stack
 

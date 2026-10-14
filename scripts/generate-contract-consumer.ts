@@ -1,10 +1,10 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sdkIndex = path.join(root, 'src/vendor/canvas-sdk/index.d.ts');
-const outFile = path.join(root, 'test/contract/consumer.ts');
+const outFile = path.join(root, 'src/contract/consumer.ts');
 
 if (!fs.existsSync(sdkIndex)) {
   console.error('Run pnpm run sync:sdk first');
@@ -79,7 +79,7 @@ export type ContractValueExports = typeof contractValues;
 export type ContractTypeExports =
 ${uniqueTypes.map((n) => `  | ${contractTypeEntry(n)}`).join('\n')};
 
-import type { ShimHostTheme } from '../../src/shim/theme';
+import type { ShimHostTheme } from '../shim/theme';
 
 export type ContractHostThemeExtras = Pick<
   ShimHostTheme,

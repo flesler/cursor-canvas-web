@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VENDOR_REL="src/vendor/canvas-sdk"
 VENDOR="$ROOT/$VENDOR_REL"
-LEGACY_SDK="test/contract/cursor-sdk"
+LEGACY_SDK="src/contract/cursor-sdk"
 STUB="$ROOT/scripts/vendor-stubs/canvas-action-dispatch.d.ts"
 cd "$ROOT"
 
@@ -70,7 +70,7 @@ pnpm typecheck
 pnpm test
 pnpm run check:sdk-exports
 tsx scripts/generate-contract-consumer.ts
-pnpm exec tsc -p test/contract/tsconfig.json
+tsc --noEmit
 
 echo "test-render-compat: typecheck + smoke with HEAD SDK snapshot + current shim"
 install_vendor_from "$HEAD_VENDOR"

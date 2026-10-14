@@ -71,7 +71,9 @@ pnpm test:contract      # export parity + consumer tsc + build:lib
 pnpm build              # full static build
 ```
 
-After `pnpm run sync:sdk`: `pnpm ci:local`, then `pnpm run test:render-compat` (see `.cursor/skills/sdk-sync-compat/SKILL.md`).
+After `pnpm run sync:sdk`: `pnpm ci:local`, then `pnpm run test:render-compat` and `pnpm run test:demo-screenshots` (see `.cursor/skills/sdk-sync-compat/SKILL.md`). Use `pnpm run test:demo-screenshots:update` when baseline PNGs should move with the new SDK/shim.
+
+npm releases: `.cursor/skills/release/SKILL.md`.
 
 CI (`.github/workflows/ci.yml`) runs typecheck + lint + test on every push/PR.
 `deploy.yml` publishes `dist/` to GitHub Pages on push to `main`.

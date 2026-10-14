@@ -262,7 +262,7 @@ export type ContractTypeExports =
   | UsageBarProps
   | UsageBarSegment;
 
-import type { ShimHostTheme } from '../../src/shim/theme';
+import type { ShimHostTheme } from '../shim/theme';
 
 export type ContractHostThemeExtras = Pick<
   ShimHostTheme,

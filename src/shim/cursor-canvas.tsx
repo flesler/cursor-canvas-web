@@ -28,16 +28,16 @@ import {
   TextInput as MantineTextInput,
   Switch,
   Title,
-} from '@mantine/core';
+} from '@mantine/core'
 import {
   createContext,
   useCallback,
   useContext,
   useState,
   type CSSProperties,
-} from 'react';
+} from 'react'
 
-import type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js';
+import type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js'
 import type {
   CheckboxProps,
   IconButtonProps,
@@ -45,12 +45,12 @@ import type {
   TextAreaProps,
   TextInputProps,
   ToggleProps,
-} from '../vendor/canvas-sdk/form-primitives.js';
+} from '../vendor/canvas-sdk/form-primitives.js'
 import type {
   CanvasAction,
   SetCanvasState,
-} from '../vendor/canvas-sdk/hooks.js';
-import type { SwatchProps } from '../vendor/canvas-sdk/swatch.js';
+} from '../vendor/canvas-sdk/hooks.js'
+import type { SwatchProps } from '../vendor/canvas-sdk/swatch.js'
 import type {
   ButtonProps,
   CalloutProps,
@@ -72,23 +72,23 @@ import type {
   TableRowTone,
   TextProps,
   TextWeight,
-} from '../vendor/canvas-sdk/ui-primitives.js';
-import type { UsageBarProps } from '../vendor/canvas-sdk/usage-bar.js';
+} from '../vendor/canvas-sdk/ui-primitives.js'
+import type { UsageBarProps } from '../vendor/canvas-sdk/usage-bar.js'
 
-import { toneColor, usageColorSequence } from './theme';
-import { useHostTheme } from './use-tokens';
+import { toneColor, toneHex, usageColorSequence } from './theme'
+import { useHostTheme } from './use-tokens'
 
 /* --------------------------------------------------------------- re-exports */
 
-export { useEffect, useMemo, useRef, useState } from 'react';
-export type { CSSProperties, RefObject } from 'react';
+export { useEffect, useMemo, useRef, useState } from 'react'
+export type { CSSProperties, RefObject } from 'react'
 export type {
   CanvasHostThemeBrand,
   CategoryPalette,
   ChartPalette,
-  Color,
-} from '../vendor/canvas-sdk/canvas-tokens.js';
-export type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js';
+  Color
+} from '../vendor/canvas-sdk/canvas-tokens.js'
+export type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js'
 export type {
   CheckboxProps,
   IconButtonProps,
@@ -96,18 +96,18 @@ export type {
   SelectProps,
   TextAreaProps,
   TextInputProps,
-  ToggleProps,
-} from '../vendor/canvas-sdk/form-primitives.js';
+  ToggleProps
+} from '../vendor/canvas-sdk/form-primitives.js'
 export type {
   CanvasAction,
   CanvasHostTheme,
-  SetCanvasState,
-} from '../vendor/canvas-sdk/hooks.js';
-export type { SwatchProps } from '../vendor/canvas-sdk/swatch.js';
+  SetCanvasState
+} from '../vendor/canvas-sdk/hooks.js'
+export type { SwatchProps } from '../vendor/canvas-sdk/swatch.js'
 export type {
   CanvasPalette,
-  CanvasTokens,
-} from '../vendor/canvas-sdk/theme.js';
+  CanvasTokens
+} from '../vendor/canvas-sdk/theme.js'
 export type {
   ButtonProps,
   CalloutProps,
@@ -135,13 +135,13 @@ export type {
   TableProps,
   TableRowTone,
   TextProps,
-  TextWeight,
-} from '../vendor/canvas-sdk/ui-primitives.js';
+  TextWeight
+} from '../vendor/canvas-sdk/ui-primitives.js'
 export type {
   UsageBarProps,
-  UsageBarSegment,
-} from '../vendor/canvas-sdk/usage-bar.js';
-export { BarChart, LineChart, PieChart } from './charts';
+  UsageBarSegment
+} from '../vendor/canvas-sdk/usage-bar.js'
+export { BarChart, LineChart, PieChart } from './charts'
 export type {
   BarChartProps,
   ChartDataPoint,
@@ -149,23 +149,23 @@ export type {
   ChartSeries,
   ChartTone,
   LineChartProps,
-  PieChartProps,
-} from './charts';
-export { computeDAGLayout } from './dag';
+  PieChartProps
+} from './charts'
+export { computeDAGLayout } from './dag'
 export type {
   DAGLayoutEdge,
   DAGLayoutNode,
   DAGLayoutOptions,
   DAGLayoutRank,
-  DAGLayoutResult,
-} from './dag';
-export { DiffStats, DiffView } from './diff';
+  DAGLayoutResult
+} from './dag'
+export { DiffStats, DiffView } from './diff'
 export type {
   DiffLineData,
   DiffLineType,
   DiffStatsProps,
-  DiffViewProps,
-} from './diff';
+  DiffViewProps
+} from './diff'
 export {
   canvasPaletteDark,
   canvasPaletteGrokDark,
@@ -176,16 +176,16 @@ export {
   categoryPaletteDark,
   categoryPaletteLight,
   colorPalette,
-  usageColorSequence,
-} from './theme';
-export { TodoList, TodoListCard } from './todo';
+  usageColorSequence
+} from './theme'
+export { TodoList, TodoListCard } from './todo'
 export type {
   TodoItem,
   TodoListCardProps,
   TodoListProps,
-  TodoStatus,
-} from './todo';
-export { useHostTheme } from './use-tokens';
+  TodoStatus
+} from './todo'
+export { useHostTheme } from './use-tokens'
 
 /* ------------------------------------------------------------------ hooks */
 
@@ -255,25 +255,45 @@ export function mergeStyle(
 
 /* ------------------------------------------------------------- typography */
 
+function headingStyle(
+  host: ReturnType<typeof useHostTheme>,
+  level: 'h1' | 'h2' | 'h3',
+  style?: CSSProperties,
+): CSSProperties {
+  const block = host.typography[level]
+  return {
+    fontFamily: host.typography.fontFamily,
+    fontSize: block.fontSize,
+    lineHeight: block.lineHeight,
+    fontWeight: block.fontWeight,
+    color: host.text.primary,
+    margin: 0,
+    ...style,
+  }
+}
+
 export function H1({ children, style }: H1Props) {
+  const host = useHostTheme();
   return (
-    <Title order={1} fz={24} lh="30px" style={style}>
+    <Title order={1} style={headingStyle(host, 'h1', style)}>
       {children}
     </Title>
   );
 }
 
 export function H2({ children, style }: H2Props) {
+  const host = useHostTheme();
   return (
-    <Title order={2} fz={18} lh="24px" style={style}>
+    <Title order={2} style={headingStyle(host, 'h2', style)}>
       {children}
     </Title>
   );
 }
 
 export function H3({ children, style }: H3Props) {
+  const host = useHostTheme();
   return (
-    <Title order={3} fz={16} lh="22px" style={style}>
+    <Title order={3} style={headingStyle(host, 'h3', style)}>
       {children}
     </Title>
   );
@@ -304,7 +324,12 @@ export function Text({
       fw={TEXT_WEIGHT[weight]}
       c={tone === 'primary' ? undefined : theme.text[tone]}
       truncate={truncate}
-      style={{ fontStyle: italic ? 'italic' : undefined, ...style }}
+      style={{
+        fontStyle: italic ? 'italic' : undefined,
+        ...(tone === 'primary' ? { color: theme.text.primary } : undefined),
+        fontFamily: theme.typography.fontFamily,
+        ...style,
+      }}
     >
       {children}
     </MantineText>
@@ -312,14 +337,16 @@ export function Text({
 }
 
 export function Code({ children, style }: CodeProps) {
+  const host = useHostTheme();
   return (
     <code
       style={{
         fontFamily:
           'ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Code", monospace',
         fontSize: '0.92em',
-        background: 'var(--mantine-color-default-hover)',
-        borderRadius: 4,
+        color: host.text.primary,
+        background: host.fill.secondary,
+        borderRadius: host.radius.sm,
         padding: '1px 4px',
         ...style,
       }}
@@ -330,12 +357,13 @@ export function Code({ children, style }: CodeProps) {
 }
 
 export function Link({ children, href, style }: LinkProps) {
+  const host = useHostTheme();
   return (
     <a
       href={href}
       target="_blank"
       rel="noreferrer"
-      style={{ color: 'var(--mantine-color-anchor)', ...style }}
+      style={{ color: host.text.link, ...style }}
     >
       {children}
     </a>
@@ -431,6 +459,7 @@ export function Card({
   onOpenChange,
   style,
 }: CardProps) {
+  const host = useHostTheme();
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const open = openProp ?? internalOpen;
   const toggle = useCallback(() => {
@@ -442,9 +471,13 @@ export function Card({
   return (
     <MantineCard
       withBorder={variant !== 'borderless'}
-      radius="md"
+      radius={host.radius.md}
       padding={0}
-      style={style}
+      style={{
+        background: host.bg.elevated,
+        borderColor: host.stroke.secondary,
+        ...style,
+      }}
     >
       <CardContext.Provider value={{ collapsible, open, toggle }}>
         {children}
@@ -454,6 +487,7 @@ export function Card({
 }
 
 export function CardHeader({ children, trailing, style }: CardHeaderProps) {
+  const host = useHostTheme();
   const { collapsible, open, toggle } = useContext(CardContext);
   return (
     <div
@@ -464,10 +498,11 @@ export function CardHeader({ children, trailing, style }: CardHeaderProps) {
         justifyContent: 'space-between',
         gap: 8,
         padding: '8px 14px',
-        borderBottom: '1px solid var(--mantine-color-default-border)',
-        fontSize: 12,
-        fontWeight: 600,
-        color: 'var(--mantine-color-dimmed)',
+        borderBottom: `1px solid ${host.stroke.secondary}`,
+        fontSize: host.typography.small.fontSize,
+        fontWeight: host.typography.h3.fontWeight,
+        color: host.text.tertiary,
+        fontFamily: host.typography.fontFamily,
         cursor: collapsible ? 'pointer' : undefined,
         userSelect: collapsible ? 'none' : undefined,
         ...style,
@@ -515,17 +550,27 @@ function Chevron({ expanded }: { expanded: boolean }) {
 /* --------------------------------------------------------------- display */
 
 export function Stat({ value, label, tone, style }: StatProps) {
+  const host = useHostTheme();
   return (
     <div style={style}>
       <MantineText
         fz={22}
         fw={700}
         lh={1.2}
-        c={tone ? `${toneColor[tone]}.6` : undefined}
+        style={{
+          color: tone ? toneHex[tone] : host.text.primary,
+          fontFamily: host.typography.fontFamily,
+        }}
       >
         {value}
       </MantineText>
-      <MantineText fz={12} c="dimmed">
+      <MantineText
+        fz={12}
+        style={{
+          color: host.text.tertiary,
+          fontFamily: host.typography.fontFamily,
+        }}
+      >
         {label}
       </MantineText>
     </div>
@@ -671,6 +716,7 @@ export function Button({
   return (
     <MantineButton
       variant={BUTTON_VARIANT[variant]}
+      color={variant === 'primary' ? 'accent' : undefined}
       size="xs"
       disabled={disabled}
       type={type}
