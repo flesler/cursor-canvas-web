@@ -19,10 +19,11 @@ into the IDE-managed canvases folder so it renders in Cursor too.
   A canvas may import from `cursor/canvas` only. Keeping this pure is the whole
   point of the PoC.
 - The shim **must stay API-compatible with the real SDK**. The authoritative
-  contract is the official declarations at
-  `~/.cursor/skills-cursor/canvas/sdk/*.d.ts` (components, props, tones, hook
-  signatures). A canvas that compiles here must also compile/render unchanged
-  in the IDE — so match prop shapes and the real tone vocabularies
+  contract is the vendored declarations at `src/vendor/canvas-sdk/*.d.ts`
+  (synced from `~/.cursor/skills-cursor/canvas/sdk/`). Shim sources import
+  prop types from that tree; npm `types` point at the same vendored
+  `index.d.ts`, not generated Mantine declarations. A canvas that compiles here
+  must also compile/render unchanged in the IDE — match tone vocabularies
   (`StatTone`, `PillTone`, `CalloutTone`, `ChartTone`, `Text` tones). Do not
   invent exports (e.g. a generic `Tone`) that the real SDK lacks.
 - All adaptation lives under `src/shim/` behind the `cursor-canvas.tsx` barrel
@@ -30,8 +31,8 @@ into the IDE-managed canvases folder so it renders in Cursor too.
   `use-tokens.ts`). Add new canvas API surface there, implemented with Mantine,
   mirroring the SDK declarations, and re-export it from the barrel.
 - **SDK upkeep:** `pnpm run sync:sdk` copies the IDE declarations into
-  `test/contract/cursor-sdk/` and updates `sdk-manifest.json`. Release policy
-  and intentional IDE vs web gaps: [`COMPAT.md`](./COMPAT.md). We do **not** keep
+  `src/vendor/canvas-sdk/` and updates `manifest.json`. Release policy and
+  intentional IDE vs web gaps: [`COMPAT.md`](./COMPAT.md). We do **not** keep
   parallel implementations per Cursor version.
 - **Back-compat / defensive behavior** only at these boundaries (comment or dev
   log when behavior differs from the IDE):

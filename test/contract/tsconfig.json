@@ -7,8 +7,9 @@
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
+    "types": ["vite/client"],
     "paths": {
-      "cursor/canvas": ["../../dist/shim/cursor-canvas.d.ts"]
+      "cursor/canvas": ["../../src/shim/cursor-canvas.tsx"]
     }
   },
   "include": ["consumer.ts"]

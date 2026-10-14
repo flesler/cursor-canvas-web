@@ -7,6 +7,20 @@
  * Values are aligned with the Cursor dark/light themes from the SDK.
  */
 
+import type {
+  CanvasPalette,
+  CanvasTokens,
+  CategoryPalette,
+  Color,
+} from '../vendor/canvas-sdk/canvas-tokens.js';
+
+export type {
+  CanvasPalette,
+  CanvasTokens,
+  CategoryPalette,
+  Color,
+} from '../vendor/canvas-sdk/canvas-tokens.js';
+
 export const canvasPaletteDark = {
   foreground: '#E4E4E4EB',
   foregroundSecondary: '#E4E4E48D',
@@ -94,47 +108,6 @@ export const canvasPaletteGrokLight: CanvasPalette = {
   ...grokAccentLight,
 };
 
-export interface CanvasPalette {
-  readonly foreground: string;
-  readonly foregroundSecondary: string;
-  readonly foregroundTertiary: string;
-  readonly foregroundQuaternary: string;
-  readonly editor: string;
-  readonly chrome: string;
-  readonly sidebar: string;
-  readonly elevated: string;
-  readonly fillPrimary: string;
-  readonly fillSecondary: string;
-  readonly fillTertiary: string;
-  readonly fillQuaternary: string;
-  readonly strokePrimary: string;
-  readonly strokeSecondary: string;
-  readonly strokeTertiary: string;
-  readonly strokeFocused: string;
-  readonly accent: string;
-  readonly buttonBackground: string;
-  readonly buttonForeground: string;
-  readonly buttonHoverBackground: string;
-  readonly link: string;
-  readonly diffInsertedLine: string;
-  readonly diffRemovedLine: string;
-  readonly diffStripAdded: string;
-  readonly diffStripRemoved: string;
-}
-
-export type Color =
-  | 'gray'
-  | 'purple'
-  | 'green'
-  | 'yellow'
-  | 'cyan'
-  | 'pink'
-  | 'blue'
-  | 'orange'
-  | 'red';
-
-export type CategoryPalette = Readonly<Record<Color, string>>;
-
 export const categoryPaletteDark: CategoryPalette = {
   gray: '#8888A8E0',
   purple: '#7B64B8F0',
@@ -159,7 +132,10 @@ export const categoryPaletteLight: CategoryPalette = {
   red: '#CF2D56E0',
 };
 
-function buildTokens(palette: CanvasPalette, category: CategoryPalette) {
+function buildTokens(
+  palette: CanvasPalette,
+  category: CategoryPalette,
+): CanvasTokens {
   return {
     bg: {
       editor: palette.editor,
@@ -201,12 +177,7 @@ function buildTokens(palette: CanvasPalette, category: CategoryPalette) {
   };
 }
 
-export type CanvasTokens = ReturnType<typeof buildTokens>;
-
-export const canvasTokens = buildTokens(
-  canvasPaletteDark,
-  categoryPaletteDark,
-);
+export const canvasTokens = buildTokens(canvasPaletteDark, categoryPaletteDark);
 export const canvasTokensLight = buildTokens(
   canvasPaletteLight,
   categoryPaletteLight,
@@ -334,8 +305,8 @@ export const toneColor: Record<string, string> = {
   renamed: 'indigo',
 };
 
-/** Host theme returned by `useHostTheme()`. Extends the token groups. */
-export interface CanvasHostTheme extends CanvasTokens {
+/** Host theme returned by `useHostTheme()`. Extends the SDK `CanvasHostTheme`. */
+export interface ShimHostTheme extends CanvasTokens {
   readonly kind: string;
   readonly tokens: CanvasTokens;
   readonly palette: CanvasPalette;
@@ -350,11 +321,10 @@ export interface CanvasHostTheme extends CanvasTokens {
   readonly spacing: typeof canvasSpacing;
 }
 
-export function buildHostTheme(kind: 'light' | 'dark'): CanvasHostTheme {
+export function buildHostTheme(kind: 'light' | 'dark'): ShimHostTheme {
   const tokens = kind === 'dark' ? canvasTokens : canvasTokensLight;
   const palette = kind === 'dark' ? canvasPaletteDark : canvasPaletteLight;
-  const category =
-    kind === 'dark' ? categoryPaletteDark : categoryPaletteLight;
+  const category = kind === 'dark' ? categoryPaletteDark : categoryPaletteLight;
   return {
     ...tokens,
     kind,

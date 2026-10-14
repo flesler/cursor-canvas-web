@@ -2,17 +2,22 @@
  * Todo primitives. `TodoList` renders clickable status rows; `TodoListCard`
  * wraps them in a bordered, collapsible surface with an "N of M Done" summary.
  */
-import { type CSSProperties, useState } from 'react';
-import { useHostTheme } from './use-tokens';
+import { useState } from 'react';
 import { toneHex } from './theme';
+import { useHostTheme } from './use-tokens';
 
-export type TodoStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
+export type {
+  TodoItem,
+  TodoListCardProps,
+  TodoListProps,
+  TodoStatus,
+} from '../vendor/canvas-sdk/todo-list.js';
 
-export interface TodoItem {
-  readonly id: string;
-  readonly content: string;
-  readonly status: TodoStatus;
-}
+import type {
+  TodoListCardProps,
+  TodoListProps,
+  TodoStatus,
+} from '../vendor/canvas-sdk/todo-list.js';
 
 function StatusIcon({ status }: { status: TodoStatus }) {
   const theme = useHostTheme();
@@ -55,13 +60,6 @@ function StatusIcon({ status }: { status: TodoStatus }) {
     </svg>
   );
 }
-
-export type TodoListProps = {
-  todos: readonly TodoItem[];
-  dimmedTodoIds?: ReadonlySet<string>;
-  onTodoClick?: (todo: TodoItem) => void;
-  style?: CSSProperties;
-};
 
 export function TodoList({
   todos,
@@ -113,14 +111,6 @@ export function TodoList({
     </div>
   );
 }
-
-export type TodoListCardProps = {
-  todos: readonly TodoItem[];
-  dimmedTodoIds?: ReadonlySet<string>;
-  defaultExpanded?: boolean;
-  onTodoClick?: (todo: TodoItem) => void;
-  style?: CSSProperties;
-};
 
 export function TodoListCard({
   todos,

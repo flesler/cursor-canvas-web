@@ -5,75 +5,39 @@
  * flat `data` array for pie); Mantine wants an array of row objects plus a
  * series descriptor. We reshape here and map `tone` -> color.
  */
-import type { ChartReferenceLineProps } from '@mantine/charts'
+import type { ChartReferenceLineProps } from '@mantine/charts';
 import {
-    AreaChart,
-    DonutChart,
-    BarChart as MantineBarChart,
-    LineChart as MantineLineChart,
-    PieChart as MantinePieChart,
-} from '@mantine/charts'
-import type { CSSProperties } from 'react'
+  AreaChart,
+  DonutChart,
+  BarChart as MantineBarChart,
+  LineChart as MantineLineChart,
+  PieChart as MantinePieChart,
+} from '@mantine/charts';
+import { chartColorSequence, toneHex } from './theme';
 
-import { chartColorSequence, toneHex } from './theme'
+export type {
+  BarChartProps,
+  ChartDataPoint,
+  ChartReferenceLine,
+  ChartSeries,
+  ChartTone,
+  LineChartProps,
+  PieChartProps,
+} from '../vendor/canvas-sdk/chart-primitives.js';
 
-export type ChartTone = 'success' | 'danger' | 'warning' | 'info' | 'neutral';
+import type {
+  BarChartProps,
+  ChartReferenceLine,
+  ChartSeries,
+  ChartTone,
+  LineChartProps,
+  PieChartProps,
+} from '../vendor/canvas-sdk/chart-primitives.js';
 
-export type ChartDataPoint = { label: string; value: number };
-
-export type ChartSeries = {
-  name: string;
-  data: number[];
-  tone?: ChartTone;
-};
-
-export type ChartReferenceLine = {
-  value: number;
-  label?: string;
-  tone?: ChartTone;
-};
-
-/** Unknown SDK props typecheck. The wrapper only reads the fields it names. */
-type ExtraProps = { [key: string]: unknown };
-
-type ValueAxisProps = {
-  beginAtZero?: boolean;
-  yMin?: number;
-  yMax?: number;
-  referenceLines?: ChartReferenceLine[];
-};
-
-export type BarChartProps = ValueAxisProps & {
-  categories: string[];
-  series: ChartSeries[];
-  height?: number;
-  stacked?: boolean;
-  horizontal?: boolean;
-  normalized?: boolean;
-  valueSuffix?: string;
-  valuePrefix?: string;
-  showValues?: boolean;
-  style?: CSSProperties;
-} & ExtraProps;
-
-export type LineChartProps = ValueAxisProps & {
-  categories: string[];
-  series: ChartSeries[];
-  height?: number;
-  fill?: boolean;
-  valueSuffix?: string;
-  valuePrefix?: string;
-  showValues?: boolean;
-  showHoverGuide?: boolean;
-  style?: CSSProperties;
-} & ExtraProps;
-
-export type PieChartProps = {
-  data: Array<ChartDataPoint & { tone?: ChartTone }>;
-  size?: number;
-  donut?: boolean;
-  style?: CSSProperties;
-} & ExtraProps;
+type ValueAxisProps = Pick<
+  BarChartProps,
+  'beginAtZero' | 'yMin' | 'yMax' | 'referenceLines'
+>;
 
 function seriesColor(tone: ChartTone | undefined, index: number): string {
   return tone
@@ -260,12 +224,7 @@ export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
     color: seriesColor(point.tone, index),
   }));
   const chart = donut ? (
-    <DonutChart
-      data={mantineData}
-      size={size}
-      withTooltip
-      style={style}
-    />
+    <DonutChart data={mantineData} size={size} withTooltip style={style} />
   ) : (
     <MantinePieChart
       data={mantineData}

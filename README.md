@@ -1,6 +1,6 @@
 # cursor-canvas-web
 
-> **Fork** of [`@thisismydesign/cursor-canvas-web`](https://github.com/thisismydesign/cursor-canvas-web) ([npm](https://www.npmjs.com/package/@thisismydesign/cursor-canvas-web)), published as **`@flesler/cursor-canvas-web`**. We keep the shim aligned with the Cursor IDE `cursor/canvas` SDK (see [`COMPAT.md`](./COMPAT.md), `pnpm test:contract`) and track current stack versions — **Mantine 8** and **Recharts 2 or 3** — instead of the upstream Mantine 7 line.
+> **Fork** of [`@thisismydesign/cursor-canvas-web`](https://github.com/thisismydesign/cursor-canvas-web) ([npm](https://www.npmjs.com/package/@thisismydesign/cursor-canvas-web)), published as `@flesler/cursor-canvas-web`. We keep the shim aligned with the Cursor IDE `cursor/canvas` SDK (see [`COMPAT.md`](./COMPAT.md), `pnpm test:contract`) and track current stack versions — **Mantine 8** and **Recharts 2 or 3** — instead of the upstream Mantine 7 line.
 
 Deploy **Cursor canvases** to the web.
 
@@ -44,8 +44,8 @@ pnpm add react react-dom @mantine/core@^8 @mantine/charts@^8 recharts@^2
 
 The package ships two entry points:
 
-| Import                                      | Provides                                      |
-| ------------------------------------------- | --------------------------------------------- |
+| Import                               | Provides                                      |
+| ------------------------------------ | --------------------------------------------- |
 | `@flesler/cursor-canvas-web`         | The `cursor/canvas` shim (components, hooks). |
 | `@flesler/cursor-canvas-web/runtime` | `CanvasRoot` + `mountCanvas` web host glue.   |
 
@@ -130,9 +130,10 @@ The shim implements the **full public `cursor/canvas` surface**:
   and `spacing` (see `COMPAT.md` for IDE vs web)
 
 Known fidelity gaps (behavior is reproduced, not the exact renderer):
-`DiffView` skips Shiki syntax highlighting (plain-text fallback), and
-`useCanvasAction` is a no-op on the web (IDE-only). Styling approximates the
-Cursor theme rather than matching it pixel-for-pixel.
+`DiffView` skips IDE Shiki highlighting (plain-text lines; gutters/backgrounds
+stay). Charts use Recharts instead of inline SVG; `useCanvasAction` is a
+no-op on the web (IDE-only). Styling approximates the Cursor theme rather than
+matching it pixel-for-pixel.
 
 If your canvas needs an export the shim doesn't yet provide, see
 [Extending the shim](#extending-the-shim).
@@ -170,7 +171,7 @@ pnpm typecheck      # tsc --noEmit, strict
 pnpm lint           # eslint
 pnpm test           # vitest run
 pnpm test:contract  # IDE SDK snapshot + export parity + consumer tsc
-pnpm sync:sdk       # refresh test/contract/cursor-sdk from ~/.cursor/skills-cursor/canvas/sdk
+pnpm sync:sdk       # refresh src/vendor/canvas-sdk from ~/.cursor/skills-cursor/canvas/sdk
 pnpm build          # typecheck + vite build -> dist/
 ```
 

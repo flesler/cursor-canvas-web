@@ -1,7 +1,7 @@
-import { fireEvent, screen } from '@testing-library/react'
-import { beforeEach, describe, expect, it } from 'vitest'
-import DemoCanvas from '../../../.cursor/canvases/demo.canvas'
-import { renderWithProvider } from '../../test/render'
+import { fireEvent, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
+import DemoCanvas from '../../../.cursor/canvases/demo.canvas';
+import { renderWithProvider } from '../../test/render';
 
 // useCanvasState persists the active tab to localStorage; clear it so each test
 // starts from the canvas's default tab ('charts').
@@ -73,7 +73,9 @@ describe('DemoCanvas showcase', () => {
     // Callout tones.
     expect(screen.getByText('Deployed')).toBeInTheDocument();
     expect(screen.getByText('Failing')).toBeInTheDocument();
-    expect(screen.getByText('Contract tests track the IDE SDK snapshot.')).toBeInTheDocument();
+    expect(
+      screen.getByText('Contract tests track the IDE SDK snapshot.'),
+    ).toBeInTheDocument();
     expect(
       screen.getByText('Neutral callout for secondary notices.'),
     ).toBeInTheDocument();
@@ -82,9 +84,13 @@ describe('DemoCanvas showcase', () => {
   it('renders chart guide section headers (axis, SLO, normalized, horizontal)', () => {
     renderWithProvider(<DemoCanvas />);
 
-    expect(screen.getByText('Uptime % (SLO line, fill, tight axis)')).toBeInTheDocument();
+    expect(
+      screen.getByText('Uptime % (SLO line, fill, tight axis)'),
+    ).toBeInTheDocument();
     expect(screen.getByText('Traffic share (normalized)')).toBeInTheDocument();
-    expect(screen.getByText('Queue depth (horizontal stacked)')).toBeInTheDocument();
+    expect(
+      screen.getByText('Queue depth (horizontal stacked)'),
+    ).toBeInTheDocument();
     expect(screen.getByText('Grouped bars + budget line')).toBeInTheDocument();
     // Reference-line labels render in real layout (Playwright), not jsdom charts.
   });
@@ -126,7 +132,9 @@ describe('DemoCanvas showcase', () => {
     expect(
       screen.getByText('export default function Showcase() {'),
     ).toBeInTheDocument();
-    expect(screen.getByText('export default function Demo() {')).toBeInTheDocument();
+    expect(
+      screen.getByText('export default function Demo() {'),
+    ).toBeInTheDocument();
     expect(screen.getByText('+1')).toBeInTheDocument();
     expect(screen.getByText('-1')).toBeInTheDocument();
   });
@@ -178,9 +186,10 @@ describe('DemoCanvas showcase', () => {
       'text.secondary',
       'text.tertiary',
       'text.quaternary',
-      'chart.green',
-      'chart.blue',
-      'chart.neutralLine',
+      'chart.accent',
+      'chart.link',
+      'chart.strokePrimary',
+      'category.orange',
     ]) {
       expect(screen.getByText(key)).toBeInTheDocument();
     }

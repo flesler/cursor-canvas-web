@@ -13,9 +13,9 @@ export default defineConfig({
   plugins: [
     react(),
     dts({
-      // Flatten output to dist/{shim,runtime}/* and keep tests/helpers out.
+      // Public types come from src/vendor/canvas-sdk — emit runtime declarations only.
       entryRoot: 'src',
-      include: ['src/shim', 'src/runtime'],
+      include: ['src/runtime'],
       exclude: ['src/**/__tests__/**', 'src/**/*.test.*', 'src/test/**'],
     }),
   ],

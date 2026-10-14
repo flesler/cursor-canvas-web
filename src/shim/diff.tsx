@@ -2,13 +2,13 @@
  * Diff primitives. `DiffView` renders a unified diff body (colored line
  * backgrounds, gutter, accent strip); `DiffStats` is the `+N`/`-N` glyph pair.
  *
- * Syntax highlighting from the real SDK (Shiki) is intentionally omitted — the
- * plain-text fallback is an explicitly supported mode. `path`/`language` are
- * accepted for API parity but do not colorize tokens here.
+ * `path` / `language` are accepted for API parity with the IDE SDK. Token
+ * coloring on the web is plain text until a lightweight highlighter lands
+ * (see open-canvas `docs/TODO.md` — Shiki is IDE-only and too heavy to ship).
  */
 import type { CSSProperties } from 'react';
-import { useHostTheme } from './use-tokens';
 import { toneHex } from './theme';
+import { useHostTheme } from './use-tokens';
 
 export type DiffStatsProps = {
   additions?: number;

@@ -1,17 +1,19 @@
-#!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-function stripComments(text) {
+function stripComments(text: string): string {
   return text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
 }
 
-function parseIndexExports(source) {
-  const values = new Set();
-  const types = new Set();
+function parseIndexExports(source: string): {
+  values: Set<string>;
+  types: Set<string>;
+} {
+  const values = new Set<string>();
+  const types = new Set<string>();
   const cleaned = stripComments(source);
   for (const match of cleaned.matchAll(
     /export\s+type\s+\{([^}]+)\}\s+from\s+["'][^"']+["']/g,
@@ -37,62 +39,65 @@ function parseIndexExports(source) {
   return { values, types };
 }
 
-function parseForkDeclarations(source) {
-  const values = new Set();
-  const types = new Set();
-  for (const line of source.split('\n')) {
-    let m = line.match(/^export declare function ([A-Za-z0-9_]+)/);
-    if (m) {
-      values.add(m[1]);
-    }
-    m = line.match(/^export (?:declare )?function ([A-Za-z0-9_]+)/);
-    if (m) {
-      values.add(m[1]);
-    }
-    m = line.match(/^export interface ([A-Za-z0-9_]+)/);
-    if (m) {
-      types.add(m[1]);
-    }
-    m = line.match(/^export type ([A-Za-z0-9_]+)/);
-    if (m) {
-      types.add(m[1]);
-    }
-    m = line.match(/^export \{([^}]+)\} from /);
-    if (m) {
-      for (const part of m[1].split(',')) {
-        const bits = part.trim().split(/\s+as\s+/);
-        values.add(bits[bits.length - 1].trim());
-      }
-    }
-    m = line.match(/^export type \{([^}]+)\} from /);
-    if (m) {
-      for (const part of m[1].split(',')) {
-        const name = part.trim().split(/\s+/).pop();
-        if (name) {
-          types.add(name);
-        }
-      }
-    }
+function parseBarrelExports(source: string): {
+  values: Set<string>;
+  types: Set<string>;
+} {
+  const values = new Set<string>();
+  const types = new Set<string>();
+  const cleaned = stripComments(source);
+
+  const reExports = parseIndexExports(cleaned);
+  for (const n of reExports.types) {
+    types.add(n);
   }
+  for (const n of reExports.values) {
+    values.add(n);
+  }
+
+  for (const match of cleaned.matchAll(
+    /export\s+function\s+([A-Za-z0-9_]+)/g,
+  )) {
+    values.add(match[1]);
+  }
+  for (const match of cleaned.matchAll(
+    /export\s+interface\s+([A-Za-z0-9_]+)/g,
+  )) {
+    types.add(match[1]);
+  }
+  for (const match of cleaned.matchAll(
+    /export\s+type\s+([A-Za-z0-9_]+)\s*=/g,
+  )) {
+    types.add(match[1]);
+  }
+  for (const match of cleaned.matchAll(
+    /export\s+type\s+([A-Za-z0-9_]+)\s*</g,
+  )) {
+    types.add(match[1]);
+  }
+
   return { values, types };
 }
 
+const argv = process.argv.slice(2);
+const strict = argv.includes('--strict');
+const positional = argv.filter((a) => a !== '--strict');
+
 const sdkPath =
-  process.argv[2] ?? path.join(root, 'test/contract/cursor-sdk/index.d.ts');
-const forkPath =
-  process.argv[3] ?? path.join(root, 'dist/shim/cursor-canvas.d.ts');
+  positional[0] ?? path.join(root, 'src/vendor/canvas-sdk/index.d.ts');
+const forkPath = positional[1] ?? path.join(root, 'src/shim/cursor-canvas.tsx');
 
 if (!fs.existsSync(sdkPath)) {
   console.error(`Missing SDK snapshot: ${sdkPath} (run pnpm run sync:sdk)`);
   process.exit(1);
 }
 if (!fs.existsSync(forkPath)) {
-  console.error(`Missing fork types: ${forkPath} (run pnpm run build:lib)`);
+  console.error(`Missing shim barrel: ${forkPath}`);
   process.exit(1);
 }
 
 const sdk = parseIndexExports(fs.readFileSync(sdkPath, 'utf8'));
-const fork = parseForkDeclarations(fs.readFileSync(forkPath, 'utf8'));
+const fork = parseBarrelExports(fs.readFileSync(forkPath, 'utf8'));
 
 const missVal = [...sdk.values].filter((n) => !fork.values.has(n)).sort();
 const missType = [...sdk.types].filter((n) => !fork.types.has(n)).sort();
@@ -110,8 +115,7 @@ console.log(
   'Fork-only value exports (review):',
   extraVal.join(', ') || '(none)',
 );
-console.log(
-  'check:sdk-exports is a warning. Missing names do not fail the build.',
-);
 
-process.exit(0);
+if (strict && (missVal.length > 0 || missType.length > 0)) {
+  process.exit(1);
+}
