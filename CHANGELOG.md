@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.1] — 2026-10-14
+
+- Charts: horizontal bar category ticks, pie/donut legend highlight, line `smooth`, reference lines, and value-axis defaults closer to IDE.
+- Shim components and `CanvasMantineRoot` use host theme tokens more consistently.
+- Pre-push hook skips rewriting unchanged contract consumer; release skill documents agent boundaries.
+
 ## [1.1.0] — 2026-10-14
 
 - Vendored IDE `canvas-sdk` under `src/vendor/canvas-sdk/`; npm `types` and `./canvas-sdk` export use that tree.
