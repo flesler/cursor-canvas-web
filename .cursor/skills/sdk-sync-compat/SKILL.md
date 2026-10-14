@@ -11,7 +11,7 @@ description: Read before syncing canvas-sdk or checking cross-snapshot render co
 
 ## Workflow (local, before commit)
 
-1. `pnpm run sync:sdk` — vendor + `skills/open-canvas/references/canvas.md` are **uncommitted**.
+1. `pnpm run sync:sdk` — vendor + `src/vendor/canvas/SKILL.md` are **uncommitted**.
 2. Wire new `index.d.ts` exports in `src/shim/` if needed.
 3. `pnpm ci:local` — typecheck, lint, test, contract on the **new** vendor tree.
 4. `pnpm run test:render-compat` — copies vendor aside, runs gates, swaps in a **temp** copy of HEAD’s SDK (via `git archive` only — no `checkout`/`stash`), `typecheck` + `pnpm test`, then **always** restores the starting vendor tree on exit (success or failure).

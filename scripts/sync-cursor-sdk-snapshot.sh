@@ -4,7 +4,7 @@ SRC="${CURSOR_SDK_DIR:-$HOME/.cursor/skills-cursor/canvas/sdk}"
 CANVAS_SKILL="${CURSOR_CANVAS_SKILL:-$(dirname "$SRC")/SKILL.md}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$ROOT/src/vendor/canvas-sdk"
-SKILL_REF="$ROOT/skills/open-canvas/references/canvas.md"
+SKILL_REF="$ROOT/src/vendor/canvas/SKILL.md"
 STUB="$ROOT/scripts/vendor-stubs/canvas-action-dispatch.d.ts"
 if [[ ! -d "$SRC" ]]; then
   echo "sync-cursor-sdk: missing IDE SDK at $SRC" >&2
