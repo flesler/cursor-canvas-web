@@ -88,7 +88,14 @@ export type ContractHostThemeExtras = Pick<
 `;
 
 fs.mkdirSync(path.dirname(outFile), { recursive: true });
-fs.writeFileSync(outFile, body);
-console.log(
-  `Wrote ${outFile} (${uniqueValues.length} values, ${uniqueTypes.length} types)`,
-);
+const prev = fs.existsSync(outFile) ? fs.readFileSync(outFile, 'utf8') : '';
+if (prev !== body) {
+  fs.writeFileSync(outFile, body);
+  console.log(
+    `Wrote ${outFile} (${uniqueValues.length} values, ${uniqueTypes.length} types)`,
+  );
+} else {
+  console.log(
+    `Unchanged ${outFile} (${uniqueValues.length} values, ${uniqueTypes.length} types)`,
+  );
+}

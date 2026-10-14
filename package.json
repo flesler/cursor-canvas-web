@@ -54,6 +54,7 @@
     "sync:sdk": "bash scripts/sync-cursor-sdk-snapshot.sh",
     "check:sdk-exports": "tsx scripts/diff-sdk-exports.ts --strict",
     "test:contract": "pnpm run check:sdk-exports && tsx scripts/generate-contract-consumer.ts && tsc --noEmit && pnpm run build:lib",
+    "test:contract:fast": "pnpm run check:sdk-exports && tsx scripts/generate-contract-consumer.ts && tsc --noEmit",
     "check:sdk-live": "tsx scripts/diff-sdk-exports.ts --strict \"${HOME}/.cursor/skills-cursor/canvas/sdk/index.d.ts\"",
     "test:contract:strict": "pnpm run test:contract",
     "test:contract:ci": "pnpm run test:contract",
