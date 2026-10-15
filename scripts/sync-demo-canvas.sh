@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fork demo = open-canvas showcase emitted with --formats cursor (data inlined).
+# Demo = open-canvas showcase (--formats cursor --inline-state: data + sidecar in one file).
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -14,7 +14,7 @@ if [[ ! -f "$CLI" ]]; then
 	exit 1
 fi
 
-node "$CLI" generate "$SHOWCASE" --formats cursor --out "$TMP"
+node "$CLI" generate "$SHOWCASE" --formats cursor --inline-state --out "$TMP"
 EMIT="$TMP/showcase.canvas.tsx"
 if [[ ! -f "$EMIT" ]]; then
 	echo "expected cursor emit at $EMIT" >&2
@@ -22,4 +22,5 @@ if [[ ! -f "$EMIT" ]]; then
 fi
 
 sed 's/showcase\.canvas\.tsx/demo.canvas.tsx/g' "$EMIT" > "$DEST"
-echo "Wrote $DEST (from open-canvas --formats cursor)"
+rm -rf "$TMP"
+echo "Wrote $DEST (open-canvas --formats cursor --inline-state)"

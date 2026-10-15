@@ -30,10 +30,9 @@ describe('DemoCanvas showcase', () => {
       'Graph layout (computeDAGLayout)',
       'Diff',
       'Disclosure & tasks',
-      'Typography & text',
-      'Forms (state persists via useCanvasState)',
-      'Theme tokens (useHostTheme)',
+      'Typography & theme',
       'Host brand (Cursor vs Grok)',
+      'Forms (state persists via useCanvasState)',
       'Data imports (JSON, YAML, TSV, CSV, JSONL)',
     ]) {
       expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
@@ -49,7 +48,6 @@ describe('DemoCanvas showcase', () => {
       'Write a .canvas.tsx that imports only cursor/canvas.',
       'Vite + tsconfig redirect cursor/canvas at build time.',
       'Mantine implements the same API, props, and tones.',
-      'open-canvas generate → HTML, PNG, PDF beside the canvas.',
     ]) {
       expect(screen.getByText(step)).toBeInTheDocument();
     }
@@ -57,7 +55,6 @@ describe('DemoCanvas showcase', () => {
       'Components',
       'Hooks',
       'Source of truth',
-      'Canvas edits to deploy',
     ]) {
       expect(screen.getByText(stat)).toBeInTheDocument();
     }
@@ -70,9 +67,10 @@ describe('DemoCanvas showcase', () => {
     // jsdom, so assert the card headers that frame them).
     expect(screen.getByText('Latency (ms)')).toBeInTheDocument();
     expect(screen.getByText('Requests by source')).toBeInTheDocument();
-    expect(screen.getByText('Test outcomes')).toBeInTheDocument();
-    expect(screen.getByText(/75%/)).toBeInTheDocument();
-    expect(screen.getByText(/9\.9%/)).toBeInTheDocument();
+    expect(screen.getByText('Test outcomes (pie)')).toBeInTheDocument();
+    expect(screen.getByText('Test outcomes (donut)')).toBeInTheDocument();
+    expect(screen.getAllByText(/75%/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/9\.9%/).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Total')).toBeInTheDocument();
     // Callout tones.
     expect(screen.getByText('Deployed')).toBeInTheDocument();
@@ -93,9 +91,11 @@ describe('DemoCanvas showcase', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Traffic share (normalized)')).toBeInTheDocument();
     expect(
-      screen.getByText('Queue depth (horizontal stacked)'),
+      screen.getByText('Lane depth (horizontal, long labels)'),
     ).toBeInTheDocument();
     expect(screen.getByText('Grouped bars + budget line')).toBeInTheDocument();
+    expect(screen.getByText('Dual series, filled area')).toBeInTheDocument();
+    expect(screen.getByText('Weekly volume')).toBeInTheDocument();
     // Reference-line labels render in real layout (Playwright), not jsdom charts.
   });
 
@@ -165,11 +165,15 @@ describe('DemoCanvas showcase', () => {
     expect(screen.getByText('Italic remark.')).toBeInTheDocument();
     expect(screen.getByText('deleted')).toBeInTheDocument();
     expect(screen.getByText('renamed')).toBeInTheDocument();
+    expect(
+      screen.getByText('Quaternary — footnotes and source lines.'),
+    ).toBeInTheDocument();
   });
 
   it('renders the form controls wired to useCanvasState', () => {
     renderWithProvider(<DemoCanvas />);
 
+    expect(screen.getByText('Environment snapshot')).toBeInTheDocument();
     for (const field of ['Environment', 'Filter', 'Release note']) {
       expect(screen.getByText(field)).toBeInTheDocument();
     }
@@ -185,6 +189,8 @@ describe('DemoCanvas showcase', () => {
   it('renders the theme tokens and footer link', () => {
     renderWithProvider(<DemoCanvas />);
 
+    expect(screen.getByText('Theme tokens (useHostTheme)')).toBeInTheDocument();
+    expect(screen.getByText(/brand: cursor/)).toBeInTheDocument();
     for (const key of [
       'text.primary',
       'text.secondary',

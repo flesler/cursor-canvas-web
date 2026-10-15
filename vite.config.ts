@@ -1,6 +1,6 @@
-import { fileURLToPath, URL } from 'node:url';
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react'
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vitest/config'
 
 // Project Pages are served from /<repo>/. Override with BASE_PATH if the
 // repository is renamed or deployed elsewhere.

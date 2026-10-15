@@ -52,8 +52,10 @@ Repo-owned canvases live at `.cursor/canvases/<name>.canvas.tsx` — versioned
 source of truth, edit here. The IDE renders only from
 `~/.cursor/projects/<workspace>/canvases/`, so after editing, `cp` the repo copy
 over the managed one. Live UI edits persist to a managed-folder
-`*.canvas.data.json` sidecar (not versioned); fold meaningful values into the
-repo defaults. Skills reference their canvas by name and keep it current.
+`*.canvas.data.json` sidecar (not versioned); fold meaningful values into
+open-canvas `showcase.canvas.data.json`, then `pnpm sync:demo` (`--inline-state`
+inlines state into `demo.canvas.tsx`). Skills reference their canvas by name and
+keep it current.
 Authoring rules: `canvas` skill.
 
 ## Environment

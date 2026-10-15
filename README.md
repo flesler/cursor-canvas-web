@@ -15,7 +15,7 @@ A Cursor canvas is a `.tsx` that imports only from `cursor/canvas`. That module 
   <img src="docs/demo-dark.png" alt="Demo canvas (dark)" width="49%" />
 </p>
 
-Regenerate demo: `pnpm sync:demo` then `pnpm demo:screenshot` (sibling [open-canvas](https://github.com/flesler/open-canvas) built; uses `open-canvas generate --formats cursor`).
+Regenerate demo: `pnpm sync:demo` then `pnpm demo:screenshot` (sibling [open-canvas](https://github.com/flesler/open-canvas) built; `sync:demo` runs `generate --formats cursor --inline-state`).
 
 ## How it works: a module shim, not a converter
 

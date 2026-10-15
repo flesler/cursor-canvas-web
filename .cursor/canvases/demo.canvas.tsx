@@ -1,4 +1,14 @@
-import { BarChart, Button, Callout, Card, CardBody, CardHeader, Checkbox, Code, CollapsibleSection, DiffStats, DiffView, Divider, Grid, H1, H2, H3, IconButton, LineChart, Link, PieChart, Pill, Row, Select, Spacer, Stack, Stat, Swatch, Table, Text, TextArea, TextInput, TodoList, TodoListCard, Toggle, UsageBar, canvasPaletteGrokDark, canvasPaletteGrokLight, colorPalette, computeDAGLayout, mergeStyle, useCanvasAction, useCanvasState, useEffect, useHostTheme, useMemo, useRef, useState, type ChartSeries, type Color, type DiffLineData, type StackProps, type TodoItem } from 'cursor/canvas'
+import { BarChart, Button, Callout, Card, CardBody, CardHeader, Checkbox, Code, CollapsibleSection, DiffStats, DiffView, Divider, Grid, H1, H2, H3, IconButton, LineChart, Link, PieChart, Pill, Row, Select, Spacer, Stack, Stat, Swatch, Table, Text, TextArea, TextInput, TodoList, TodoListCard, Toggle, UsageBar, canvasPaletteGrokDark, canvasPaletteGrokLight, computeDAGLayout, mergeStyle, usageColorSequence, useCanvasAction, useCanvasState, useEffect, useHostTheme, useMemo, useRef, useState, type ChartSeries, type Color, type DiffLineData, type StackProps, type TableRowTone, type TodoItem } from 'cursor/canvas'
+
+const __canvasJsonState = {"show.env":"staging","show.note":"Hydrated from .canvas.data.json on export","show.live":false} as Record<string, unknown>
+if (typeof localStorage !== 'undefined') {
+	for (const [key, value] of Object.entries(__canvasJsonState)) {
+		const storageKey = 'canvas:' + key
+		if (localStorage.getItem(storageKey) === null) {
+			localStorage.setItem(storageKey, JSON.stringify(value))
+		}
+	}
+}
 
 const daily = [{"date":"2026-10-05","deploys":"582","totalDurationP90Sec":"388"},{"date":"2026-10-06","deploys":"601","totalDurationP90Sec":"401"},{"date":"2026-10-07","deploys":"593","totalDurationP90Sec":"395"},{"date":"2026-10-08","deploys":"612","totalDurationP90Sec":"407"},{"date":"2026-10-09","deploys":"598","totalDurationP90Sec":"412"},{"date":"2026-10-10","deploys":"604","totalDurationP90Sec":"418"},{"date":"2026-10-11","deploys":"597","totalDurationP90Sec":"421"}]
 const deployEvents = [{"date":"2026-10-09","app":"app-aurora-7f3","durationSec":2847},{"date":"2026-10-10","app":"app-mint-2c1","durationSec":2292},{"date":"2026-10-11","app":"app-orbit-9aa","durationSec":1904}]
@@ -33,7 +43,11 @@ const REQUESTS: ChartSeries[] = [
 const CATEGORIES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 const UPTIME: ChartSeries[] = [
-	{ name: 'uptime %', data: [99.2, 99.5, 99.1, 99.8, 99.6, 99.9], tone: 'success' },
+	{
+		name: 'uptime %',
+		data: [99.2, 99.5, 99.1, 99.8, 99.6, 99.9],
+		tone: 'success',
+	},
 ]
 const TRAFFIC_SHARE: ChartSeries[] = [
 	{ name: 'Web', data: [40, 45, 50], tone: 'info' },
@@ -41,12 +55,23 @@ const TRAFFIC_SHARE: ChartSeries[] = [
 	{ name: 'Batch', data: [25, 25, 25], tone: 'neutral' },
 ]
 const SHARE_WEEKS = ['W1', 'W2', 'W3']
-const QUEUE: ChartSeries[] = [
-	{ name: 'ready', data: [12, 8, 15, 6], tone: 'neutral' },
-	{ name: 'retry', data: [3, 5, 2, 4], tone: 'warning' },
-]
-const QUEUE_STAGES = ['ingest', 'build', 'test', 'ship']
 
+const DRAIN_CHECKPOINTS = ['T+5s', 'T+10s', 'T+15s', 'T+20s', 'T+30s']
+const DRAIN_SERIES: ChartSeries[] = [
+	{ name: 'Off-heap reclaimed', data: [0.12, 0.18, 0.24, 0.36, 0.41], tone: 'info' },
+	{ name: 'Heap reclaimed', data: [0.58, 0.55, 0.62, 0.71, 0.85], tone: 'warning' },
+]
+
+function serviceTableRows(): {
+	tone?: TableRowTone;
+	row: [string, string, string]
+}[] {
+	return [
+		{ row: ['api-gateway', 'healthy', '3.2k'], tone: 'success' },
+		{ row: ['workers', 'hot', '8.1k'], tone: 'warning' },
+		{ row: ['billing', 'down', '0'], tone: 'danger' },
+	]
+}
 const OUTCOMES = [
 	{ label: 'Passing', value: 68, tone: 'success' as const },
 	{ label: 'Flaky', value: 14, tone: 'warning' as const },
@@ -77,6 +102,21 @@ const TODOS: TodoItem[] = [
 		id: '5',
 		content: 'Vendor official .d.ts as the type source',
 		status: 'cancelled',
+	},
+]
+
+/** Extra rows on the selectable TodoList so the right column matches the left stack height. */
+const TODOS_SELECTABLE: TodoItem[] = [
+	...TODOS,
+	{
+		id: '6',
+		content: 'Keep README showcase PNGs in sync after layout edits',
+		status: 'pending',
+	},
+	{
+		id: '7',
+		content: 'Run contract + verify on every SDK bump',
+		status: 'pending',
 	},
 ]
 
@@ -124,6 +164,9 @@ const STEPS: { n: string; title: string; desc: string }[] = [
 	},
 ]
 
+const DAG_NODE_W = 96
+const DAG_NODE_H = 40
+
 const DAG = computeDAGLayout({
 	nodes: [
 		{ id: 'Plan' },
@@ -140,10 +183,11 @@ const DAG = computeDAGLayout({
 		{ from: 'Review', to: 'Edit' },
 	],
 	direction: 'horizontal',
-	nodeWidth: 96,
-	nodeHeight: 34,
-	rankGap: 40,
+	nodeWidth: DAG_NODE_W,
+	nodeHeight: DAG_NODE_H,
+	rankGap: 52,
 	nodeGap: 18,
+	padding: 32,
 })
 
 /* -------------------------------------------------------------- subsections */
@@ -170,17 +214,21 @@ function Section({
 function DagDiagram() {
 	const theme = useHostTheme()
 	const labelOf = (id: string) => id
+	const backEdgeLift = 48
 	return (
-		<div style={{ overflowX: 'auto' }}>
+		<div style={{ width: '100%' }}>
 			<svg
-				width={DAG.width}
-				height={DAG.height}
+				viewBox={`0 0 ${DAG.width} ${DAG.height}`}
+				width="100%"
+				height="auto"
+				preserveAspectRatio="xMidYMid meet"
 				role="img"
 				aria-label="Agent loop graph"
+				style={{ display: 'block', minHeight: 88, maxHeight: 140 }}
 			>
 				<defs>
 					<marker
-						id="arrow"
+						id="dag-arrow"
 						viewBox="0 0 8 8"
 						refX={7}
 						refY={4}
@@ -190,17 +238,41 @@ function DagDiagram() {
 					>
 						<path d="M0 0L8 4L0 8z" fill={theme.text.tertiary} />
 					</marker>
+					<marker
+						id="dag-arrow-back"
+						viewBox="0 0 8 8"
+						refX={7}
+						refY={4}
+						markerWidth={6}
+						markerHeight={6}
+						orient="auto-start-reverse"
+					>
+						<path d="M0 0L8 4L0 8z" fill={theme.accent.primary} />
+					</marker>
 				</defs>
+				{DAG.ranks.map(rank => (
+					<rect
+						key={rank.rank}
+						x={rank.x}
+						y={rank.y}
+						width={rank.width}
+						height={rank.height}
+						rx={8}
+						fill={theme.fill.secondary}
+						stroke={theme.stroke.secondary}
+						strokeWidth={1}
+					/>
+				))}
 				{DAG.edges.map(edge =>
 					edge.isBackEdge ? (
 						<path
 							key={`${edge.from}-${edge.to}`}
-							d={`M ${edge.sourceX} ${edge.sourceY} C ${edge.sourceX} ${edge.sourceY - 42}, ${edge.targetX} ${edge.targetY - 42}, ${edge.targetX} ${edge.targetY}`}
+							d={`M ${edge.sourceX} ${edge.sourceY} C ${edge.sourceX} ${edge.sourceY - backEdgeLift}, ${edge.targetX} ${edge.targetY - backEdgeLift}, ${edge.targetX} ${edge.targetY}`}
 							fill="none"
 							stroke={theme.accent.primary}
 							strokeWidth={1.5}
 							strokeDasharray="4 3"
-							markerEnd="url(#arrow)"
+							markerEnd="url(#dag-arrow-back)"
 						/>
 					) : (
 						<line
@@ -211,7 +283,7 @@ function DagDiagram() {
 							y2={edge.targetY}
 							stroke={theme.text.tertiary}
 							strokeWidth={1.5}
-							markerEnd="url(#arrow)"
+							markerEnd="url(#dag-arrow)"
 						/>
 					),
 				)}
@@ -220,15 +292,15 @@ function DagDiagram() {
 						<rect
 							x={node.x}
 							y={node.y}
-							width={96}
-							height={34}
+							width={DAG_NODE_W}
+							height={DAG_NODE_H}
 							rx={6}
-							fill={theme.fill.tertiary}
+							fill={theme.fill.primary}
 							stroke={theme.stroke.primary}
 						/>
 						<text
-							x={node.x + 48}
-							y={node.y + 17}
+							x={node.x + DAG_NODE_W / 2}
+							y={node.y + DAG_NODE_H / 2}
 							textAnchor="middle"
 							dominantBaseline="central"
 							fontSize={12}
@@ -264,30 +336,61 @@ export default function ShowcaseCanvas() {
 	}, [])
 	const dimmed = useMemo(
 		() =>
-			new Set(
-				TODOS.filter(t => t.status === 'completed').map(t => t.id),
-			),
+			new Set(TODOS.filter(t => t.status === 'completed').map(t => t.id)),
 		[],
 	)
 
 	const { meta, kpis, durationByPhase } = report
-  const grokPalette =
-    theme.kind === 'light' ? canvasPaletteGrokLight : canvasPaletteGrokDark
+	const grokPalette =
+		theme.kind === 'light' ? canvasPaletteGrokLight : canvasPaletteGrokDark
 	const cap = { color: theme.text.tertiary, fontSize: 12 }
-	const rssRows = (phaseRssMb as { rows?: Array<{ phase: string; p90: number }> }).rows ?? []
+
+	const envTraffic = useMemo(() => {
+		if (env === 'staging') {
+			return { rps: '1.2k', tone: 'warning' as const, hint: 'mirrored subset' }
+		}
+		if (env === 'dev') {
+			return { rps: '120', tone: 'info' as const, hint: 'local stack' }
+		}
+		return { rps: '3.2k', tone: 'success' as const, hint: 'primary region' }
+	}, [env])
+
+	const outlierRowTone = useMemo(
+		() =>
+			outlierRows.map((_, i) => {
+				if (i === 0) {
+					return 'danger' as const
+				}
+				if (i < 3) {
+					return 'warning' as const
+				}
+				if (i === outlierRows.length - 1) {
+					return 'success' as const
+				}
+				return undefined
+			}),
+		[],
+	)
+	const rssRows =
+		(phaseRssMb as { rows?: Array<{ phase: string; p90: number }> }).rows ?? []
 	const phases = durationByPhase.rows.map(r => r.phase)
 	const durationSeries: ChartSeries[] = [
 		{ name: 'p50', data: durationByPhase.rows.map(r => r.p50), tone: 'info' },
-		{ name: 'p90', data: durationByPhase.rows.map(r => r.p90), tone: 'warning' },
+		{
+			name: 'p90',
+			data: durationByPhase.rows.map(r => r.p90),
+			tone: 'warning',
+		},
 	]
 	const dayLabels = daily.map(d => d.date.slice(5))
 
 	return (
 		<Stack gap={20}>
 			{/* Header --------------------------------------------------------- */}
-			<Row gap={12}>
+			<Row gap={12} align="center">
 				<H1>Cursor Canvas SDK showcase</H1>
 				<Spacer />
+				<Link href="https://github.com/flesler/open-canvas">open-canvas</Link>
 				<Pill tone="info" active={live}>
 					{live ? 'live' : 'paused'}
 				</Pill>
@@ -305,14 +408,15 @@ export default function ShowcaseCanvas() {
 			</Row>
 
 			<Text tone="secondary">
-				Full <Code>cursor/canvas</Code> gallery plus <Code>./data/*</Code> imports
-				(JSON, YAML, TSV, CSV, JSONL) — one file for verify, smoke, and exports.
+				Full <Code>cursor/canvas</Code> gallery plus <Code>./data/*</Code>{' '}
+				imports (JSON, YAML, TSV, CSV, JSONL) — one file for verify, smoke, and
+				exports.
 			</Text>
 
 			{/* How it works (stepped explanation, not a callout) -------------- */}
 			<Section title="How it works">
-				<Grid columns={4} gap={12}>
-					{STEPS.map(step => (
+				<Grid columns={3} gap={12}>
+					{STEPS.slice(0, 3).map(step => (
 						<Card key={step.n}>
 							<CardBody>
 								<Stack gap={6}>
@@ -329,7 +433,7 @@ export default function ShowcaseCanvas() {
 			</Section>
 
 			{/* Stats ---------------------------------------------------------- */}
-			<Grid columns={4} gap={12}>
+			<Grid columns={3} gap={12}>
 				<Card>
 					<CardBody>
 						<Stat value="35" label="Components" tone="info" />
@@ -343,11 +447,6 @@ export default function ShowcaseCanvas() {
 				<Card>
 					<CardBody>
 						<Stat value="1" label="Source of truth" />
-					</CardBody>
-				</Card>
-				<Card>
-					<CardBody>
-						<Stat value="0" label="Canvas edits to deploy" tone="success" />
 					</CardBody>
 				</Card>
 			</Grid>
@@ -365,7 +464,7 @@ export default function ShowcaseCanvas() {
 
 					{tab === 'charts' && (
 						<Stack gap={16}>
-							<Grid columns={3} gap={16} align="start">
+							<Grid columns={2} gap={16}>
 								<Card>
 									<CardHeader>Latency (ms)</CardHeader>
 									<CardBody>
@@ -388,8 +487,10 @@ export default function ShowcaseCanvas() {
 										/>
 									</CardBody>
 								</Card>
+							</Grid>
+							<Grid columns={2} gap={16}>
 								<Card>
-									<CardHeader>Test outcomes</CardHeader>
+									<CardHeader>Test outcomes (pie)</CardHeader>
 									<CardBody
 										style={{
 											display: 'flex',
@@ -398,7 +499,24 @@ export default function ShowcaseCanvas() {
 											minHeight: SHOWCASE_CHART_HEIGHT,
 										}}
 									>
-										<PieChart data={OUTCOMES} donut size={SHOWCASE_CHART_HEIGHT} />
+										<PieChart data={OUTCOMES} size={SHOWCASE_CHART_HEIGHT} />
+									</CardBody>
+								</Card>
+								<Card>
+									<CardHeader>Test outcomes (donut)</CardHeader>
+									<CardBody
+										style={{
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+											minHeight: SHOWCASE_CHART_HEIGHT,
+										}}
+									>
+										<PieChart
+											data={OUTCOMES}
+											donut
+											size={SHOWCASE_CHART_HEIGHT}
+										/>
 									</CardBody>
 								</Card>
 							</Grid>
@@ -431,13 +549,23 @@ export default function ShowcaseCanvas() {
 						<Table
 							headers={['Service', 'Status', 'RPS']}
 							columnAlign={['left', 'left', 'right']}
-							rowTone={['success', undefined, 'danger']}
+							rowTone={serviceTableRows().map(r => r.tone)}
 							striped
-							rows={[
-								['api-gateway', <Pill tone="success">healthy</Pill>, '3.2k'],
-								['workers', <Pill tone="warning">hot</Pill>, '8.1k'],
-								['billing', <Pill tone="deleted">down</Pill>, '0'],
-							]}
+							rows={serviceTableRows().map(r => [
+								r.row[0],
+								<Pill
+									tone={
+										r.tone === 'success'
+											? 'success'
+											: r.tone === 'warning'
+												? 'warning'
+												: 'deleted'
+									}
+								>
+									{r.row[1]}
+								</Pill>,
+								r.row[2],
+							])}
 						/>
 					)}
 
@@ -490,9 +618,8 @@ export default function ShowcaseCanvas() {
 								yMin={99}
 								yMax={100}
 								valueSuffix="%"
-								referenceLines={[
-									{ value: 99.9, label: 'SLO', tone: 'danger' },
-								]}
+								referenceLines={[{ value: 99.9, label: 'SLO', tone: 'danger' }]}
+								showHoverGuide
 							/>
 						</CardBody>
 					</Card>
@@ -510,14 +637,21 @@ export default function ShowcaseCanvas() {
 						</CardBody>
 					</Card>
 					<Card variant="borderless">
-						<CardHeader>Queue depth (horizontal stacked)</CardHeader>
+						<CardHeader>Lane depth (horizontal, long labels)</CardHeader>
 						<CardBody>
 							<BarChart
-								categories={QUEUE_STAGES}
-								series={QUEUE}
-								height={160}
+								categories={[
+									'Aurora north intake',
+									'HUD memory pressure',
+									'Local-vs-CI divergence label',
+									'ship',
+								]}
+								series={[
+									{ name: 'Depth', data: [40, 85, 170, 255], tone: 'warning' },
+								]}
+								height={200}
 								horizontal
-								stacked
+								beginAtZero
 								showValues
 							/>
 						</CardBody>
@@ -548,6 +682,53 @@ export default function ShowcaseCanvas() {
 						</CardBody>
 					</Card>
 				</Grid>
+				<Divider />
+				<Grid columns="1.2fr 1fr" gap={16}>
+					<Card>
+						<CardHeader>Dual series, filled area</CardHeader>
+						<CardBody>
+							<LineChart
+								categories={DRAIN_CHECKPOINTS}
+								series={DRAIN_SERIES}
+								height={200}
+								fill
+								beginAtZero
+								valueSuffix=" GB"
+								showValues
+							/>
+							<Text size="small" tone="tertiary">
+								Median reclaimed resources vs checkpoint (illustrative).
+							</Text>
+						</CardBody>
+					</Card>
+					<Card>
+						<CardHeader trailing="no bar labels">
+							Weekly volume
+						</CardHeader>
+						<CardBody>
+							<BarChart
+								categories={SHARE_WEEKS}
+								series={[
+									{
+										name: 'Builds',
+										data: [42, 51, 48],
+										tone: 'neutral',
+									},
+								]}
+								height={160}
+								showValues={false}
+							/>
+							<Row justify="space-between" align="end">
+								<Text size="small" tone="secondary">
+									Row justify / align
+								</Text>
+								<Text size="small" tone="quaternary">
+									quaternary caption
+								</Text>
+							</Row>
+						</CardBody>
+					</Card>
+				</Grid>
 			</Section>
 
 			{/* Graph ---------------------------------------------------------- */}
@@ -572,7 +753,11 @@ export default function ShowcaseCanvas() {
 						demo.canvas.tsx
 					</CardHeader>
 					<CardBody style={{ padding: 0 }}>
-						<DiffView path="demo.canvas.tsx" lines={DIFF_LINES} />
+						<DiffView
+							path="demo.canvas.tsx"
+							language="typescript"
+							lines={DIFF_LINES}
+						/>
 					</CardBody>
 				</Card>
 			</Section>
@@ -603,13 +788,19 @@ export default function ShowcaseCanvas() {
 								</Text>
 							</CollapsibleSection>
 						</CollapsibleSection>
-						<TodoListCard todos={TODOS} dimmedTodoIds={dimmed} defaultExpanded />
+						<TodoListCard
+							todos={TODOS}
+							dimmedTodoIds={dimmed}
+							defaultExpanded
+						/>
 					</Stack>
 					<Card>
-						<CardHeader>TodoList (selectable)</CardHeader>
+						<CardHeader trailing={<Pill active>selectable</Pill>}>
+							TodoList
+						</CardHeader>
 						<CardBody>
 							<TodoList
-								todos={TODOS}
+								todos={TODOS_SELECTABLE}
 								onTodoClick={t => setSelectedTodo(t.id)}
 							/>
 							<Text size="small" tone="tertiary" style={{ marginTop: 8 }}>
@@ -620,36 +811,219 @@ export default function ShowcaseCanvas() {
 				</Grid>
 			</Section>
 
-			{/* Typography ----------------------------------------------------- */}
-			<Section title="Typography & text">
-				<Card>
-					<CardBody>
-						<Stack gap={6}>
-							<H3>Heading level 3</H3>
-							<Text>Primary body text in the default tone and weight.</Text>
-							<Text tone="secondary">Secondary — supporting copy.</Text>
-							<Text tone="tertiary" size="small">
-								Tertiary, small — captions and hints.
-							</Text>
-							<Text weight="semibold">Semibold emphasis.</Text>
-							<Text italic tone="secondary">
-								Italic remark.
-							</Text>
-							<Row gap={6} wrap>
-								<Pill tone="success">success</Pill>
-								<Pill tone="warning">warning</Pill>
-								<Pill tone="info" leadingContent={<Swatch color="blue" />}>
-									with swatch
-								</Pill>
-								<Pill tone="neutral" keyboardHint="⇧Tab">
-									hint
-								</Pill>
-								<Pill tone="deleted">deleted</Pill>
-								<Pill tone="renamed">renamed</Pill>
-							</Row>
-						</Stack>
-					</CardBody>
-				</Card>
+			{/* Typography + theme (half width each; stack on narrow viewports) ----- */}
+			<Section title="Typography & theme">
+				<Grid
+					columns="repeat(auto-fit, minmax(min(100%, 22rem), 1fr))"
+					gap={16}
+					align="start"
+				>
+					<Card>
+						<CardHeader>Typography & text</CardHeader>
+						<CardBody>
+							<Stack gap={6}>
+								<Text>
+									Nested emphasis stays inline, including{' '}
+									<Text weight="semibold">25 staged items</Text>
+								</Text>
+								<Text tone="secondary" size="small">
+									A second line of body copy sits directly under the emphasis.
+								</Text>
+								<H3>Heading level 3</H3>
+								<Text>Primary body text in the default tone and weight.</Text>
+								<Text tone="secondary">Secondary — supporting copy.</Text>
+								<Text tone="tertiary" size="small">
+									Tertiary, small — captions and hints.
+								</Text>
+								<Text tone="quaternary" size="small">
+									Quaternary — footnotes and source lines.
+								</Text>
+								<Text weight="semibold">Semibold emphasis.</Text>
+								<Text italic tone="secondary">
+									Italic remark.
+								</Text>
+								<Row gap={6} wrap>
+									<Pill tone="success">success</Pill>
+									<Pill tone="warning">warning</Pill>
+									<Pill tone="info" leadingContent={<Swatch color="blue" />}>
+										with swatch
+									</Pill>
+									<Pill tone="neutral" keyboardHint="⇧Tab">
+										hint
+									</Pill>
+									<Pill tone="deleted">deleted</Pill>
+									<Pill tone="renamed">renamed</Pill>
+								</Row>
+							</Stack>
+						</CardBody>
+					</Card>
+					<Card>
+						<CardHeader>Theme tokens (useHostTheme)</CardHeader>
+						<CardBody>
+							<Stack gap={10}>
+								<Text size="small" tone="secondary">
+									Semantic palette keys from <Code>theme.palette</Code>:
+								</Text>
+								<Row gap={10} wrap>
+									{(
+										[
+											['accent', theme.palette.accent],
+											['link', theme.palette.link],
+											['strokePrimary', theme.palette.strokePrimary],
+										] as const
+									).map(([key, hex]) => (
+										<Row key={key} gap={6}>
+											<span
+												style={{
+													width: 16,
+													height: 16,
+													borderRadius: 4,
+													background: hex,
+													border: `1px solid ${theme.stroke.secondary}`,
+												}}
+											/>
+											<Text size="small" tone="tertiary">
+												chart.{key}
+											</Text>
+										</Row>
+									))}
+								</Row>
+								<Text size="small" tone="secondary">
+									Category hues (<Code>theme.category</Code>):
+								</Text>
+								<Row gap={10} wrap>
+									{(
+										[
+											['orange', theme.category.orange],
+											['blue', theme.category.blue],
+											['gray', theme.category.gray],
+										] as const
+									).map(([key, hex]) => (
+										<Row key={key} gap={6}>
+											<span
+												style={{
+													width: 16,
+													height: 16,
+													borderRadius: 4,
+													background: hex,
+													border: `1px solid ${theme.stroke.secondary}`,
+												}}
+											/>
+											<Text size="small" tone="tertiary">
+												category.{key}
+											</Text>
+										</Row>
+									))}
+								</Row>
+								<Text size="small" tone="secondary">Text fills:</Text>
+								<Grid columns={2} gap={8}>
+									{(['primary', 'secondary', 'tertiary', 'quaternary'] as const).map(
+										key => (
+											<div
+												key={key}
+												style={mergeStyle(
+													{
+														display: 'flex',
+														alignItems: 'center',
+														gap: 8,
+														padding: '6px 10px',
+														borderRadius: 6,
+														border: `1px solid ${theme.stroke.secondary}`,
+														minWidth: 0,
+													},
+													{ background: theme.fill.quaternary },
+												)}
+											>
+												<span
+													style={{
+														width: 14,
+														height: 14,
+														borderRadius: 4,
+														background: theme.text[key],
+														flexShrink: 0,
+													}}
+												/>
+												<Text size="small" tone="secondary">
+													text.{key}
+												</Text>
+											</div>
+										),
+									)}
+								</Grid>
+								<Text size="small" tone="tertiary">
+									React hooks: {hookMark}. First{' '}
+									<Code>usageColorSequence</Code> hue: {usageColorSequence[0]}.
+								</Text>
+							</Stack>
+						</CardBody>
+					</Card>
+				</Grid>
+			</Section>
+
+			<Section title="Host brand (Cursor vs Grok)">
+				<Stack gap={10}>
+					<Row gap={8} wrap>
+						<Pill active={theme.brand === 'cursor'}>brand: {theme.brand}</Pill>
+						<Text size="small" tone="secondary">
+							<Code>useHostTheme().brand</Code> from the host (open-canvas{' '}
+							<Code>--brand grok</Code> for export).
+						</Text>
+					</Row>
+					<Row gap={16} wrap>
+						<Card size="base">
+							<CardHeader>
+								<Text weight="semibold">Active accent (host)</Text>
+							</CardHeader>
+							<CardBody>
+								<Row gap={8}>
+									<span
+										style={{
+											width: 120,
+											height: 32,
+											borderRadius: theme.radius.md,
+											background: theme.palette.accent,
+											border: `1px solid ${theme.stroke.secondary}`,
+										}}
+									/>
+									<Text size="small" tone="secondary">
+										{theme.palette.accent}
+									</Text>
+								</Row>
+							</CardBody>
+						</Card>
+						{theme.brand === 'cursor' ? (
+							<Card size="base" variant="borderless">
+								<CardHeader>
+									<Text weight="semibold">Grok reference</Text>
+								</CardHeader>
+								<CardBody>
+									<Row gap={8}>
+										<span
+											style={{
+												width: 120,
+												height: 32,
+												borderRadius: 8,
+												background: grokPalette.accent,
+												border: `1px solid ${theme.stroke.secondary}`,
+											}}
+										/>
+										<Text size="small" tone="secondary">
+											{grokPalette.accent}
+										</Text>
+									</Row>
+								</CardBody>
+							</Card>
+						) : null}
+					</Row>
+					<BarChart
+						categories={['A', 'B', 'C']}
+						series={[
+							{ name: 's1', data: [3, 5, 2], tone: 'info' },
+							{ name: 's2', data: [2, 4, 6], tone: 'success' },
+						]}
+						height={140}
+					/>
+				</Stack>
 			</Section>
 
 			{/* Forms ---------------------------------------------------------- */}
@@ -657,6 +1031,30 @@ export default function ShowcaseCanvas() {
 				<Card>
 					<CardBody>
 						<Stack gap={12}>
+							<Card variant="borderless">
+								<CardHeader trailing="reads sidecar on export">
+									Environment snapshot
+								</CardHeader>
+								<CardBody
+									style={{
+										background: theme.bg.editor,
+										borderRadius: 8,
+										padding: 12,
+									}}
+								>
+									<Row gap={16} wrap align="center">
+										<Stat
+											value={envTraffic.rps}
+											label={`${env} · ${envTraffic.hint}`}
+											tone={envTraffic.tone}
+										/>
+										<Text size="small" tone="secondary">
+											Change Environment below —{' '}
+											<Code>.canvas.data.json</Code> is inlined on export.
+										</Text>
+									</Row>
+								</CardBody>
+							</Card>
 							<Grid columns={2} gap={16}>
 								<Stack gap={6}>
 									<Text size="small" tone="secondary" weight="medium">
@@ -723,192 +1121,41 @@ export default function ShowcaseCanvas() {
 				</Card>
 			</Section>
 
-			{/* Theme tokens --------------------------------------------------- */}
-			<Section title="Theme tokens (useHostTheme)">
-				<Stack gap={10}>
-					<Text size="small" tone="secondary">
-						Semantic palette keys from <Code>theme.palette</Code>:
-					</Text>
-					<Row gap={10} wrap>
-						{(
-							[
-								['accent', theme.palette.accent],
-								['link', theme.palette.link],
-								['strokePrimary', theme.palette.strokePrimary],
-							] as const
-						).map(([key, hex]) => (
-							<Row key={key} gap={6}>
-								<span
-									style={{
-										width: 16,
-										height: 16,
-										borderRadius: 4,
-										background: hex,
-										border: `1px solid ${theme.stroke.secondary}`,
-									}}
-								/>
-								<Text size="small" tone="tertiary">
-									chart.{key}
-								</Text>
-							</Row>
-						))}
-					</Row>
-					<Text size="small" tone="secondary">
-						Category hues (canvases read <Code>theme.category</Code>):
-					</Text>
-					<Row gap={10} wrap>
-						{(
-							[
-								['orange', theme.category.orange],
-								['blue', theme.category.blue],
-								['gray', theme.category.gray],
-							] as const
-						).map(([key, hex]) => (
-							<Row key={key} gap={6}>
-								<span
-									style={{
-										width: 16,
-										height: 16,
-										borderRadius: 4,
-										background: hex,
-										border: `1px solid ${theme.stroke.secondary}`,
-									}}
-								/>
-								<Text size="small" tone="tertiary">
-									category.{key}
-								</Text>
-							</Row>
-						))}
-					</Row>
-					<Text size="small" tone="tertiary">
-						React hooks from <Code>cursor/canvas</Code>: {hookMark}
-					</Text>
-				</Stack>
-				<Row gap={10} wrap>
-					{(['primary', 'secondary', 'tertiary', 'quaternary'] as const).map(
-						key => (
-							<div
-								key={key}
-								style={mergeStyle(
-									{
-										display: 'flex',
-										alignItems: 'center',
-										gap: 8,
-										padding: '6px 10px',
-										borderRadius: 6,
-										border: `1px solid ${theme.stroke.secondary}`,
-									},
-									{ background: theme.fill.quaternary },
-								)}
-							>
-								<span
-									style={{
-										width: 14,
-										height: 14,
-										borderRadius: 4,
-										background: theme.text[key],
-									}}
-								/>
-								<Text size="small" tone="secondary">
-									text.{key}
-								</Text>
-							</div>
-						),
-					)}
-				</Row>
-			</Section>
-
-      <Section title="Host brand (Cursor vs Grok)">
-        <Stack gap={10}>
-          <Row gap={8} wrap>
-            <Pill active={theme.brand === 'cursor'}>brand: {theme.brand}</Pill>
-            <Text size="small" tone="secondary">
-              <Code>useHostTheme().brand</Code> from the host (open-canvas{' '}
-              <Code>--brand grok</Code> for README Grok shots).
-            </Text>
-          </Row>
-          <Row gap={16} wrap>
-            <Card size="base">
-              <CardHeader>
-                <Text weight="semibold">Active accent (host)</Text>
-              </CardHeader>
-              <CardBody>
-                <Row gap={8}>
-                  <span
-                    style={{
-                      width: 120,
-                      height: 32,
-                      borderRadius: theme.radius.md,
-                      background: theme.palette.accent,
-                      border: `1px solid ${theme.stroke.secondary}`,
-                    }}
-                  />
-                  <Text size="small" tone="secondary">
-                    {theme.palette.accent}
-                  </Text>
-                </Row>
-              </CardBody>
-            </Card>
-            {theme.brand === 'cursor' ? (
-              <Card size="base" variant="borderless">
-                <CardHeader>
-                  <Text weight="semibold">Grok reference</Text>
-                </CardHeader>
-                <CardBody>
-                  <Row gap={8}>
-                    <span
-                      style={{
-                        width: 120,
-                        height: 32,
-                        borderRadius: 8,
-                        background: grokPalette.accent,
-                        border: `1px solid ${theme.stroke.secondary}`,
-                      }}
-                    />
-                    <Text size="small" tone="secondary">
-                      {grokPalette.accent}
-                    </Text>
-                  </Row>
-                </CardBody>
-              </Card>
-            ) : null}
-          </Row>
-          <BarChart
-            categories={['A', 'B', 'C']}
-            series={[
-              { name: 's1', data: [3, 5, 2] },
-              { name: 's2', data: [2, 4, 6] },
-            ]}
-            height={140}
-          />
-        </Stack>
-      </Section>
-
 			<Section title="Data imports (JSON, YAML, TSV, CSV, JSONL)">
 				<Stack gap={12}>
 					<Text size="small" tone="secondary">
-						{meta.periodStart} → {meta.periodEnd} · {meta.deployCount.toLocaleString()} deploys ·{' '}
-						{deployEvents.length} tail events in JSONL
+						{meta.periodStart} → {meta.periodEnd} ·{' '}
+						{meta.deployCount.toLocaleString()} deploys · {deployEvents.length}{' '}
+						tail events in JSONL
 					</Text>
 					<Grid columns={3} gap={12}>
 						{kpis.map(k => (
 							<Card key={k.label}>
 								<CardBody>
 									<Stat value={k.value} label={k.label} />
-									{k.hint && <Text style={{ ...cap, marginTop: 4 }}>{k.hint}</Text>}
+									{k.hint && (
+										<Text style={{ ...cap, marginTop: 4 }}>{k.hint}</Text>
+									)}
 								</CardBody>
 							</Card>
 						))}
 					</Grid>
 					<Callout tone="danger" title="Deps dominates p90; watch tail latency">
-						Deps ~51% of p90 wall time (211s of 412s). Max 47m 27s is 6.9× p90 — check cache and workspace size.
+						Deps ~51% of p90 wall time (211s of 412s). Max 47m 27s is 6.9× p90 —
+						check cache and workspace size.
 					</Callout>
 					<Grid columns={2} gap={16}>
 						<Card>
 							<CardHeader>Phase duration (p50 vs p90)</CardHeader>
 							<CardBody>
 								<Text style={cap}>Y: seconds</Text>
-								<BarChart categories={phases} series={durationSeries} height={260} valuePrefix="$" valueSuffix="s" />
+								<BarChart
+									categories={phases}
+									series={durationSeries}
+									height={260}
+									valuePrefix="$"
+									valueSuffix="s"
+								/>
 							</CardBody>
 						</Card>
 						<Card>
@@ -917,7 +1164,13 @@ export default function ShowcaseCanvas() {
 								<Text style={cap}>Y: megabytes</Text>
 								<BarChart
 									categories={rssRows.map(r => r.phase)}
-									series={[{ name: 'p90', data: rssRows.map(r => r.p90), tone: 'danger' }]}
+									series={[
+										{
+											name: 'p90',
+											data: rssRows.map(r => r.p90),
+											tone: 'danger',
+										},
+									]}
 									height={260}
 									valueSuffix=" MB"
 								/>
@@ -948,9 +1201,15 @@ export default function ShowcaseCanvas() {
 								<BarChart
 									categories={dayLabels}
 									series={[
-										{ name: 'deploys', data: daily.map(d => Number(d.deploys)), tone: 'neutral' },
+										{
+											name: 'deploys',
+											data: daily.map(d => Number(d.deploys)),
+											tone: 'neutral',
+										},
 									]}
 									height={220}
+									beginAtZero
+									showValues
 								/>
 							</CardBody>
 						</Card>
@@ -961,6 +1220,7 @@ export default function ShowcaseCanvas() {
 							<Table
 								headers={OUTLIER_TABLE.headers}
 								columnAlign={['left', 'left', 'right', 'right', 'right']}
+								rowTone={outlierRowTone}
 								rows={OUTLIER_TABLE.rows}
 								striped
 							/>
@@ -969,14 +1229,6 @@ export default function ShowcaseCanvas() {
 				</Stack>
 			</Section>
 
-			<Divider />
-			<Text size="small" tone="tertiary">
-				<Code>cursor/canvas</Code> + relative data files · colors from{' '}
-				<Code>useHostTheme()</Code> · category hues from <Code>colorPalette</Code>{' '}
-				({Object.keys(colorPalette).length} hues) ·{' '}
-				<Link href="https://github.com/flesler/open-canvas">open-canvas</Link> ·
-				same file in the IDE, CLI verify, and static exports.
-			</Text>
 		</Stack>
 	)
 }
