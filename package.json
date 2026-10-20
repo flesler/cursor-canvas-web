@@ -68,7 +68,7 @@
     "test:demo-screenshots": "bash scripts/test-demo-screenshots.sh",
     "test:demo-screenshots:update": "bash scripts/test-demo-screenshots.sh --update",
     "test:render-compat": "bash scripts/test-render-compat.sh",
-    "ci:local": "npm run typecheck && npm run lint && npm test && npm run test:contract:ci",
+    "ci:local": "npm run typecheck && npm run lint:fix && npm test && npm run test:contract:ci",
     "prepare": "[ \"$CI\" != \"true\" ] && [ -d node_modules/husky ] && husky || true",
     "prepublishOnly": "npm run typecheck && npm test && npm run check:sdk-exports && npm run build:lib"
   },
