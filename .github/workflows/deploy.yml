@@ -18,21 +18,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install tools (node, pnpm) from .tool-versions
-        uses: jdx/mise-action@v2
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build static site
-        run: pnpm build
-
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
       - uses: actions/configure-pages@v5
         with:
           enablement: true
-
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

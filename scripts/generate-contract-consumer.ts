@@ -7,7 +7,7 @@ const sdkIndex = path.join(root, 'src/vendor/canvas-sdk/index.d.ts');
 const outFile = path.join(root, 'src/contract/consumer.ts');
 
 if (!fs.existsSync(sdkIndex)) {
-  console.error('Run pnpm run sync:sdk first');
+  console.error('Run npm run sync:sdk first');
   process.exit(1);
 }
 

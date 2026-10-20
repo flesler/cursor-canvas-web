@@ -33,7 +33,7 @@ into the IDE-managed canvases folder so it renders in Cursor too.
   (split into `charts.tsx`, `diff.tsx`, `dag.ts`, `todo.tsx`, `theme.ts`,
   `use-tokens.ts`). Add new canvas API surface there, implemented with Mantine,
   mirroring the SDK declarations, and re-export it from the barrel.
-- **SDK upkeep:** `pnpm run sync:sdk` copies the IDE declarations into
+- **SDK upkeep:** `npm run sync:sdk` copies the IDE declarations into
   `src/vendor/canvas-sdk/` and updates `manifest.json`. Release policy and
   intentional IDE vs web gaps: [`COMPAT.md`](./COMPAT.md). We do **not** keep
   parallel implementations per Cursor version.
@@ -56,27 +56,26 @@ source of truth, edit here. The IDE renders only from
 `~/.cursor/projects/<workspace>/canvases/`, so after editing, `cp` the repo copy
 over the managed one. Live UI edits persist to a managed-folder
 `*.canvas.data.json` sidecar (not versioned); fold meaningful values into
-open-canvas `showcase.canvas.data.json`, then `pnpm sync:demo` (`--inline-state`
+open-canvas `showcase.canvas.data.json`, then `npm run sync:demo` (`--inline-state`
 inlines state into `demo.canvas.tsx`). Skills reference their canvas by name and
 keep it current.
 Authoring rules: `canvas` skill.
 
 ## Environment
 
-Node + pnpm are pinned in `.tool-versions` (managed by mise). Run
-`mise install` then `pnpm install`.
+Node is pinned in `.nvmrc`. Run `nvm use` then `npm install`.
 
 ## Validation gate (run before finishing changes)
 
 ```bash
-pnpm typecheck          # tsc --noEmit, strict
-pnpm lint               # eslint flat config
-pnpm test               # vitest run
-pnpm test:contract      # export parity + consumer tsc + build:lib
-pnpm build              # full static build
+npm run typecheck          # tsc --noEmit, strict
+npm run lint               # eslint flat config
+npm test                 # vitest run
+npm run test:contract    # export parity + consumer tsc + build:lib
+npm run build              # full static build
 ```
 
-After `pnpm run sync:sdk`: `pnpm ci:local`, then `pnpm run test:render-compat` and `pnpm run test:demo-screenshots` (see `.cursor/skills/sdk-sync-compat/SKILL.md`). Use `pnpm run test:demo-screenshots:update` when baseline PNGs should move with the new SDK/shim.
+After `npm run sync:sdk`: `npm run ci:local`, then `npm run test:render-compat` and `npm run test:demo-screenshots` (see `.cursor/skills/sdk-sync-compat/SKILL.md`). Use `npm run test:demo-screenshots:update` when baseline PNGs should move with the new SDK/shim.
 
 npm releases: `.cursor/skills/release/SKILL.md`.
 

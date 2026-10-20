@@ -2,51 +2,18 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
 jobs:
-  typecheck:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install tools (node, pnpm) from .tool-versions
-        uses: jdx/mise-action@v2
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Typecheck
-        run: pnpm typecheck
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install tools (node, pnpm) from .tool-versions
-        uses: jdx/mise-action@v2
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint
-        run: pnpm lint
-
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install tools (node, pnpm) from .tool-versions
-        uses: jdx/mise-action@v2
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Test
-        run: pnpm test
-
-      - name: Contract (committed SDK snapshot)
-        run: pnpm test:contract:ci
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run ci:local

@@ -23,11 +23,11 @@ NEVER squash product work into the version commit. NEVER use one commit that mix
 ## Ready to ship?
 
 ```bash
-pnpm ci:local
-pnpm build
+npm run ci:local
+npm run build
 ```
 
-If vendor changed since last tag: `pnpm run test:render-compat` and `pnpm run test:demo-screenshots` (open-canvas sibling). Refresh baselines with `pnpm run test:demo-screenshots:update` when intentional.
+If vendor changed since last tag: `npm run test:render-compat` and `npm run test:demo-screenshots` (open-canvas sibling). Refresh baselines with `npm run test:demo-screenshots:update` when intentional.
 
 ```bash
 npm view @flesler/cursor-canvas-web version
@@ -67,7 +67,7 @@ npm publish --access public --tag latest
 ## Checklist (user)
 
 1. Product commits on `main`
-2. `pnpm ci:local` (+ SDK screenshot gates if vendor touched)
+2. `npm run ci:local` (+ SDK screenshot gates if vendor touched)
 3. Version-only commit: `package.json`, `CHANGELOG.md` (± lockfile) — subject `X.Y.Z`
 4. `git tag -a vX.Y.Z -m vX.Y.Z` → `git push origin main vX.Y.Z`
 5. `npm publish --access public --tag latest`

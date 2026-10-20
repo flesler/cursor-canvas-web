@@ -11,7 +11,7 @@ cd "$ROOT"
 
 if git diff --quiet HEAD -- "$VENDOR_REL" && git diff --cached --quiet HEAD -- "$VENDOR_REL"; then
   echo "test-render-compat: no vendor diff vs HEAD." >&2
-  echo "  Normal: pnpm sync:sdk leaves uncommitted vendor — run gates, then this script." >&2
+  echo "  Normal: npm run sync:sdk leaves uncommitted vendor — run gates, then this script." >&2
   echo "  One-off (sync already committed): git reset --soft HEAD^ then re-run." >&2
   exit 1
 fi
@@ -66,15 +66,15 @@ install_vendor_from() {
 materialize_head_sdk_into "$HEAD_VENDOR"
 
 echo "test-render-compat: gates with synced vendor (working tree)"
-pnpm typecheck
-pnpm test
-pnpm run check:sdk-exports
+npm run typecheck
+npm test
+npm run check:sdk-exports
 tsx scripts/generate-contract-consumer.ts
 tsc --noEmit
 
 echo "test-render-compat: typecheck + smoke with HEAD SDK snapshot + current shim"
 install_vendor_from "$HEAD_VENDOR"
-pnpm typecheck
-pnpm test
+npm run typecheck
+npm test
 
 echo "test-render-compat: ok"

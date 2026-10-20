@@ -16,7 +16,7 @@ if [[ ! -f "$CLI" ]]; then
 	exit 1
 fi
 
-pnpm --dir "$REPO" run build:lib
+npm --prefix "$REPO" run build:lib
 SHIM_PKG="$OPEN_CANVAS_ROOT/node_modules/@flesler/cursor-canvas-web"
 SYNC_SHIM="$OPEN_CANVAS_ROOT/.cursor/skills/shim-rollout/scripts/sync-local-shim.sh"
 if [[ -x "$SYNC_SHIM" ]] && [[ -d "$SHIM_PKG" ]]; then

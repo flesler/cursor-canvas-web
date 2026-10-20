@@ -1,17 +1,16 @@
 #!/bin/sh
 
-if ! command -v pnpm >/dev/null 2>&1 && [ -s "$HOME/.nvm/nvm.sh" ]; then
+if ! command -v npm >/dev/null 2>&1 && [ -s "$HOME/.nvm/nvm.sh" ]; then
   . "$HOME/.nvm/nvm.sh"
   nvm use
 fi
 
-if ! pnpm test; then
+if ! npm test; then
   echo "pre-push: test failed"
   exit 1
 fi
 
-# Full contract + build:lib runs in CI (pnpm ci:local). Fast path avoids rebuild on every push.
-if ! pnpm run test:contract:fast; then
+if ! npm run test:contract:fast; then
   echo "pre-push: test:contract:fast failed"
   exit 1
 fi

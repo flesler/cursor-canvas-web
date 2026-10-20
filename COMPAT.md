@@ -6,7 +6,7 @@ We implement **one** `cursor/canvas` surface: the IDE SDK snapshot in this repo.
 
 | Change                         | What to do                                                                    |
 | ------------------------------ | ----------------------------------------------------------------------------- |
-| New SDK export / optional prop | Implement in `src/shim/`, `pnpm run sync:sdk`, contract green → **patch** npm |
+| New SDK export / optional prop | Implement in `src/shim/`, `npm run sync:sdk`, contract green → **patch** npm |
 | Breaking SDK change            | Fix shim or **major** bump; document minimum Cursor / skill date here         |
 | Old Cursor / old skill         | Not supported on `main`; use an older shim release from git/npm               |
 
@@ -15,7 +15,7 @@ We implement **one** `cursor/canvas` surface: the IDE SDK snapshot in this repo.
 ## Snapshot
 
 - **Vendored contract:** `src/vendor/canvas-sdk/` (`.d.ts` tree + `manifest.json`).
-- **IDE reference:** `~/.cursor/skills-cursor/canvas/sdk/` (copied by `pnpm run sync:sdk`).
+- **IDE reference:** `~/.cursor/skills-cursor/canvas/sdk/` (copied by `npm run sync:sdk`).
 - **Recorded target:** `src/vendor/canvas-sdk/manifest.json` (`syncedAt`, `sdkSource`, `indexLines`, `contentHash`).
 - **Hash:** `contentHash` in manifest (SHA-256 over vendored `.d.ts` via `scripts/hash-canvas-sdk-tree.ts`). Cursor separately writes `canvases/node_modules/canvas-sdk-version` in the IDE; do not duplicate that file in our vendor tree or skill bundle.
 - **Minimum SDK snapshot:** see manifest `syncedAt` for the npm release you ship; bump intentionally via sync + contract.
@@ -26,11 +26,11 @@ Published npm **types** resolve to `src/superset/index.d.ts`: the vendored SDK p
 
 | Script                    | What it checks                                                                                                                                                                       |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `pnpm run sync:sdk`       | **Manual.** Copy IDE `sdk/*.d.ts` into `src/vendor/canvas-sdk/`, refresh `manifest.json`, restore `internal/canvas-action-dispatch.d.ts` stub if the skill bundle omits `internal/`. |
-| `pnpm run test:contract`  | Strict export parity (`src/shim/cursor-canvas.tsx` vs vendored `index.d.ts`), consumer `tsc`, then `build:lib`.                                                                      |
-| `pnpm run check:sdk-live` | Diff live Cursor SDK vs the shim barrel (does not write files).                                                                                                                      |
-| `pnpm run test:render-compat` | **Local only** when vendor differs from HEAD: contract on synced tree, then smoke with HEAD vendor + current shim. Not CI. See `.cursor/skills/sdk-sync-compat/SKILL.md`. |
-| `pnpm run test:demo-screenshots` | **Local only** (needs sibling open-canvas): render demo light/dark, compare to `docs/demo-*.png`. `test:demo-screenshots:update` refreshes baselines after review. |
+| `npm run sync:sdk`       | **Manual.** Copy IDE `sdk/*.d.ts` into `src/vendor/canvas-sdk/`, refresh `manifest.json`, restore `internal/canvas-action-dispatch.d.ts` stub if the skill bundle omits `internal/`. |
+| `npm run test:contract`  | Strict export parity (`src/shim/cursor-canvas.tsx` vs vendored `index.d.ts`), consumer `tsc`, then `build:lib`.                                                                      |
+| `npm run check:sdk-live` | Diff live Cursor SDK vs the shim barrel (does not write files).                                                                                                                      |
+| `npm run test:render-compat` | **Local only** when vendor differs from HEAD: contract on synced tree, then smoke with HEAD vendor + current shim. Not CI. See `.cursor/skills/sdk-sync-compat/SKILL.md`. |
+| `npm run test:demo-screenshots` | **Local only** (needs sibling open-canvas): render demo light/dark, compare to `docs/demo-*.png`. `test:demo-screenshots:update` refreshes baselines after review. |
 
 ## Stack
 

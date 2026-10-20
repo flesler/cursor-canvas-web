@@ -31,5 +31,5 @@
       "@testing-library/jest-dom"
     ]
   },
-  "include": ["src", ".cursor/canvases", "vite.config.ts", "vite.lib.config.ts"]
+  "include": ["src", "scripts", ".cursor/canvases", "vite.config.ts", "vite.lib.config.ts"]
 }

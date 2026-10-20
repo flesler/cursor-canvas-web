@@ -88,7 +88,7 @@ const sdkPath =
 const forkPath = positional[1] ?? path.join(root, 'src/shim/cursor-canvas.tsx');
 
 if (!fs.existsSync(sdkPath)) {
-  console.error(`Missing SDK snapshot: ${sdkPath} (run pnpm run sync:sdk)`);
+  console.error(`Missing SDK snapshot: ${sdkPath} (run npm run sync:sdk)`);
   process.exit(1);
 }
 if (!fs.existsSync(forkPath)) {

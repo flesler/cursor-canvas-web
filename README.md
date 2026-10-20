@@ -1,12 +1,12 @@
 # cursor-canvas-web
 
-> **Fork** of [`@thisismydesign/cursor-canvas-web`](https://github.com/thisismydesign/cursor-canvas-web) ([npm](https://www.npmjs.com/package/@thisismydesign/cursor-canvas-web)), published as `@flesler/cursor-canvas-web`. We keep the shim aligned with the Cursor IDE `cursor/canvas` SDK (see [`COMPAT.md`](./COMPAT.md), `pnpm test:contract`) and track current stack versions — **Mantine 8** and **Recharts 2 or 3** — instead of the upstream Mantine 7 line.
+> **Standalone project** published as [`@flesler/cursor-canvas-web`](https://www.npmjs.com/package/@flesler/cursor-canvas-web), initially forked from [`@thisismydesign/cursor-canvas-web`](https://github.com/thisismydesign/cursor-canvas-web) and developed independently since. We keep the shim aligned with the Cursor IDE `cursor/canvas` SDK (see [`COMPAT.md`](./COMPAT.md), `npm run test:contract`) on **Mantine 8** and **Recharts 2 or 3**.
 
 Deploy **Cursor canvases** to the web.
 
 A Cursor canvas is a `.tsx` that imports only from `cursor/canvas`. That module isn't an installable package; it's provided by the Cursor IDE at compile time, so a canvas can't build or render anywhere outside the IDE. This project is an open, **Mantine-backed shim** of `cursor/canvas`. A build-time Vite alias swaps the module for the shim, so the same `.tsx` renders in the Cursor IDE and on the web. No converter, no fork of your source.
 
-**Live demo (this fork):** <https://flesler.github.io/cursor-canvas-web/> — built from
+**Live demo:** <https://flesler.github.io/cursor-canvas-web/> — built from
 [`.cursor/canvases/demo.canvas.tsx`](./.cursor/canvases/demo.canvas.tsx) (max SDK showcase + vitest smoke).
 **Upstream reference:** <https://thisismydesign.github.io/cursor-canvas-web/>
 
@@ -15,7 +15,7 @@ A Cursor canvas is a `.tsx` that imports only from `cursor/canvas`. That module 
   <img src="docs/demo-dark.png" alt="Demo canvas (dark)" width="49%" />
 </p>
 
-Regenerate demo: `pnpm sync:demo` then `pnpm demo:screenshot` (sibling [open-canvas](https://github.com/flesler/open-canvas) built; `sync:demo` runs `generate --formats cursor --inline-state`).
+Regenerate demo: `npm run sync:demo` then `npm run demo:screenshot` (sibling [open-canvas](https://github.com/flesler/open-canvas) built; `sync:demo` runs `generate --formats cursor --inline-state`).
 
 ## How it works: a module shim, not a converter
 
@@ -37,9 +37,9 @@ compiles and renders unchanged in the Cursor IDE.
 ## Install
 
 ```bash
-pnpm add @flesler/cursor-canvas-web
+npm install @flesler/cursor-canvas-web
 # peer deps your app must supply (Mantine 8 + matching charts styles):
-pnpm add react react-dom @mantine/core@^8 @mantine/charts@^8 recharts@^2
+npm install react react-dom @mantine/core@^8 @mantine/charts@^8 recharts@^2
 ```
 
 The package ships two entry points:
@@ -105,7 +105,7 @@ The canvas file itself never changes — it still imports only from
 
 ### 3. Deploy
 
-The result is a plain Vite app, so `pnpm build` produces a static `dist/` you
+The result is a plain Vite app, so `npm run build` produces a static `dist/` you
 can host anywhere (GitHub Pages, Netlify, Vercel, S3, …). This repo deploys its
 example canvas to GitHub Pages — see [Example deployment](#example-deployment).
 
@@ -155,24 +155,23 @@ defaults to `/cursor-canvas-web/` (project Page); override it with the
 
 ## Develop this repo
 
-Tool versions (Node, pnpm) are pinned in [`.tool-versions`](./.tool-versions)
-and managed with [mise](https://mise.jdx.dev/).
+Node is pinned in [`.nvmrc`](./.nvmrc) (`v24.11.1`).
 
 ```bash
-mise install        # install Node + pnpm from .tool-versions
-pnpm install
-pnpm dev            # start the dev server
+nvm use
+npm install
+npm run dev            # start the dev server
 ```
 
 Validation gate:
 
 ```bash
-pnpm typecheck      # tsc --noEmit, strict
-pnpm lint           # eslint
-pnpm test           # vitest run
-pnpm test:contract  # IDE SDK snapshot + export parity + consumer tsc
-pnpm sync:sdk       # refresh src/vendor/canvas-sdk from ~/.cursor/skills-cursor/canvas/sdk
-pnpm build          # typecheck + vite build -> dist/
+npm run typecheck      # tsc --noEmit, strict
+npm run lint           # eslint
+npm test               # vitest run
+npm run test:contract  # IDE SDK snapshot + export parity + consumer tsc
+npm run sync:sdk       # refresh src/vendor/canvas-sdk from ~/.cursor/skills-cursor/canvas/sdk
+npm run build          # typecheck + vite build -> dist/
 ```
 
 ### Layout

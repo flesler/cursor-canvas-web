@@ -30,7 +30,7 @@ fi
 mkdir -p "$(dirname "$SKILL_REF")"
 cp "$CANVAS_SKILL" "$SKILL_REF"
 MANIFEST="$DEST/manifest.json"
-HASH="$(pnpm exec tsx "$ROOT/scripts/hash-canvas-sdk-tree.ts" "$DEST")"
+HASH="$(npx --no-install tsx "$ROOT/scripts/hash-canvas-sdk-tree.ts" "$DEST")"
 node -e "
 const fs = require('fs');
 const manifest = {
