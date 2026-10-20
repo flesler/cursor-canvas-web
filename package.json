@@ -20,19 +20,23 @@
   "sideEffects": false,
   "files": [
     "dist",
-    "src/vendor"
+    "src/vendor",
+    "src/superset"
   ],
   "main": "./dist/cursor-canvas.cjs",
   "module": "./dist/cursor-canvas.js",
-  "types": "./src/vendor/canvas-sdk/index.d.ts",
+  "types": "./src/superset/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/vendor/canvas-sdk/index.d.ts",
+      "types": "./src/superset/index.d.ts",
       "import": "./dist/cursor-canvas.js",
       "require": "./dist/cursor-canvas.cjs"
     },
     "./canvas-sdk": {
       "types": "./src/vendor/canvas-sdk/index.d.ts"
+    },
+    "./superset": {
+      "types": "./src/superset/index.d.ts"
     },
     "./runtime": {
       "types": "./dist/runtime/index.d.ts",

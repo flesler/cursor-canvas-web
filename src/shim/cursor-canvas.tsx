@@ -144,6 +144,11 @@ export type {
 export { BarChart, LineChart, PieChart } from './charts';
 export type {
   BarChartProps,
+  CanvasBarChartExtra,
+  CanvasChartExtra,
+  CanvasChartScale,
+  CanvasChartValueAxisExtra,
+  CanvasLineChartExtra,
   ChartDataPoint,
   ChartReferenceLine,
   ChartSeries,

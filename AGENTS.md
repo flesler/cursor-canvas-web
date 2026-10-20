@@ -21,11 +21,14 @@ into the IDE-managed canvases folder so it renders in Cursor too.
 - The shim **must stay API-compatible with the real SDK**. The authoritative
   contract is the vendored declarations at `src/vendor/canvas-sdk/*.d.ts`
   (synced from `~/.cursor/skills-cursor/canvas/sdk/`). Shim sources import
-  prop types from that tree; npm `types` point at the same vendored
-  `index.d.ts`, not generated Mantine declarations. A canvas that compiles here
+  prop types from that tree; npm `types` point at `src/superset/index.d.ts`
+  (that tree plus superset features), not generated Mantine declarations. A canvas that compiles here
   must also compile/render unchanged in the IDE — match tone vocabularies
   (`StatTone`, `PillTone`, `CalloutTone`, `ChartTone`, `Text` tones). Do not
   invent exports (e.g. a generic `Tone`) that the real SDK lacks.
+- **Superset** features beyond the SDK are the one exception: typed in
+  `src/superset/`, exposed on SDK components only through an `extra` prop the
+  IDE ignores. Recipe in [`COMPAT.md`](./COMPAT.md#superset).
 - All adaptation lives under `src/shim/` behind the `cursor-canvas.tsx` barrel
   (split into `charts.tsx`, `diff.tsx`, `dag.ts`, `todo.tsx`, `theme.ts`,
   `use-tokens.ts`). Add new canvas API surface there, implemented with Mantine,

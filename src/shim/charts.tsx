@@ -18,25 +18,32 @@ import {
   PieChart as MantinePieChart,
 } from '@mantine/charts';
 import { useState } from 'react';
+import type { XAxisProps, YAxisProps } from 'recharts';
+import type { CanvasChartValueAxisExtra } from '../superset/chart-extra';
+import type { BarChartProps, LineChartProps } from '../superset/index';
 import { toneHex } from './theme';
 import { useHostTheme } from './use-tokens';
 
 export type {
-  BarChartProps,
   ChartDataPoint,
   ChartReferenceLine,
   ChartSeries,
   ChartTone,
-  LineChartProps,
   PieChartProps,
 } from '../vendor/canvas-sdk/chart-primitives.js';
+export type {
+  CanvasBarChartExtra,
+  CanvasChartExtra,
+  CanvasChartScale,
+  CanvasChartValueAxisExtra,
+  CanvasLineChartExtra,
+} from '../superset/chart-extra';
+export type { BarChartProps, LineChartProps } from '../superset/index';
 
 import type {
-  BarChartProps,
   ChartReferenceLine,
   ChartSeries,
   ChartTone,
-  LineChartProps,
   PieChartProps,
 } from '../vendor/canvas-sdk/chart-primitives.js';
 
@@ -118,31 +125,52 @@ function mantineReferenceLines(
 }
 
 type AxisChartProps = {
-  yAxisProps?: { domain: [number | string, number | string] };
-  xAxisProps?: { domain: [number | string, number | string] };
+  yAxisProps?: Omit<YAxisProps, 'ref'>;
+  xAxisProps?: Omit<XAxisProps, 'ref'>;
   referenceLines?: ChartReferenceLineProps[];
 };
 
-function valueAxisChartProps(
+const NON_LINEAR_SCALES = new Set(['log', 'symlog', 'pow', 'sqrt']);
+
+/** Non-linear scales break on a zero-based domain, so default to `[1, 'dataMax']`. */
+function normalizeValueAxisExtra(
+  valueAxis: CanvasChartValueAxisExtra,
+): CanvasChartValueAxisExtra {
+  const { scale } = valueAxis;
+  if (typeof scale !== 'string' || !NON_LINEAR_SCALES.has(scale)) {
+    return valueAxis;
+  }
+  return {
+    ...valueAxis,
+    type: valueAxis.type ?? 'number',
+    allowDataOverflow: valueAxis.allowDataOverflow ?? true,
+    allowDecimals: valueAxis.allowDecimals ?? true,
+    domain: valueAxis.domain ?? [1, 'dataMax'],
+  };
+}
+
+export function valueAxisChartProps(
   opts: ValueAxisProps & {
     horizontal?: boolean;
     stacked?: boolean;
     normalized?: boolean;
+    valueAxis?: CanvasChartValueAxisExtra;
   },
 ): AxisChartProps {
   const ref = mantineReferenceLines(opts.referenceLines, !!opts.horizontal);
-  if (opts.stacked || opts.normalized) {
+  let domain: [number | string, number | string] | undefined;
+  if (!opts.stacked && !opts.normalized) {
+    const beginAtZero = opts.beginAtZero !== false;
+    domain = [opts.yMin ?? (beginAtZero ? 0 : 'auto'), opts.yMax ?? 'auto'];
+  }
+  const extra = opts.valueAxis ? normalizeValueAxisExtra(opts.valueAxis) : undefined;
+  if (!domain && !extra) {
     return { referenceLines: ref };
   }
-  const beginAtZero = opts.beginAtZero !== false;
-  const domain: [number | string, number | string] = [
-    opts.yMin ?? (beginAtZero ? 0 : 'auto'),
-    opts.yMax ?? 'auto',
-  ];
-  if (opts.horizontal) {
-    return { xAxisProps: { domain }, referenceLines: ref };
-  }
-  return { yAxisProps: { domain }, referenceLines: ref };
+  const axisProps = { ...(domain && { domain }), ...extra };
+  return opts.horizontal
+    ? { xAxisProps: axisProps as Omit<XAxisProps, 'ref'>, referenceLines: ref }
+    : { yAxisProps: axisProps, referenceLines: ref };
 }
 
 function defaultShowBarValues(
@@ -219,9 +247,6 @@ function verticalBarLabelProps() {
   };
 }
 
-/** Shim-only: IDE line/area charts use straight segments unless `smooth` is set. */
-export type LineChartShimProps = LineChartProps & { smooth?: boolean };
-
 export function LineChart({
   categories,
   series,
@@ -236,18 +261,23 @@ export function LineChart({
   yMax,
   referenceLines,
   style,
-  smooth,
-}: LineChartShimProps) {
+  extra,
+  smooth: legacySmooth,
+}: LineChartProps) {
+  const smooth = extra?.smooth ?? legacySmooth;
   const seriesColor = useSeriesColor();
   const chartColors = useChartColorProps();
   const data = reshapeLineChartData(categories, series);
   const mantineSeries = toMantineSeries(series, seriesColor);
+  const stacked = Boolean(fill && extra?.stacked);
   const axis = valueAxisChartProps({
     beginAtZero,
     yMin,
     yMax,
     referenceLines,
     horizontal: false,
+    stacked,
+    valueAxis: extra?.valueAxis,
   });
   const common = {
     h: height,
@@ -268,7 +298,11 @@ export function LineChart({
     ...axis,
     style,
   };
-  return fill ? <AreaChart {...common} /> : <MantineLineChart {...common} />;
+  return fill ? (
+    <AreaChart {...common} type={stacked ? 'stacked' : 'default'} />
+  ) : (
+    <MantineLineChart {...common} />
+  );
 }
 
 export function BarChart({
@@ -286,6 +320,7 @@ export function BarChart({
   yMax,
   referenceLines,
   style,
+  extra,
 }: BarChartProps) {
   const seriesColor = useSeriesColor();
   const chartColors = useChartColorProps();
@@ -299,6 +334,7 @@ export function BarChart({
     horizontal,
     stacked,
     normalized,
+    valueAxis: extra?.valueAxis,
   });
   const withBarValueLabel =
     !stacked &&

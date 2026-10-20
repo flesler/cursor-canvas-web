@@ -20,7 +20,7 @@ We implement **one** `cursor/canvas` surface: the IDE SDK snapshot in this repo.
 - **Hash:** `contentHash` in manifest (SHA-256 over vendored `.d.ts` via `scripts/hash-canvas-sdk-tree.ts`). Cursor separately writes `canvases/node_modules/canvas-sdk-version` in the IDE; do not duplicate that file in our vendor tree or skill bundle.
 - **Minimum SDK snapshot:** see manifest `syncedAt` for the npm release you ship; bump intentionally via sync + contract.
 
-Published npm **types** resolve to `src/vendor/canvas-sdk/index.d.ts` (subpath `@flesler/cursor-canvas-web/canvas-sdk` for consumers copying the tree).
+Published npm **types** resolve to `src/superset/index.d.ts`: the vendored SDK plus [superset](#superset) features. The pure IDE snapshot stays at `src/vendor/canvas-sdk/index.d.ts` (subpath `@flesler/cursor-canvas-web/canvas-sdk` for consumers copying the tree).
 
 ## Contract tests
 
@@ -42,7 +42,7 @@ Published npm **types** resolve to `src/vendor/canvas-sdk/index.d.ts` (subpath `
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | `useCanvasState`                                     | `.canvas.data.json` sidecar                                                            | `localStorage`                                                          |
 | `useCanvasAction`                                    | IDE dispatch                                                                           | no-op (dev log)                                                         |
-| Charts                                               | Pure SVG                                                                               | Mantine + Recharts                                                      |
+| Charts                                               | Pure SVG                                                                               | Mantine + Recharts; [superset](#superset) `extra` on bar/line charts    |
 | `DiffView` syntax                                    | Shiki per-line tokens                                                                  | Plain text (`path`/`language` ignored for color; diff chrome unchanged) |
 | Host theme SSE / workbench overrides                 | live host                                                                              | Mantine light/dark only                                                 |
 | `useHostTheme().chart`                               | Not in public `hooks.d.ts` today; some canvases use `theme.chart.palette.*` at runtime | `{ palette: chartPalette, sequence: chartColorSequence }`               |
@@ -50,6 +50,25 @@ Published npm **types** resolve to `src/vendor/canvas-sdk/index.d.ts` (subpath `
 | `Pill` `tone`                                        | Deprecated; IDE renders neutral only                                                   | Accepts `tone` for older canvases; ignored at render (neutral styling)  |
 | `reshapeLineChartData`                               | Not in IDE `index.d.ts`                                                                | Internal helper in `charts.tsx` (not barrel-exported)                   |
 | Host `brand: grok`                                   | Grok palettes, chart sequence, Sand radii/typography                                   | `resolveTheme` / `useHostTheme`; web defaults to `cursor` + Mantine scheme |
+
+## Superset
+
+Features beyond the IDE SDK. A canvas using them still renders in Cursor, minus the extras.
+
+- **Typings:** `src/superset/index.d.ts` re-exports the vendored SDK (`export *`) and overrides only the components it extends; local exports win over the star export. open-canvas points `cursor/canvas` at this file.
+- **Props on SDK components** go under `extra`, which the IDE ignores. Never add superset props at the top level: they could collide with a future SDK prop. (`LineChart` `smooth` is a deprecated top-level alias for `extra.smooth`.)
+
+| Component   | `extra` fields                                                         |
+| ----------- | ---------------------------------------------------------------------- |
+| `BarChart`  | `valueAxis` (Recharts value-axis passthrough: `scale`, `domain`, …)    |
+| `LineChart` | `valueAxis`, `smooth`, `stacked` (with `fill`)                         |
+
+To add one:
+
+1. Declare the shape in `src/superset/<area>-extra.d.ts` and re-export it from `index.d.ts`.
+2. In `index.d.ts`, override the component's props type and function declaration with `extra?: …`.
+3. Implement it in the shim component (it reads its prop types from `src/superset/`), and add a behavior test.
+4. Add the new field to `src/test/superset-contract.ts`.
 
 ## open-canvas
 
