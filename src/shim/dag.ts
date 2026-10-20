@@ -14,13 +14,7 @@ export type {
   DAGLayoutResult,
 } from '../vendor/canvas-sdk/dag-layout.js';
 
-import type {
-  DAGLayoutEdge,
-  DAGLayoutNode,
-  DAGLayoutOptions,
-  DAGLayoutRank,
-  DAGLayoutResult,
-} from '../vendor/canvas-sdk/dag-layout.js';
+import type { DAGLayoutEdge, DAGLayoutNode, DAGLayoutOptions, DAGLayoutRank, DAGLayoutResult } from '../vendor/canvas-sdk/dag-layout.js';
 
 export function computeDAGLayout(options: DAGLayoutOptions): DAGLayoutResult {
   const {

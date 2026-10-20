@@ -11,68 +11,14 @@
  * tone vocabularies, and signatures — so a canvas renders unchanged in both the
  * IDE and the web build.
  */
-import {
-  ActionIcon,
-  Alert,
-  Badge,
-  Group,
-  Button as MantineButton,
-  Card as MantineCard,
-  Checkbox as MantineCheckbox,
-  Divider as MantineDivider,
-  Select as MantineSelect,
-  Stack as MantineStack,
-  Table as MantineTable,
-  Text as MantineText,
-  Textarea as MantineTextarea,
-  TextInput as MantineTextInput,
-  Switch,
-  Title,
-} from '@mantine/core';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-  type CSSProperties,
-} from 'react';
+import { ActionIcon, Alert, Badge, Group, Button as MantineButton, Card as MantineCard, Checkbox as MantineCheckbox, Divider as MantineDivider, Select as MantineSelect, Stack as MantineStack, Table as MantineTable, Text as MantineText, Textarea as MantineTextarea, TextInput as MantineTextInput, Switch, Title } from '@mantine/core';
+import { createContext, useCallback, useContext, useState, type CSSProperties } from 'react';
 
 import type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js';
-import type {
-  CheckboxProps,
-  IconButtonProps,
-  SelectProps,
-  TextAreaProps,
-  TextInputProps,
-  ToggleProps,
-} from '../vendor/canvas-sdk/form-primitives.js';
-import type {
-  CanvasAction,
-  SetCanvasState,
-} from '../vendor/canvas-sdk/hooks.js';
+import type { CheckboxProps, IconButtonProps, SelectProps, TextAreaProps, TextInputProps, ToggleProps } from '../vendor/canvas-sdk/form-primitives.js';
+import type { CanvasAction, SetCanvasState } from '../vendor/canvas-sdk/hooks.js';
 import type { SwatchProps } from '../vendor/canvas-sdk/swatch.js';
-import type {
-  ButtonProps,
-  CalloutProps,
-  CardBodyProps,
-  CardHeaderProps,
-  CardProps,
-  CodeProps,
-  DividerProps,
-  GridProps,
-  H1Props,
-  H2Props,
-  H3Props,
-  LinkProps,
-  PillProps,
-  RowProps,
-  StackProps,
-  StatProps,
-  TableProps,
-  TableRowTone,
-  TextProps,
-  TextWeight,
-} from '../vendor/canvas-sdk/ui-primitives.js';
+import type { ButtonProps, CalloutProps, CardBodyProps, CardHeaderProps, CardProps, CodeProps, DividerProps, GridProps, H1Props, H2Props, H3Props, LinkProps, PillProps, RowProps, StackProps, StatProps, TableProps, TableRowTone, TextProps, TextWeight } from '../vendor/canvas-sdk/ui-primitives.js';
 import type { UsageBarProps } from '../vendor/canvas-sdk/usage-bar.js';
 
 import { toneColor, toneHex, usageColorSequence } from './theme';

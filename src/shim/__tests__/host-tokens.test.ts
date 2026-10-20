@@ -1,12 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import {
-  applyPrimaryColor,
-  buildHostTokens,
-  canvasPaletteGrokDark,
-  chartThemeForBrand,
-  parseCanvasHostThemeBrand,
-  resolveThemeForColorScheme,
-} from '../host-tokens';
+import { applyPrimaryColor, buildHostTokens, canvasPaletteGrokDark, chartThemeForBrand, parseCanvasHostThemeBrand, resolveThemeForColorScheme } from '../host-tokens';
 
 describe('host-tokens', () => {
   afterEach(() => {

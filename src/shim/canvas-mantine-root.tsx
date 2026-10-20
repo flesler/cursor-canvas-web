@@ -1,15 +1,6 @@
-import {
-  MantineProvider,
-  createTheme,
-  type MantineColorScheme,
-  type MantineColorsTuple,
-  type MantineThemeOverride,
-} from '@mantine/core';
+import { MantineProvider, createTheme, type MantineColorScheme, type MantineColorsTuple, type MantineThemeOverride } from '@mantine/core';
 import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
-import {
-  resolveThemeForColorScheme,
-  type ShimHostTheme,
-} from './host-tokens';
+import { resolveThemeForColorScheme, type ShimHostTheme } from './host-tokens';
 
 export interface CanvasMantineRootProps {
   children: ReactNode;

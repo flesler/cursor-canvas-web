@@ -5,18 +5,8 @@
  * flat `data` array for pie); Mantine wants an array of row objects plus a
  * series descriptor. We reshape here and map `tone` -> color.
  */
-import type {
-  ChartReferenceLineProps,
-  LineChartCurveType,
-} from '@mantine/charts';
-import {
-  AreaChart,
-  ChartLegend,
-  DonutChart,
-  BarChart as MantineBarChart,
-  LineChart as MantineLineChart,
-  PieChart as MantinePieChart,
-} from '@mantine/charts';
+import type { ChartReferenceLineProps, LineChartCurveType } from '@mantine/charts';
+import { AreaChart, ChartLegend, DonutChart, BarChart as MantineBarChart, LineChart as MantineLineChart, PieChart as MantinePieChart } from '@mantine/charts';
 import { useState } from 'react';
 import type { XAxisProps, YAxisProps } from 'recharts';
 import type { CanvasChartValueAxisExtra } from '../superset/chart-extra';
@@ -40,12 +30,7 @@ export type {
 } from '../superset/chart-extra';
 export type { BarChartProps, LineChartProps } from '../superset/index';
 
-import type {
-  ChartReferenceLine,
-  ChartSeries,
-  ChartTone,
-  PieChartProps,
-} from '../vendor/canvas-sdk/chart-primitives.js';
+import type { ChartReferenceLine, ChartSeries, ChartTone, PieChartProps } from '../vendor/canvas-sdk/chart-primitives.js';
 
 type ValueAxisProps = Pick<
   BarChartProps,
@@ -81,7 +66,7 @@ function useChartColorProps(): { textColor: string; barLabelColor: string } {
 
 /**
  * Fork-only export (not in IDE `index.d.ts`); keeps chart data shaping stable for
- * Mantine — listed under “fork-only” in `pnpm run check:sdk-exports`.
+ * Mantine — listed under “fork-only” in `npm run check:sdk-exports`.
  */
 export function reshapeLineChartData(
   categories: string[],

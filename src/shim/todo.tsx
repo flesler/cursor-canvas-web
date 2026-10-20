@@ -13,11 +13,7 @@ export type {
   TodoStatus,
 } from '../vendor/canvas-sdk/todo-list.js';
 
-import type {
-  TodoListCardProps,
-  TodoListProps,
-  TodoStatus,
-} from '../vendor/canvas-sdk/todo-list.js';
+import type { TodoListCardProps, TodoListProps, TodoStatus } from '../vendor/canvas-sdk/todo-list.js';
 
 function StatusIcon({ status }: { status: TodoStatus }) {
   const theme = useHostTheme();

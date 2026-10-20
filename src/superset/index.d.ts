@@ -5,10 +5,7 @@
  * Superset props on SDK components go under `extra`, which the IDE ignores.
  */
 import type { JSX } from 'react';
-import type {
-  BarChartProps as SdkBarChartProps,
-  LineChartProps as SdkLineChartProps,
-} from '../vendor/canvas-sdk/index.js';
+import type { BarChartProps as SdkBarChartProps, LineChartProps as SdkLineChartProps } from '../vendor/canvas-sdk/index.js';
 import type { CanvasBarChartExtra, CanvasLineChartExtra } from './chart-extra.js';
 
 export * from '../vendor/canvas-sdk/index.js';

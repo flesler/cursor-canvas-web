@@ -2,18 +2,8 @@
  * Runtime mirror of vendored `canvas-tokens.d.ts` + `theme.d.ts` token helpers.
  */
 import type { CanvasHostTheme } from '../vendor/canvas-sdk/hooks.js';
-import type {
-  CanvasHostThemeBrand,
-  CanvasHostThemeOverrides,
-  CanvasPalette,
-  CanvasTokens,
-  CategoryPalette,
-  Color,
-} from '../vendor/canvas-sdk/canvas-tokens.js';
-import type {
-  CanvasRadius,
-  CanvasTypography,
-} from '../vendor/canvas-sdk/theme.js';
+import type { CanvasHostThemeBrand, CanvasHostThemeOverrides, CanvasPalette, CanvasTokens, CategoryPalette, Color } from '../vendor/canvas-sdk/canvas-tokens.js';
+import type { CanvasRadius, CanvasTypography } from '../vendor/canvas-sdk/theme.js';
 
 export type {
   CanvasHostThemeBrand,
