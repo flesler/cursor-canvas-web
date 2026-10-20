@@ -1,10 +1,10 @@
-import react from '@vitejs/plugin-react';
-import { fileURLToPath, URL } from 'node:url';
-import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react'
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vitest/config'
 
 // Project Pages are served from /<repo>/. Override with BASE_PATH if the
 // repository is renamed or deployed elsewhere.
-const base = process.env.BASE_PATH ?? '/cursor-canvas-web/';
+const base = process.env.BASE_PATH ?? '/cursor-canvas-web/'
 
 export default defineConfig({
   base,
@@ -23,4 +23,4 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     css: true,
   },
-});
+})

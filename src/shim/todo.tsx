@@ -2,21 +2,21 @@
  * Todo primitives. `TodoList` renders clickable status rows; `TodoListCard`
  * wraps them in a bordered, collapsible surface with an "N of M Done" summary.
  */
-import { useState } from 'react';
-import { toneHex } from './theme';
-import { useHostTheme } from './use-tokens';
+import { useState } from 'react'
+import { toneHex } from './theme'
+import { useHostTheme } from './use-tokens'
 
 export type {
   TodoItem,
   TodoListCardProps,
   TodoListProps,
   TodoStatus,
-} from '../vendor/canvas-sdk/todo-list.js';
+} from '../vendor/canvas-sdk/todo-list.js'
 
-import type { TodoListCardProps, TodoListProps, TodoStatus } from '../vendor/canvas-sdk/todo-list.js';
+import type { TodoListCardProps, TodoListProps, TodoStatus } from '../vendor/canvas-sdk/todo-list.js'
 
 function StatusIcon({ status }: { status: TodoStatus }) {
-  const theme = useHostTheme();
+  const theme = useHostTheme()
   const stroke =
     status === 'completed'
       ? toneHex.success
@@ -24,7 +24,7 @@ function StatusIcon({ status }: { status: TodoStatus }) {
         ? theme.accent.primary
         : status === 'cancelled'
           ? toneHex.danger
-          : theme.text.tertiary;
+          : theme.text.tertiary
   return (
     <svg
       width={14}
@@ -54,7 +54,7 @@ function StatusIcon({ status }: { status: TodoStatus }) {
         />
       )}
     </svg>
-  );
+  )
 }
 
 export function TodoList({
@@ -63,12 +63,12 @@ export function TodoList({
   onTodoClick,
   style,
 }: TodoListProps) {
-  const theme = useHostTheme();
-  if (todos.length === 0) return null;
+  const theme = useHostTheme()
+  if (todos.length === 0) return null
   return (
     <div style={{ display: 'flex', flexDirection: 'column', ...style }}>
       {todos.map((todo) => {
-        const dimmed = dimmedTodoIds?.has(todo.id);
+        const dimmed = dimmedTodoIds?.has(todo.id)
         return (
           <button
             key={todo.id}
@@ -102,10 +102,10 @@ export function TodoList({
               {todo.content}
             </span>
           </button>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 export function TodoListCard({
@@ -115,10 +115,10 @@ export function TodoListCard({
   onTodoClick,
   style,
 }: TodoListCardProps) {
-  const theme = useHostTheme();
-  const [open, setOpen] = useState(defaultExpanded);
-  if (todos.length === 0) return null;
-  const done = todos.filter((t) => t.status === 'completed').length;
+  const theme = useHostTheme()
+  const [open, setOpen] = useState(defaultExpanded)
+  if (todos.length === 0) return null
+  const done = todos.filter((t) => t.status === 'completed').length
   return (
     <div
       style={{
@@ -180,5 +180,5 @@ export function TodoListCard({
         </div>
       )}
     </div>
-  );
+  )
 }

@@ -11,30 +11,30 @@
  * tone vocabularies, and signatures — so a canvas renders unchanged in both the
  * IDE and the web build.
  */
-import { ActionIcon, Alert, Badge, Group, Button as MantineButton, Card as MantineCard, Checkbox as MantineCheckbox, Divider as MantineDivider, Select as MantineSelect, Stack as MantineStack, Table as MantineTable, Text as MantineText, Textarea as MantineTextarea, TextInput as MantineTextInput, Switch, Title } from '@mantine/core';
-import { createContext, useCallback, useContext, useState, type CSSProperties } from 'react';
+import { ActionIcon, Alert, Badge, Group, Button as MantineButton, Card as MantineCard, Checkbox as MantineCheckbox, Divider as MantineDivider, Select as MantineSelect, Stack as MantineStack, Table as MantineTable, Text as MantineText, Textarea as MantineTextarea, TextInput as MantineTextInput, Switch, Title } from '@mantine/core'
+import { createContext, useCallback, useContext, useState, type CSSProperties } from 'react'
 
-import type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js';
-import type { CheckboxProps, IconButtonProps, SelectProps, TextAreaProps, TextInputProps, ToggleProps } from '../vendor/canvas-sdk/form-primitives.js';
-import type { CanvasAction, SetCanvasState } from '../vendor/canvas-sdk/hooks.js';
-import type { SwatchProps } from '../vendor/canvas-sdk/swatch.js';
-import type { ButtonProps, CalloutProps, CardBodyProps, CardHeaderProps, CardProps, CodeProps, DividerProps, GridProps, H1Props, H2Props, H3Props, LinkProps, PillProps, RowProps, StackProps, StatProps, TableProps, TableRowTone, TextProps, TextWeight } from '../vendor/canvas-sdk/ui-primitives.js';
-import type { UsageBarProps } from '../vendor/canvas-sdk/usage-bar.js';
+import type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js'
+import type { CheckboxProps, IconButtonProps, SelectProps, TextAreaProps, TextInputProps, ToggleProps } from '../vendor/canvas-sdk/form-primitives.js'
+import type { CanvasAction, SetCanvasState } from '../vendor/canvas-sdk/hooks.js'
+import type { SwatchProps } from '../vendor/canvas-sdk/swatch.js'
+import type { ButtonProps, CalloutProps, CardBodyProps, CardHeaderProps, CardProps, CodeProps, DividerProps, GridProps, H1Props, H2Props, H3Props, LinkProps, PillProps, RowProps, StackProps, StatProps, TableProps, TableRowTone, TextProps, TextWeight } from '../vendor/canvas-sdk/ui-primitives.js'
+import type { UsageBarProps } from '../vendor/canvas-sdk/usage-bar.js'
 
-import { toneColor, toneHex, usageColorSequence } from './theme';
-import { useHostTheme } from './use-tokens';
+import { toneColor, toneHex, usageColorSequence } from './theme'
+import { useHostTheme } from './use-tokens'
 
 /* --------------------------------------------------------------- re-exports */
 
-export { useEffect, useMemo, useRef, useState } from 'react';
-export type { CSSProperties, RefObject } from 'react';
+export { useEffect, useMemo, useRef, useState } from 'react'
+export type { CSSProperties, RefObject } from 'react'
 export type {
   CanvasHostThemeBrand,
   CategoryPalette,
   ChartPalette,
   Color,
-} from '../vendor/canvas-sdk/canvas-tokens.js';
-export type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js';
+} from '../vendor/canvas-sdk/canvas-tokens.js'
+export type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js'
 export type {
   CheckboxProps,
   IconButtonProps,
@@ -43,17 +43,17 @@ export type {
   TextAreaProps,
   TextInputProps,
   ToggleProps,
-} from '../vendor/canvas-sdk/form-primitives.js';
+} from '../vendor/canvas-sdk/form-primitives.js'
 export type {
   CanvasAction,
   CanvasHostTheme,
   SetCanvasState,
-} from '../vendor/canvas-sdk/hooks.js';
-export type { SwatchProps } from '../vendor/canvas-sdk/swatch.js';
+} from '../vendor/canvas-sdk/hooks.js'
+export type { SwatchProps } from '../vendor/canvas-sdk/swatch.js'
 export type {
   CanvasPalette,
   CanvasTokens,
-} from '../vendor/canvas-sdk/theme.js';
+} from '../vendor/canvas-sdk/theme.js'
 export type {
   ButtonProps,
   CalloutProps,
@@ -82,12 +82,12 @@ export type {
   TableRowTone,
   TextProps,
   TextWeight,
-} from '../vendor/canvas-sdk/ui-primitives.js';
+} from '../vendor/canvas-sdk/ui-primitives.js'
 export type {
   UsageBarProps,
   UsageBarSegment,
-} from '../vendor/canvas-sdk/usage-bar.js';
-export { BarChart, LineChart, PieChart } from './charts';
+} from '../vendor/canvas-sdk/usage-bar.js'
+export { BarChart, LineChart, PieChart } from './charts'
 export type {
   BarChartProps,
   CanvasBarChartExtra,
@@ -101,22 +101,22 @@ export type {
   ChartTone,
   LineChartProps,
   PieChartProps,
-} from './charts';
-export { computeDAGLayout } from './dag';
+} from './charts'
+export { computeDAGLayout } from './dag'
 export type {
   DAGLayoutEdge,
   DAGLayoutNode,
   DAGLayoutOptions,
   DAGLayoutRank,
   DAGLayoutResult,
-} from './dag';
-export { DiffStats, DiffView } from './diff';
+} from './dag'
+export { DiffStats, DiffView } from './diff'
 export type {
   DiffLineData,
   DiffLineType,
   DiffStatsProps,
   DiffViewProps,
-} from './diff';
+} from './diff'
 export {
   canvasPaletteDark,
   canvasPaletteGrokDark,
@@ -128,15 +128,15 @@ export {
   categoryPaletteLight,
   colorPalette,
   usageColorSequence,
-} from './theme';
-export { TodoList, TodoListCard } from './todo';
+} from './theme'
+export { TodoList, TodoListCard } from './todo'
 export type {
   TodoItem,
   TodoListCardProps,
   TodoListProps,
   TodoStatus,
-} from './todo';
-export { useHostTheme } from './use-tokens';
+} from './todo'
+export { useHostTheme } from './use-tokens'
 
 /* ------------------------------------------------------------------ hooks */
 
@@ -148,17 +148,17 @@ export function useCanvasState<T>(
   key: string,
   defaultValue: T,
 ): [T, SetCanvasState<T>] {
-  const storageKey = `canvas:${key}`;
+  const storageKey = `canvas:${key}`
 
   const [state, setState] = useState<T>(() => {
-    if (typeof localStorage === 'undefined') return defaultValue;
+    if (typeof localStorage === 'undefined') return defaultValue
     try {
-      const raw = localStorage.getItem(storageKey);
-      return raw === null ? defaultValue : (JSON.parse(raw) as T);
+      const raw = localStorage.getItem(storageKey)
+      return raw === null ? defaultValue : (JSON.parse(raw) as T)
     } catch {
-      return defaultValue;
+      return defaultValue
     }
-  });
+  })
 
   const set = useCallback<SetCanvasState<T>>(
     (action) => {
@@ -166,19 +166,19 @@ export function useCanvasState<T>(
         const next =
           typeof action === 'function'
             ? (action as (prev: T) => T)(prev)
-            : action;
+            : action
         try {
-          localStorage?.setItem(storageKey, JSON.stringify(next));
+          localStorage?.setItem(storageKey, JSON.stringify(next))
         } catch {
           // Ignore quota / unavailable storage; state still updates in memory.
         }
-        return next;
-      });
+        return next
+      })
     },
     [storageKey],
-  );
+  )
 
-  return [state, set];
+  return [state, set]
 }
 
 /**
@@ -191,9 +191,9 @@ export function useCanvasAction(): (action: CanvasAction) => void {
       console.info(
         '[cursor/canvas shim] useCanvasAction (no-op on web):',
         action,
-      );
+      )
     }
-  }, []);
+  }, [])
 }
 
 /** Shallow-merge two style objects, `override` winning. */
@@ -201,7 +201,7 @@ export function mergeStyle(
   base: CSSProperties,
   override?: CSSProperties,
 ): CSSProperties {
-  return { ...base, ...override };
+  return { ...base, ...override }
 }
 
 /* ------------------------------------------------------------- typography */
@@ -211,7 +211,7 @@ function headingStyle(
   level: 'h1' | 'h2' | 'h3',
   style?: CSSProperties,
 ): CSSProperties {
-  const block = host.typography[level];
+  const block = host.typography[level]
   return {
     fontFamily: host.typography.fontFamily,
     fontSize: block.fontSize,
@@ -220,34 +220,34 @@ function headingStyle(
     color: host.text.primary,
     margin: 0,
     ...style,
-  };
+  }
 }
 
 export function H1({ children, style }: H1Props) {
-  const host = useHostTheme();
+  const host = useHostTheme()
   return (
     <Title order={1} style={headingStyle(host, 'h1', style)}>
       {children}
     </Title>
-  );
+  )
 }
 
 export function H2({ children, style }: H2Props) {
-  const host = useHostTheme();
+  const host = useHostTheme()
   return (
     <Title order={2} style={headingStyle(host, 'h2', style)}>
       {children}
     </Title>
-  );
+  )
 }
 
 export function H3({ children, style }: H3Props) {
-  const host = useHostTheme();
+  const host = useHostTheme()
   return (
     <Title order={3} style={headingStyle(host, 'h3', style)}>
       {children}
     </Title>
-  );
+  )
 }
 
 const TEXT_WEIGHT: Record<TextWeight, number> = {
@@ -255,7 +255,7 @@ const TEXT_WEIGHT: Record<TextWeight, number> = {
   medium: 500,
   semibold: 600,
   bold: 700,
-};
+}
 
 export function Text({
   children,
@@ -267,7 +267,7 @@ export function Text({
   truncate,
   style,
 }: TextProps) {
-  const theme = useHostTheme();
+  const theme = useHostTheme()
   return (
     <MantineText
       component={as}
@@ -284,11 +284,11 @@ export function Text({
     >
       {children}
     </MantineText>
-  );
+  )
 }
 
 export function Code({ children, style }: CodeProps) {
-  const host = useHostTheme();
+  const host = useHostTheme()
   return (
     <code
       style={{
@@ -304,11 +304,11 @@ export function Code({ children, style }: CodeProps) {
     >
       {children}
     </code>
-  );
+  )
 }
 
 export function Link({ children, href, style }: LinkProps) {
-  const host = useHostTheme();
+  const host = useHostTheme()
   return (
     <a
       href={href}
@@ -318,7 +318,7 @@ export function Link({ children, href, style }: LinkProps) {
     >
       {children}
     </a>
-  );
+  )
 }
 
 /* ---------------------------------------------------------------- layout */
@@ -328,7 +328,7 @@ export function Stack({ children, gap, style }: StackProps) {
     <MantineStack gap={gap} style={style}>
       {children}
     </MantineStack>
-  );
+  )
 }
 
 const FLEX: Record<string, string> = {
@@ -337,7 +337,7 @@ const FLEX: Record<string, string> = {
   end: 'flex-end',
   stretch: 'stretch',
   'space-between': 'space-between',
-};
+}
 
 export function Row({
   children,
@@ -357,19 +357,19 @@ export function Row({
     >
       {children}
     </Group>
-  );
+  )
 }
 
 /** Flexible filler that pushes siblings apart inside a `Row`. */
 export function Spacer() {
-  return <div style={{ flex: 1 }} />;
+  return <div style={{ flex: 1 }} />
 }
 
 export function Grid({ children, columns, gap = 16, align, style }: GridProps) {
   const gridTemplateColumns =
     typeof columns === 'number'
       ? `repeat(${columns}, minmax(0, 1fr))`
-      : columns;
+      : columns
   return (
     <div
       style={{
@@ -382,11 +382,11 @@ export function Grid({ children, columns, gap = 16, align, style }: GridProps) {
     >
       {children}
     </div>
-  );
+  )
 }
 
 export function Divider({ style }: DividerProps) {
-  return <MantineDivider style={style} />;
+  return <MantineDivider style={style} />
 }
 
 /* ------------------------------------------------------------------ card */
@@ -394,12 +394,12 @@ export function Divider({ style }: DividerProps) {
 const CardContext = createContext<{
   collapsible: boolean;
   open: boolean;
-  toggle: () => void;
+  toggle: () => void
 }>({
   collapsible: false,
   open: true,
   toggle: () => {},
-});
+})
 
 export function Card({
   children,
@@ -410,14 +410,14 @@ export function Card({
   onOpenChange,
   style,
 }: CardProps) {
-  const host = useHostTheme();
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const open = openProp ?? internalOpen;
+  const host = useHostTheme()
+  const [internalOpen, setInternalOpen] = useState(defaultOpen)
+  const open = openProp ?? internalOpen
   const toggle = useCallback(() => {
-    const next = !open;
-    if (openProp === undefined) setInternalOpen(next);
-    onOpenChange?.(next);
-  }, [open, openProp, onOpenChange]);
+    const next = !open
+    if (openProp === undefined) setInternalOpen(next)
+    onOpenChange?.(next)
+  }, [open, openProp, onOpenChange])
 
   return (
     <MantineCard
@@ -434,12 +434,12 @@ export function Card({
         {children}
       </CardContext.Provider>
     </MantineCard>
-  );
+  )
 }
 
 export function CardHeader({ children, trailing, style }: CardHeaderProps) {
-  const host = useHostTheme();
-  const { collapsible, open, toggle } = useContext(CardContext);
+  const host = useHostTheme()
+  const { collapsible, open, toggle } = useContext(CardContext)
   return (
     <div
       onClick={collapsible ? toggle : undefined}
@@ -465,13 +465,13 @@ export function CardHeader({ children, trailing, style }: CardHeaderProps) {
       </span>
       {trailing != null && <span>{trailing}</span>}
     </div>
-  );
+  )
 }
 
 export function CardBody({ children, style }: CardBodyProps) {
-  const { collapsible, open } = useContext(CardContext);
-  if (collapsible && !open) return null;
-  return <div style={{ padding: 14, ...style }}>{children}</div>;
+  const { collapsible, open } = useContext(CardContext)
+  if (collapsible && !open) return null
+  return <div style={{ padding: 14, ...style }}>{children}</div>
 }
 
 function Chevron({ expanded }: { expanded: boolean }) {
@@ -495,13 +495,13 @@ function Chevron({ expanded }: { expanded: boolean }) {
         strokeLinejoin="round"
       />
     </svg>
-  );
+  )
 }
 
 /* --------------------------------------------------------------- display */
 
 export function Stat({ value, label, tone, style }: StatProps) {
-  const host = useHostTheme();
+  const host = useHostTheme()
   return (
     <div style={style}>
       <MantineText
@@ -525,7 +525,7 @@ export function Stat({ value, label, tone, style }: StatProps) {
         {label}
       </MantineText>
     </div>
-  );
+  )
 }
 
 export function Pill({
@@ -556,7 +556,7 @@ export function Pill({
     >
       {children}
     </Badge>
-  );
+  )
 }
 
 export function Callout({
@@ -576,7 +576,7 @@ export function Callout({
     >
       {children}
     </Alert>
-  );
+  )
 }
 
 /* ------------------------------------------------------------------ table */
@@ -587,7 +587,7 @@ const ROW_TONE_BG: Record<TableRowTone, string> = {
   warning: 'rgba(232,163,61,0.14)',
   info: 'rgba(46,121,181,0.12)',
   neutral: 'rgba(136,136,168,0.12)',
-};
+}
 export function Table({
   headers,
   rows,
@@ -626,7 +626,7 @@ export function Table({
           </MantineTable.Tr>
         ) : (
           rows.map((row, rowIndex) => {
-            const tone = rowTone?.[rowIndex];
+            const tone = rowTone?.[rowIndex]
             return (
               <MantineTable.Tr
                 key={rowIndex}
@@ -641,12 +641,12 @@ export function Table({
                   </MantineTable.Td>
                 ))}
               </MantineTable.Tr>
-            );
+            )
           })
         )}
       </MantineTable.Tbody>
     </MantineTable>
-  );
+  )
 }
 
 /* ----------------------------------------------------------------- actions */
@@ -655,7 +655,7 @@ const BUTTON_VARIANT = {
   primary: 'filled',
   secondary: 'default',
   ghost: 'subtle',
-} as const;
+} as const
 export function Button({
   children,
   variant = 'secondary',
@@ -676,7 +676,7 @@ export function Button({
     >
       {children}
     </MantineButton>
-  );
+  )
 }
 
 export function IconButton({
@@ -702,7 +702,7 @@ export function IconButton({
     >
       {children}
     </ActionIcon>
-  );
+  )
 }
 
 /* ------------------------------------------------------------------ form */
@@ -723,11 +723,11 @@ export function Select({
       disabled={disabled}
       allowDeselect={false}
       onChange={(next) => {
-        if (next !== null) onChange?.(next);
+        if (next !== null) onChange?.(next)
       }}
       style={style}
     />
-  );
+  )
 }
 
 export function Checkbox({
@@ -745,7 +745,7 @@ export function Checkbox({
       onChange={(event) => onChange?.(event.currentTarget.checked)}
       style={style}
     />
-  );
+  )
 }
 
 export function Toggle({
@@ -763,7 +763,7 @@ export function Toggle({
       onChange={(event) => onChange?.(event.currentTarget.checked)}
       style={style}
     />
-  );
+  )
 }
 
 export function TextInput({
@@ -783,7 +783,7 @@ export function TextInput({
       onChange={(event) => onChange?.(event.currentTarget.value)}
       style={style}
     />
-  );
+  )
 }
 
 export function TextArea({
@@ -804,13 +804,13 @@ export function TextArea({
       onChange={(event) => onChange?.(event.currentTarget.value)}
       style={style}
     />
-  );
+  )
 }
 
 /* -------------------------------------------------------- rich primitives */
 
 export function Swatch({ color, style }: SwatchProps) {
-  const theme = useHostTheme();
+  const theme = useHostTheme()
   return (
     <span
       style={{
@@ -823,7 +823,7 @@ export function Swatch({ color, style }: SwatchProps) {
         ...style,
       }}
     />
-  );
+  )
 }
 
 export function UsageBar({
@@ -833,13 +833,13 @@ export function UsageBar({
   topRightLabel,
   style,
 }: UsageBarProps) {
-  const theme = useHostTheme();
-  const safeTotal = total > 0 ? total : 1;
+  const theme = useHostTheme()
+  const safeTotal = total > 0 ? total : 1
   const used = segments.reduce(
     (sum, s) => sum + (Number.isFinite(s.value) && s.value > 0 ? s.value : 0),
     0,
-  );
-  const remainder = Math.max(0, safeTotal - used);
+  )
+  const remainder = Math.max(0, safeTotal - used)
   return (
     <div style={style}>
       {(topLeftLabel != null || topRightLabel != null) && (
@@ -861,12 +861,12 @@ export function UsageBar({
           const value =
             Number.isFinite(segment.value) && segment.value > 0
               ? segment.value
-              : 0;
+              : 0
           const color =
             theme.category[
               segment.color ??
                 usageColorSequence[index % usageColorSequence.length]
-            ];
+            ]
           return (
             <div
               key={segment.id}
@@ -876,7 +876,7 @@ export function UsageBar({
                 borderRadius: 3,
               }}
             />
-          );
+          )
         })}
         {remainder > 0 && (
           <div
@@ -889,7 +889,7 @@ export function UsageBar({
         )}
       </div>
     </div>
-  );
+  )
 }
 
 export function CollapsibleSection({
@@ -901,8 +901,8 @@ export function CollapsibleSection({
   defaultOpen = false,
   style,
 }: CollapsibleSectionProps) {
-  const theme = useHostTheme();
-  const [open, setOpen] = useState(defaultOpen);
+  const theme = useHostTheme()
+  const [open, setOpen] = useState(defaultOpen)
   return (
     <div style={style}>
       <div
@@ -935,5 +935,5 @@ export function CollapsibleSection({
         <div style={{ paddingLeft: 18, paddingBottom: 4 }}>{children}</div>
       )}
     </div>
-  );
+  )
 }

@@ -5,14 +5,14 @@
  * flat `data` array for pie); Mantine wants an array of row objects plus a
  * series descriptor. We reshape here and map `tone` -> color.
  */
-import type { ChartReferenceLineProps, LineChartCurveType } from '@mantine/charts';
-import { AreaChart, ChartLegend, DonutChart, BarChart as MantineBarChart, LineChart as MantineLineChart, PieChart as MantinePieChart } from '@mantine/charts';
-import { useState } from 'react';
-import type { XAxisProps, YAxisProps } from 'recharts';
-import type { CanvasChartValueAxisExtra } from '../superset/chart-extra';
-import type { BarChartProps, LineChartProps } from '../superset/index';
-import { toneHex } from './theme';
-import { useHostTheme } from './use-tokens';
+import type { ChartReferenceLineProps, LineChartCurveType } from '@mantine/charts'
+import { AreaChart, ChartLegend, DonutChart, BarChart as MantineBarChart, LineChart as MantineLineChart, PieChart as MantinePieChart } from '@mantine/charts'
+import { useState } from 'react'
+import type { XAxisProps, YAxisProps } from 'recharts'
+import type { CanvasChartValueAxisExtra } from '../superset/chart-extra'
+import type { BarChartProps, LineChartProps } from '../superset/index'
+import { toneHex } from './theme'
+import { useHostTheme } from './use-tokens'
 
 export type {
   ChartDataPoint,
@@ -20,48 +20,48 @@ export type {
   ChartSeries,
   ChartTone,
   PieChartProps,
-} from '../vendor/canvas-sdk/chart-primitives.js';
+} from '../vendor/canvas-sdk/chart-primitives.js'
 export type {
   CanvasBarChartExtra,
   CanvasChartExtra,
   CanvasChartScale,
   CanvasChartValueAxisExtra,
   CanvasLineChartExtra,
-} from '../superset/chart-extra';
-export type { BarChartProps, LineChartProps } from '../superset/index';
+} from '../superset/chart-extra'
+export type { BarChartProps, LineChartProps } from '../superset/index'
 
-import type { ChartReferenceLine, ChartSeries, ChartTone, PieChartProps } from '../vendor/canvas-sdk/chart-primitives.js';
+import type { ChartReferenceLine, ChartSeries, ChartTone, PieChartProps } from '../vendor/canvas-sdk/chart-primitives.js'
 
 type ValueAxisProps = Pick<
   BarChartProps,
   'beginAtZero' | 'yMin' | 'yMax' | 'referenceLines'
->;
+>
 
 /** Mantine cartesian charts default legend to top; IDE places it below, centered. */
 const CHART_LEGEND_PROPS = {
   verticalAlign: 'bottom' as const,
   align: 'center' as const,
-};
+}
 
 const CHART_LEGEND_STYLES = {
   legend: { justifyContent: 'center' },
-} as const;
+} as const
 
 function useSeriesColor(): (
   tone: ChartTone | undefined,
   index: number,
 ) => string {
-  const theme = useHostTheme();
-  const sequence = theme.chart.sequence;
+  const theme = useHostTheme()
+  const sequence = theme.chart.sequence
   return (tone, index) =>
-    tone ? toneHex[tone] : sequence[index % sequence.length];
+    tone ? toneHex[tone] : sequence[index % sequence.length]
 }
 
 /** IDE charts use host foreground for axes/legends, not Mantine `dimmed`. */
 function useChartColorProps(): { textColor: string; barLabelColor: string } {
-  const theme = useHostTheme();
-  const text = theme.text.primary;
-  return { textColor: text, barLabelColor: text };
+  const theme = useHostTheme()
+  const text = theme.text.primary
+  return { textColor: text, barLabelColor: text }
 }
 
 /**
@@ -73,12 +73,12 @@ export function reshapeLineChartData(
   series: ChartSeries[],
 ): Record<string, string | number>[] {
   return categories.map((category, index) => {
-    const row: Record<string, string | number> = { category };
+    const row: Record<string, string | number> = { category }
     for (const s of series) {
-      row[s.name] = s.data[index] ?? 0;
+      row[s.name] = s.data[index] ?? 0
     }
-    return row;
-  });
+    return row
+  })
 }
 
 function toMantineSeries(
@@ -88,11 +88,11 @@ function toMantineSeries(
   return series.map((s, index) => ({
     name: s.name,
     color: seriesColor(s.tone, index),
-  }));
+  }))
 }
 
 function valueFormatter(valueSuffix?: string, valuePrefix?: string) {
-  return (value: number) => `${valuePrefix ?? ''}${value}${valueSuffix ?? ''}`;
+  return (value: number) => `${valuePrefix ?? ''}${value}${valueSuffix ?? ''}`
 }
 
 function mantineReferenceLines(
@@ -100,30 +100,30 @@ function mantineReferenceLines(
   horizontal: boolean,
 ): ChartReferenceLineProps[] | undefined {
   if (!lines?.length) {
-    return undefined;
+    return undefined
   }
   return lines.map((line) => ({
     ...(horizontal ? { x: line.value } : { y: line.value }),
     label: line.label,
     color: line.tone ? toneHex[line.tone] : toneHex.neutral,
-  }));
+  }))
 }
 
 type AxisChartProps = {
   yAxisProps?: Omit<YAxisProps, 'ref'>;
   xAxisProps?: Omit<XAxisProps, 'ref'>;
-  referenceLines?: ChartReferenceLineProps[];
-};
+  referenceLines?: ChartReferenceLineProps[]
+}
 
-const NON_LINEAR_SCALES = new Set(['log', 'symlog', 'pow', 'sqrt']);
+const NON_LINEAR_SCALES = new Set(['log', 'symlog', 'pow', 'sqrt'])
 
 /** Non-linear scales break on a zero-based domain, so default to `[1, 'dataMax']`. */
 function normalizeValueAxisExtra(
   valueAxis: CanvasChartValueAxisExtra,
 ): CanvasChartValueAxisExtra {
-  const { scale } = valueAxis;
+  const { scale } = valueAxis
   if (typeof scale !== 'string' || !NON_LINEAR_SCALES.has(scale)) {
-    return valueAxis;
+    return valueAxis
   }
   return {
     ...valueAxis,
@@ -131,7 +131,7 @@ function normalizeValueAxisExtra(
     allowDataOverflow: valueAxis.allowDataOverflow ?? true,
     allowDecimals: valueAxis.allowDecimals ?? true,
     domain: valueAxis.domain ?? [1, 'dataMax'],
-  };
+  }
 }
 
 export function valueAxisChartProps(
@@ -139,23 +139,23 @@ export function valueAxisChartProps(
     horizontal?: boolean;
     stacked?: boolean;
     normalized?: boolean;
-    valueAxis?: CanvasChartValueAxisExtra;
+    valueAxis?: CanvasChartValueAxisExtra
   },
 ): AxisChartProps {
-  const ref = mantineReferenceLines(opts.referenceLines, !!opts.horizontal);
-  let domain: [number | string, number | string] | undefined;
+  const ref = mantineReferenceLines(opts.referenceLines, !!opts.horizontal)
+  let domain: [number | string, number | string] | undefined
   if (!opts.stacked && !opts.normalized) {
-    const beginAtZero = opts.beginAtZero !== false;
-    domain = [opts.yMin ?? (beginAtZero ? 0 : 'auto'), opts.yMax ?? 'auto'];
+    const beginAtZero = opts.beginAtZero !== false
+    domain = [opts.yMin ?? (beginAtZero ? 0 : 'auto'), opts.yMax ?? 'auto']
   }
-  const extra = opts.valueAxis ? normalizeValueAxisExtra(opts.valueAxis) : undefined;
+  const extra = opts.valueAxis ? normalizeValueAxisExtra(opts.valueAxis) : undefined
   if (!domain && !extra) {
-    return { referenceLines: ref };
+    return { referenceLines: ref }
   }
-  const axisProps = { ...(domain && { domain }), ...extra };
+  const axisProps = { ...(domain && { domain }), ...extra }
   return opts.horizontal
     ? { xAxisProps: axisProps as Omit<XAxisProps, 'ref'>, referenceLines: ref }
-    : { yAxisProps: axisProps, referenceLines: ref };
+    : { yAxisProps: axisProps, referenceLines: ref }
 }
 
 function defaultShowBarValues(
@@ -164,29 +164,29 @@ function defaultShowBarValues(
   categories: string[],
 ): boolean {
   if (showValues !== undefined) {
-    return showValues;
+    return showValues
   }
-  return series.length === 1 && categories.length <= 8;
+  return series.length === 1 && categories.length <= 8
 }
 
-const HORIZONTAL_CATEGORY_LABEL_MAX = 14;
+const HORIZONTAL_CATEGORY_LABEL_MAX = 14
 
 function truncateCategoryAxisLabel(text: string): string {
   if (text.length <= HORIZONTAL_CATEGORY_LABEL_MAX) {
-    return text;
+    return text
   }
-  return `${text.slice(0, HORIZONTAL_CATEGORY_LABEL_MAX - 1)}…`;
+  return `${text.slice(0, HORIZONTAL_CATEGORY_LABEL_MAX - 1)}…`
 }
 
 function horizontalCategoryAxisTick(props: {
   x?: string | number;
   y?: string | number;
-  payload?: { value?: string | number };
+  payload?: { value?: string | number }
 }) {
-  const x = typeof props.x === 'number' ? props.x : Number(props.x) || 0;
-  const y = typeof props.y === 'number' ? props.y : Number(props.y) || 0;
-  const full = String(props.payload?.value ?? '');
-  const display = truncateCategoryAxisLabel(full);
+  const x = typeof props.x === 'number' ? props.x : Number(props.x) || 0
+  const y = typeof props.y === 'number' ? props.y : Number(props.y) || 0
+  const full = String(props.payload?.value ?? '')
+  const display = truncateCategoryAxisLabel(full)
   return (
     <g transform={`translate(${x},${y})`}>
       <text
@@ -201,14 +201,14 @@ function horizontalCategoryAxisTick(props: {
         {display}
       </text>
     </g>
-  );
+  )
 }
 
 function barValueLabelProps(barLabelColor: string) {
   return {
     fontWeight: 700,
     fill: barLabelColor,
-  };
+  }
 }
 
 function horizontalBarProps() {
@@ -220,7 +220,7 @@ function horizontalBarProps() {
     barChartProps: {
       margin: { right: 32 },
     },
-  };
+  }
 }
 
 /** Room above vertical bars so value labels are not clipped. */
@@ -229,7 +229,7 @@ function verticalBarLabelProps() {
     barChartProps: {
       margin: { top: 22 },
     },
-  };
+  }
 }
 
 export function LineChart({
@@ -249,12 +249,12 @@ export function LineChart({
   extra,
   smooth: legacySmooth,
 }: LineChartProps) {
-  const smooth = extra?.smooth ?? legacySmooth;
-  const seriesColor = useSeriesColor();
-  const chartColors = useChartColorProps();
-  const data = reshapeLineChartData(categories, series);
-  const mantineSeries = toMantineSeries(series, seriesColor);
-  const stacked = Boolean(fill && extra?.stacked);
+  const smooth = extra?.smooth ?? legacySmooth
+  const seriesColor = useSeriesColor()
+  const chartColors = useChartColorProps()
+  const data = reshapeLineChartData(categories, series)
+  const mantineSeries = toMantineSeries(series, seriesColor)
+  const stacked = Boolean(fill && extra?.stacked)
   const axis = valueAxisChartProps({
     beginAtZero,
     yMin,
@@ -263,7 +263,7 @@ export function LineChart({
     horizontal: false,
     stacked,
     valueAxis: extra?.valueAxis,
-  });
+  })
   const common = {
     h: height,
     data,
@@ -282,12 +282,12 @@ export function LineChart({
     ...chartColors,
     ...axis,
     style,
-  };
+  }
   return fill ? (
     <AreaChart {...common} type={stacked ? 'stacked' : 'default'} />
   ) : (
     <MantineLineChart {...common} />
-  );
+  )
 }
 
 export function BarChart({
@@ -307,10 +307,10 @@ export function BarChart({
   style,
   extra,
 }: BarChartProps) {
-  const seriesColor = useSeriesColor();
-  const chartColors = useChartColorProps();
-  const data = reshapeLineChartData(categories, series);
-  const type = normalized ? 'percent' : stacked ? 'stacked' : 'default';
+  const seriesColor = useSeriesColor()
+  const chartColors = useChartColorProps()
+  const data = reshapeLineChartData(categories, series)
+  const type = normalized ? 'percent' : stacked ? 'stacked' : 'default'
   const axis = valueAxisChartProps({
     beginAtZero,
     yMin,
@@ -320,11 +320,11 @@ export function BarChart({
     stacked,
     normalized,
     valueAxis: extra?.valueAxis,
-  });
+  })
   const withBarValueLabel =
     !stacked &&
     !normalized &&
-    defaultShowBarValues(showValues, series, categories);
+    defaultShowBarValues(showValues, series, categories)
   return (
     <MantineBarChart
       h={height}
@@ -353,26 +353,26 @@ export function BarChart({
       {...axis}
       style={style}
     />
-  );
+  )
 }
 
 /** Match IDE pie orientation (Recharts default is 180° off). */
-const PIE_START_ANGLE = 180;
-const PIE_END_ANGLE = 540;
+const PIE_START_ANGLE = 180
+const PIE_END_ANGLE = 540
 
 function formatPieSlicePercent(value: number, total: number): string {
   if (total <= 0) {
-    return '0%';
+    return '0%'
   }
-  const percent = (value / total) * 100;
+  const percent = (value / total) * 100
   if (percent < 10 && Math.abs(percent - Math.round(percent)) > 0.05) {
-    return `${percent.toFixed(1)}%`;
+    return `${percent.toFixed(1)}%`
   }
-  return `${Math.round(percent)}%`;
+  return `${Math.round(percent)}%`
 }
 
 function pieDonutThickness(size: number): number {
-  return Math.max(28, Math.round(size * 0.22));
+  return Math.max(28, Math.round(size * 0.22))
 }
 
 function pieLegendPayload(
@@ -383,7 +383,7 @@ function pieLegendPayload(
     value: item.name,
     color: item.color,
     type: 'circle',
-  }));
+  }))
 }
 
 function pieLegendSeries(
@@ -394,7 +394,7 @@ function pieLegendSeries(
     name: item.name,
     color: item.color,
     label: `${item.name} ${formatPieSlicePercent(item.value, total)}`,
-  }));
+  }))
 }
 
 function DonutCenterLabel({
@@ -406,7 +406,7 @@ function DonutCenterLabel({
   total: number;
   family: string;
   primary: string;
-  subtitle: string;
+  subtitle: string
 }) {
   return (
     <text
@@ -423,27 +423,27 @@ function DonutCenterLabel({
         Total
       </tspan>
     </text>
-  );
+  )
 }
 
 export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
-  const [highlighted, setHighlighted] = useState<string | null>(null);
-  const theme = useHostTheme();
-  const seriesColor = useSeriesColor();
+  const [highlighted, setHighlighted] = useState<string | null>(null)
+  const theme = useHostTheme()
+  const seriesColor = useSeriesColor()
   const mantineData = data.map((point, index) => ({
     name: point.label,
     value: point.value,
     color: seriesColor(point.tone, index),
-  }));
-  const total = mantineData.reduce((sum, row) => sum + row.value, 0);
+  }))
+  const total = mantineData.reduce((sum, row) => sum + row.value, 0)
   const pieAngles = {
     startAngle: PIE_START_ANGLE,
     endAngle: PIE_END_ANGLE,
-  };
+  }
   const pieCellProps = (name: string) => ({
     opacity:
       highlighted === null || highlighted === name ? 1 : 0.35,
-  });
+  })
   const chart = donut ? (
     <DonutChart
       data={mantineData}
@@ -469,7 +469,7 @@ export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
       cellProps={(cell) => pieCellProps(cell.name)}
       {...pieAngles}
     />
-  );
+  )
   return (
     <div
       style={{
@@ -512,5 +512,5 @@ export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
         }}
       />
     </div>
-  );
+  )
 }

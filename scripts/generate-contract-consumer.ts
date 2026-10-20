@@ -1,33 +1,33 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const sdkIndex = path.join(root, 'src/vendor/canvas-sdk/index.d.ts');
-const outFile = path.join(root, 'src/contract/consumer.ts');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const sdkIndex = path.join(root, 'src/vendor/canvas-sdk/index.d.ts')
+const outFile = path.join(root, 'src/contract/consumer.ts')
 
 if (!fs.existsSync(sdkIndex)) {
-  console.error('Run npm run sync:sdk first');
-  process.exit(1);
+  console.error('Run npm run sync:sdk first')
+  process.exit(1)
 }
 
-const raw = fs.readFileSync(sdkIndex, 'utf8');
-const values: string[] = [];
-const types: string[] = [];
+const raw = fs.readFileSync(sdkIndex, 'utf8')
+const values: string[] = []
+const types: string[] = []
 
 function stripComments(text: string): string {
-  return text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+  return text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')
 }
 
-const cleaned = stripComments(raw);
+const cleaned = stripComments(raw)
 
 for (const match of cleaned.matchAll(
   /export\s+type\s+\{([^}]+)\}\s+from\s+["'][^"']+["']/g,
 )) {
   for (const part of match[1].split(',')) {
-    const name = part.trim().split(/\s+/).pop();
+    const name = part.trim().split(/\s+/).pop()
     if (name) {
-      types.push(name);
+      types.push(name)
     }
   }
 }
@@ -36,25 +36,25 @@ for (const match of cleaned.matchAll(
   /export\s+\{([^}]+)\}\s+from\s+["'][^"']+["']/g,
 )) {
   for (const part of match[1].split(',')) {
-    const bits = part.trim().split(/\s+as\s+/);
-    const name = bits[bits.length - 1].trim();
+    const bits = part.trim().split(/\s+as\s+/)
+    const name = bits[bits.length - 1].trim()
     if (name) {
-      values.push(name);
+      values.push(name)
     }
   }
 }
 
-const uniqueValues = [...new Set(values)].sort();
-const uniqueTypes = [...new Set(types)].sort();
+const uniqueValues = [...new Set(values)].sort()
+const uniqueTypes = [...new Set(types)].sort()
 
 function contractTypeEntry(name: string): string {
   if (name === 'RefObject') {
-    return 'RefObject<HTMLDivElement>';
+    return 'RefObject<HTMLDivElement>'
   }
   if (name === 'SetCanvasState') {
-    return 'SetCanvasState<number>';
+    return 'SetCanvasState<number>'
   }
-  return name;
+  return name
 }
 
 const body = `/**
@@ -81,17 +81,17 @@ export type ContractHostThemeExtras = Pick<
   ShimHostTheme,
   'chart' | 'radius' | 'typography' | 'spacing'
 >;
-`;
+`
 
-fs.mkdirSync(path.dirname(outFile), { recursive: true });
-const prev = fs.existsSync(outFile) ? fs.readFileSync(outFile, 'utf8') : '';
+fs.mkdirSync(path.dirname(outFile), { recursive: true })
+const prev = fs.existsSync(outFile) ? fs.readFileSync(outFile, 'utf8') : ''
 if (prev !== body) {
-  fs.writeFileSync(outFile, body);
+  fs.writeFileSync(outFile, body)
   console.log(
     `Wrote ${outFile} (${uniqueValues.length} values, ${uniqueTypes.length} types)`,
-  );
+  )
 } else {
   console.log(
     `Unchanged ${outFile} (${uniqueValues.length} values, ${uniqueTypes.length} types)`,
-  );
+  )
 }

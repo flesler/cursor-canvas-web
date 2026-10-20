@@ -10,24 +10,24 @@
  *   import '@mantine/core/styles.css';
  *   import '@mantine/charts/styles.css';
  */
-import { type MantineColorScheme } from '@mantine/core';
-import { StrictMode, type ReactNode } from 'react';
-import { createRoot, type Root } from 'react-dom/client';
-import { CanvasMantineRoot } from '../shim/canvas-mantine-root';
+import { type MantineColorScheme } from '@mantine/core'
+import { StrictMode, type ReactNode } from 'react'
+import { createRoot, type Root } from 'react-dom/client'
+import { CanvasMantineRoot } from '../shim/canvas-mantine-root'
 
 export interface CanvasRootProps {
   children: ReactNode;
   /** Initial color scheme; defaults to following the OS preference. */
-  defaultColorScheme?: MantineColorScheme;
+  defaultColorScheme?: MantineColorScheme
 }
 
 /** @deprecated Use `CanvasMantineRoot` — same behavior. */
-export const CanvasRoot = CanvasMantineRoot;
+export const CanvasRoot = CanvasMantineRoot
 
 export interface MountCanvasOptions {
   defaultColorScheme?: MantineColorScheme;
   /** Skip `StrictMode` (e.g. for libraries that double-render badly). */
-  strict?: boolean;
+  strict?: boolean
 }
 
 /**
@@ -40,25 +40,25 @@ export function mountCanvas(
   canvas: ReactNode,
   options: MountCanvasOptions = {},
 ): Root {
-  const { defaultColorScheme = 'auto', strict = true } = options;
+  const { defaultColorScheme = 'auto', strict = true } = options
   const element =
     typeof container === 'string'
       ? document.getElementById(container)
-      : container;
+      : container
   if (!element) {
     throw new Error(
       `mountCanvas: container ${
         typeof container === 'string' ? `#${container}` : ''
       } not found`,
-    );
+    )
   }
 
-  const root = createRoot(element);
+  const root = createRoot(element)
   const tree = (
     <CanvasMantineRoot defaultColorScheme={defaultColorScheme}>
       {canvas}
     </CanvasMantineRoot>
-  );
-  root.render(strict ? <StrictMode>{tree}</StrictMode> : tree);
-  return root;
+  )
+  root.render(strict ? <StrictMode>{tree}</StrictMode> : tree)
+  return root
 }

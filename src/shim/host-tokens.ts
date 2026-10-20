@@ -1,9 +1,9 @@
 /**
  * Runtime mirror of vendored `canvas-tokens.d.ts` + `theme.d.ts` token helpers.
  */
-import type { CanvasHostTheme } from '../vendor/canvas-sdk/hooks.js';
-import type { CanvasHostThemeBrand, CanvasHostThemeOverrides, CanvasPalette, CanvasTokens, CategoryPalette, Color } from '../vendor/canvas-sdk/canvas-tokens.js';
-import type { CanvasRadius, CanvasTypography } from '../vendor/canvas-sdk/theme.js';
+import type { CanvasHostTheme } from '../vendor/canvas-sdk/hooks.js'
+import type { CanvasHostThemeBrand, CanvasHostThemeOverrides, CanvasPalette, CanvasTokens, CategoryPalette, Color } from '../vendor/canvas-sdk/canvas-tokens.js'
+import type { CanvasRadius, CanvasTypography } from '../vendor/canvas-sdk/theme.js'
 
 export type {
   CanvasHostThemeBrand,
@@ -12,7 +12,7 @@ export type {
   CanvasTokens,
   CategoryPalette,
   Color,
-} from '../vendor/canvas-sdk/canvas-tokens.js';
+} from '../vendor/canvas-sdk/canvas-tokens.js'
 
 export const canvasPaletteDark: CanvasPalette = {
   foreground: '#E4E4E4EB',
@@ -40,7 +40,7 @@ export const canvasPaletteDark: CanvasPalette = {
   diffRemovedLine: '#B8004933',
   diffStripAdded: '#3FA2668F',
   diffStripRemoved: '#FC6B838F',
-};
+}
 
 export const canvasPaletteLight: CanvasPalette = {
   foreground: '#141414F0',
@@ -68,7 +68,7 @@ export const canvasPaletteLight: CanvasPalette = {
   diffRemovedLine: '#CF2D5614',
   diffStripAdded: '#1F8A65CC',
   diffStripRemoved: '#CF2D56CC',
-};
+}
 
 const grokAccentDark = {
   accent: '#1084FE',
@@ -77,7 +77,7 @@ const grokAccentDark = {
   buttonHoverBackground: '#459FFE',
   link: '#80BEFE',
   strokeFocused: '#1084FE',
-} as const;
+} as const
 
 const grokAccentLight = {
   accent: '#0C64C1',
@@ -86,17 +86,17 @@ const grokAccentLight = {
   buttonHoverBackground: '#1084FE',
   link: '#0C64C1',
   strokeFocused: '#0C64C1',
-} as const;
+} as const
 
 export const canvasPaletteGrokDark: CanvasPalette = {
   ...canvasPaletteDark,
   ...grokAccentDark,
-};
+}
 
 export const canvasPaletteGrokLight: CanvasPalette = {
   ...canvasPaletteLight,
   ...grokAccentLight,
-};
+}
 
 export const categoryPaletteDark: CategoryPalette = {
   gray: '#8888A8E0',
@@ -108,7 +108,7 @@ export const categoryPaletteDark: CategoryPalette = {
   blue: '#2E79B5E0',
   orange: '#F0A040E0',
   red: '#C04848E0',
-};
+}
 
 export const categoryPaletteLight: CategoryPalette = {
   gray: '#8888A8E0',
@@ -120,7 +120,7 @@ export const categoryPaletteLight: CategoryPalette = {
   blue: '#2E79B5E0',
   orange: '#F0A088E0',
   red: '#CF2D56E0',
-};
+}
 
 export const categoryPaletteGrokDark: CategoryPalette = {
   gray: '#777777E0',
@@ -132,13 +132,13 @@ export const categoryPaletteGrokDark: CategoryPalette = {
   blue: '#1084FEE0',
   orange: '#FF6700E0',
   red: '#FF263CE0',
-};
+}
 
 export const categoryPaletteGrokLight: CategoryPalette = {
   ...categoryPaletteGrokDark,
-};
+}
 
-export const colorPalette = categoryPaletteDark;
+export const colorPalette = categoryPaletteDark
 
 export const usageColorSequence: readonly Color[] = [
   'blue',
@@ -150,7 +150,7 @@ export const usageColorSequence: readonly Color[] = [
   'orange',
   'red',
   'gray',
-];
+]
 
 export const chartPalette = {
   green: '#1F8A65E8',
@@ -173,9 +173,9 @@ export const chartPalette = {
   vibrantTeal: '#2A9A8AE0',
   muted: '#8888A8E0',
   neutralLine: '#888899D0',
-} as const;
+} as const
 
-export type ChartPalette = typeof chartPalette;
+export type ChartPalette = typeof chartPalette
 
 export const chartPaletteGrok = {
   green: '#00C972E8',
@@ -198,7 +198,7 @@ export const chartPaletteGrok = {
   vibrantTeal: '#00BCA6E0',
   muted: '#777777E0',
   neutralLine: '#777777D0',
-} as const;
+} as const
 
 export const chartColorSequence: readonly string[] = [
   chartPalette.green,
@@ -213,7 +213,7 @@ export const chartColorSequence: readonly string[] = [
   chartPalette.mintGreen,
   chartPalette.muted,
   chartPalette.vibrantTeal,
-];
+]
 
 export const chartColorSequenceGrok: readonly string[] = [
   chartPaletteGrok.green,
@@ -228,7 +228,7 @@ export const chartColorSequenceGrok: readonly string[] = [
   chartPaletteGrok.mintGreen,
   chartPaletteGrok.muted,
   chartPaletteGrok.vibrantTeal,
-];
+]
 
 export const canvasTypography = {
   fontFamily: 'inherit' as const,
@@ -237,12 +237,12 @@ export const canvasTypography = {
   h3: { fontSize: '16px', lineHeight: '22px', fontWeight: 590 },
   body: { fontSize: '14px', lineHeight: '20px', fontWeight: 400 },
   small: { fontSize: '12px', lineHeight: '16px', fontWeight: 400 },
-};
+}
 
-export const canvasFontFamilyCursor = 'inherit' as const;
+export const canvasFontFamilyCursor = 'inherit' as const
 
 export const canvasFontFamilyGrok =
-  'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
 
 export const canvasSpacing = {
   '0.5': 2,
@@ -260,7 +260,7 @@ export const canvasSpacing = {
   '8': 32,
   '9': 36,
   '10': 40,
-} as const;
+} as const
 
 export const canvasRadius = {
   none: 0,
@@ -270,19 +270,19 @@ export const canvasRadius = {
   lg: 8,
   xl: 12,
   full: 9999,
-} as const;
+} as const
 
 export const canvasRadiusGrok: CanvasRadius = {
   ...canvasRadius,
   md: 8,
   lg: 10,
   xl: 14,
-};
+}
 
 export const canvasTypographyGrok: CanvasTypography = {
   ...canvasTypography,
   fontFamily: canvasFontFamilyGrok,
-};
+}
 
 function tokensFromPalette(
   palette: CanvasPalette,
@@ -326,51 +326,51 @@ function tokensFromPalette(
       stripRemoved: palette.diffStripRemoved,
     },
     category,
-  };
+  }
 }
 
 export const canvasTokens = tokensFromPalette(
   canvasPaletteDark,
   categoryPaletteDark,
-);
+)
 export const canvasTokensLight = tokensFromPalette(
   canvasPaletteLight,
   categoryPaletteLight,
-);
+)
 
 export function parseHexColor(value: string): { r: number; g: number; b: number } | undefined {
-  const trimmed = value.trim();
-  const match = /^#([0-9a-f]{3,8})$/i.exec(trimmed);
+  const trimmed = value.trim()
+  const match = /^#([0-9a-f]{3,8})$/i.exec(trimmed)
   if (!match) {
-    return undefined;
+    return undefined
   }
-  const hex = match[1];
+  const hex = match[1]
   if (hex.length === 3 || hex.length === 4) {
-    const expand = (c: string) => c + c;
-    const r = parseInt(expand(hex[0]), 16);
-    const g = parseInt(expand(hex[1]), 16);
-    const b = parseInt(expand(hex[2]), 16);
-    return { r, g, b };
+    const expand = (c: string) => c + c
+    const r = parseInt(expand(hex[0]), 16)
+    const g = parseInt(expand(hex[1]), 16)
+    const b = parseInt(expand(hex[2]), 16)
+    return { r, g, b }
   }
   if (hex.length === 6 || hex.length === 8) {
-    const r = parseInt(hex.slice(0, 2), 16);
-    const g = parseInt(hex.slice(2, 4), 16);
-    const b = parseInt(hex.slice(4, 6), 16);
-    return { r, g, b };
+    const r = parseInt(hex.slice(0, 2), 16)
+    const g = parseInt(hex.slice(2, 4), 16)
+    const b = parseInt(hex.slice(4, 6), 16)
+    return { r, g, b }
   }
-  return undefined;
+  return undefined
 }
 
 function relativeLuminance(rgb: { r: number; g: number; b: number }): number {
   const channel = (c: number) => {
-    const s = c / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  };
+    const s = c / 255
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
+  }
   return (
     0.2126 * channel(rgb.r) +
     0.7152 * channel(rgb.g) +
     0.0722 * channel(rgb.b)
-  );
+  )
 }
 
 function mixRgb(
@@ -378,23 +378,23 @@ function mixRgb(
   b: { r: number; g: number; b: number },
   weightB: number,
 ): { r: number; g: number; b: number } {
-  const w = Math.min(1, Math.max(0, weightB));
+  const w = Math.min(1, Math.max(0, weightB))
   return {
     r: Math.round(a.r * (1 - w) + b.r * w),
     g: Math.round(a.g * (1 - w) + b.g * w),
     b: Math.round(a.b * (1 - w) + b.b * w),
-  };
+  }
 }
 
 function rgbToHex(rgb: { r: number; g: number; b: number }): string {
-  const part = (n: number) => n.toString(16).padStart(2, '0');
-  return `#${part(rgb.r)}${part(rgb.g)}${part(rgb.b)}`;
+  const part = (n: number) => n.toString(16).padStart(2, '0')
+  return `#${part(rgb.r)}${part(rgb.g)}${part(rgb.b)}`
 }
 
 export function parseCanvasHostThemeBrand(
   value: unknown,
 ): CanvasHostThemeBrand {
-  return value === 'grok' ? 'grok' : 'cursor';
+  return value === 'grok' ? 'grok' : 'cursor'
 }
 
 export function applyWorkbenchSurfaces(
@@ -404,47 +404,47 @@ export function applyWorkbenchSurfaces(
     'editorBackground' | 'editorForeground'
   >,
 ): CanvasPalette {
-  let next = palette;
+  let next = palette
   if (
     typeof surfaces.editorBackground === 'string' &&
     parseHexColor(surfaces.editorBackground)
   ) {
-    const bg = surfaces.editorBackground;
+    const bg = surfaces.editorBackground
     next = {
       ...next,
       editor: bg,
       chrome: bg,
       sidebar: bg,
       elevated: bg,
-    };
+    }
   }
   if (
     typeof surfaces.editorForeground === 'string' &&
     parseHexColor(surfaces.editorForeground)
   ) {
-    const fg = surfaces.editorForeground;
+    const fg = surfaces.editorForeground
     next = {
       ...next,
       foreground: fg,
       foregroundSecondary: fg,
       foregroundTertiary: fg,
       foregroundQuaternary: fg,
-    };
+    }
   }
-  return next;
+  return next
 }
 
 export function applyPrimaryColor(
   palette: CanvasPalette,
   primary: string,
 ): CanvasPalette {
-  const rgb = parseHexColor(primary);
+  const rgb = parseHexColor(primary)
   if (!rgb) {
-    return palette;
+    return palette
   }
-  const hover = mixRgb(rgb, { r: 255, g: 255, b: 255 }, 0.12);
+  const hover = mixRgb(rgb, { r: 255, g: 255, b: 255 }, 0.12)
   const onAccent =
-    relativeLuminance(rgb) > 0.45 ? '#141414' : '#FAFAFA';
+    relativeLuminance(rgb) > 0.45 ? '#141414' : '#FAFAFA'
   return {
     ...palette,
     accent: primary,
@@ -453,13 +453,13 @@ export function applyPrimaryColor(
     link: primary,
     strokeFocused: primary,
     buttonForeground: onAccent,
-  };
+  }
 }
 
-const LIGHT_KINDS = new Set(['light', 'hc-light']);
+const LIGHT_KINDS = new Set(['light', 'hc-light'])
 
 function isLightKind(kind: string): boolean {
-  return LIGHT_KINDS.has(kind);
+  return LIGHT_KINDS.has(kind)
 }
 
 export function buildHostTokens(
@@ -468,72 +468,72 @@ export function buildHostTokens(
 ): {
   tokens: CanvasTokens;
   palette: CanvasPalette;
-  brand: CanvasHostThemeBrand;
+  brand: CanvasHostThemeBrand
 } {
-  const brand = parseCanvasHostThemeBrand(overrides?.brand);
-  const light = isLightKind(kind);
-  let palette: CanvasPalette;
-  let category: CategoryPalette;
+  const brand = parseCanvasHostThemeBrand(overrides?.brand)
+  const light = isLightKind(kind)
+  let palette: CanvasPalette
+  let category: CategoryPalette
   if (brand === 'grok') {
-    palette = light ? canvasPaletteGrokLight : canvasPaletteGrokDark;
-    category = light ? categoryPaletteGrokLight : categoryPaletteGrokDark;
+    palette = light ? canvasPaletteGrokLight : canvasPaletteGrokDark
+    category = light ? categoryPaletteGrokLight : categoryPaletteGrokDark
   } else {
-    palette = light ? canvasPaletteLight : canvasPaletteDark;
-    category = light ? categoryPaletteLight : categoryPaletteDark;
+    palette = light ? canvasPaletteLight : canvasPaletteDark
+    category = light ? categoryPaletteLight : categoryPaletteDark
   }
-  palette = applyWorkbenchSurfaces(palette, overrides ?? {});
+  palette = applyWorkbenchSurfaces(palette, overrides ?? {})
   if (brand !== 'grok' && typeof overrides?.primary === 'string') {
-    palette = applyPrimaryColor(palette, overrides.primary);
+    palette = applyPrimaryColor(palette, overrides.primary)
   }
-  const tokens = tokensFromPalette(palette, category);
-  return { tokens, palette, brand };
+  const tokens = tokensFromPalette(palette, category)
+  return { tokens, palette, brand }
 }
 
 export function chartThemeForBrand(brand: CanvasHostThemeBrand): {
   palette: ChartPalette;
-  sequence: readonly string[];
+  sequence: readonly string[]
 } {
   if (brand === 'grok') {
     return {
       palette: chartPaletteGrok as unknown as ChartPalette,
       sequence: chartColorSequenceGrok,
-    };
+    }
   }
-  return { palette: chartPalette, sequence: chartColorSequence };
+  return { palette: chartPalette, sequence: chartColorSequence }
 }
 
 export function canvasRadiusForBrand(
   brand: CanvasHostThemeBrand,
 ): CanvasRadius {
-  return brand === 'grok' ? canvasRadiusGrok : canvasRadius;
+  return brand === 'grok' ? canvasRadiusGrok : canvasRadius
 }
 
 export function canvasTypographyForBrand(
   brand: CanvasHostThemeBrand,
 ): CanvasTypography {
-  return brand === 'grok' ? canvasTypographyGrok : canvasTypography;
+  return brand === 'grok' ? canvasTypographyGrok : canvasTypography
 }
 
 export type ShimHostTheme = CanvasHostTheme & {
   readonly category: CategoryPalette;
-  readonly spacing: typeof canvasSpacing;
-};
+  readonly spacing: typeof canvasSpacing
+}
 
 type RawHostThemeState = {
   readonly kind?: unknown;
   readonly brand?: unknown;
   readonly primary?: unknown;
   readonly editorBackground?: unknown;
-  readonly editorForeground?: unknown;
-};
+  readonly editorForeground?: unknown
+}
 
 function readHostThemeRaw(): RawHostThemeState | undefined {
   if (typeof window === 'undefined') {
-    return undefined;
+    return undefined
   }
   const bridge = (window as Window & { __cursorCanvas?: { state?: { theme?: RawHostThemeState } } })
-    .__cursorCanvas;
-  return bridge?.state?.theme;
+    .__cursorCanvas
+  return bridge?.state?.theme
 }
 
 export function resolveTheme(
@@ -543,16 +543,16 @@ export function resolveTheme(
   let kind =
     typeof raw?.kind === 'string' && raw.kind.length > 0
       ? raw.kind
-      : undefined;
+      : undefined
   if (!kind) {
     if (fallbackKind) {
-      kind = fallbackKind;
+      kind = fallbackKind
     } else if (typeof window !== 'undefined' && window.matchMedia) {
       kind = window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
-        : 'light';
+        : 'light'
     } else {
-      kind = 'dark';
+      kind = 'dark'
     }
   }
   const overrides: CanvasHostThemeOverrides = {
@@ -567,9 +567,9 @@ export function resolveTheme(
       typeof raw?.editorForeground === 'string'
         ? raw.editorForeground
         : undefined,
-  };
-  const { tokens, palette, brand } = buildHostTokens(kind, overrides);
-  const chart = chartThemeForBrand(brand);
+  }
+  const { tokens, palette, brand } = buildHostTokens(kind, overrides)
+  const chart = chartThemeForBrand(brand)
   return {
     ...tokens,
     kind,
@@ -581,12 +581,12 @@ export function resolveTheme(
     typography: canvasTypographyForBrand(brand),
     chart,
     spacing: canvasSpacing,
-  };
+  }
 }
 
 export function resolveThemeForColorScheme(
   scheme: 'light' | 'dark',
 ): ShimHostTheme {
-  const host = readHostThemeRaw();
-  return resolveTheme(host, scheme);
+  const host = readHostThemeRaw()
+  return resolveTheme(host, scheme)
 }

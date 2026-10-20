@@ -1,19 +1,19 @@
-import { MantineProvider, createTheme, type MantineColorScheme, type MantineColorsTuple, type MantineThemeOverride } from '@mantine/core';
-import { useMemo, useSyncExternalStore, type ReactNode } from 'react';
-import { resolveThemeForColorScheme, type ShimHostTheme } from './host-tokens';
+import { MantineProvider, createTheme, type MantineColorScheme, type MantineColorsTuple, type MantineThemeOverride } from '@mantine/core'
+import { useMemo, useSyncExternalStore, type ReactNode } from 'react'
+import { resolveThemeForColorScheme, type ShimHostTheme } from './host-tokens'
 
 export interface CanvasMantineRootProps {
   children: ReactNode;
-  defaultColorScheme?: MantineColorScheme;
+  defaultColorScheme?: MantineColorScheme
 }
 
 function solidScale(hex: string): MantineColorsTuple {
-  return [hex, hex, hex, hex, hex, hex, hex, hex, hex, hex];
+  return [hex, hex, hex, hex, hex, hex, hex, hex, hex, hex]
 }
 
 /** Maps `useHostTheme()` / brand onto Mantine `theme` (primary, radii, headings). */
 export function createMantineThemeFromHost(host: ShimHostTheme): MantineThemeOverride {
-  const { typography: type, radius } = host;
+  const { typography: type, radius } = host
   return createTheme({
     primaryColor: 'accent',
     colors: {
@@ -54,19 +54,19 @@ export function createMantineThemeFromHost(host: ShimHostTheme): MantineThemeOve
         },
       },
     },
-  });
+  })
 }
 
 function subscribeSystemScheme(onChange: () => void): () => void {
-  const mq = window.matchMedia('(prefers-color-scheme: dark)');
-  mq.addEventListener('change', onChange);
-  return () => mq.removeEventListener('change', onChange);
+  const mq = window.matchMedia('(prefers-color-scheme: dark)')
+  mq.addEventListener('change', onChange)
+  return () => mq.removeEventListener('change', onChange)
 }
 
 function getSystemScheme(): 'light' | 'dark' {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
     ? 'dark'
-    : 'light';
+    : 'light'
 }
 
 function useResolvedPolarity(
@@ -76,14 +76,14 @@ function useResolvedPolarity(
     subscribeSystemScheme,
     getSystemScheme,
     () => 'light',
-  );
+  )
   if (defaultColorScheme === 'dark') {
-    return 'dark';
+    return 'dark'
   }
   if (defaultColorScheme === 'light') {
-    return 'light';
+    return 'light'
   }
-  return system;
+  return system
 }
 
 /**
@@ -94,12 +94,12 @@ export function CanvasMantineRoot({
   children,
   defaultColorScheme = 'auto',
 }: CanvasMantineRootProps) {
-  const polarity = useResolvedPolarity(defaultColorScheme);
+  const polarity = useResolvedPolarity(defaultColorScheme)
   const host = useMemo(
     () => resolveThemeForColorScheme(polarity),
     [polarity],
-  );
-  const mantineTheme = useMemo(() => createMantineThemeFromHost(host), [host]);
+  )
+  const mantineTheme = useMemo(() => createMantineThemeFromHost(host), [host])
 
   return (
     <MantineProvider
@@ -125,5 +125,5 @@ export function CanvasMantineRoot({
         {children}
       </div>
     </MantineProvider>
-  );
+  )
 }

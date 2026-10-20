@@ -36,7 +36,7 @@ export {
   resolveTheme,
   resolveThemeForColorScheme,
   usageColorSequence,
-} from './host-tokens';
+} from './host-tokens'
 
 export type {
   CanvasHostThemeBrand,
@@ -47,7 +47,7 @@ export type {
   ChartPalette,
   Color,
   ShimHostTheme,
-} from './host-tokens';
+} from './host-tokens'
 
 /**
  * Maps every semantic tone literal used across primitives to a hex color, so
@@ -62,7 +62,7 @@ export const toneHex: Record<string, string> = {
   added: '#1F8A65',
   deleted: '#CF2D56',
   renamed: '#5A6CC0',
-};
+}
 
 /** Maps a semantic tone to a Mantine color name (for components that use it). */
 export const toneColor: Record<string, string> = {
@@ -74,4 +74,4 @@ export const toneColor: Record<string, string> = {
   added: 'green',
   deleted: 'red',
   renamed: 'indigo',
-};
+}

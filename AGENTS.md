@@ -85,7 +85,7 @@ CI (`.github/workflows/ci.yml`) runs typecheck + lint + test on every push/PR.
 ## Conventions
 
 - TypeScript strict; no `any`.
-- Prettier: single quotes, trailing commas, semicolons, 80 cols.
+- ESLint stylistic: single quotes, trailing commas, no semicolons, 2-space indent.
 - Tests live in `src/shim/__tests__/`. Cover new shim helpers, hook behavior,
   and a smoke render of `.cursor/canvases/demo.canvas.tsx` (max SDK surface).
   When adding shim API, extend the demo + `canvas.smoke.test.tsx` assertions.

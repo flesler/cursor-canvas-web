@@ -1,9 +1,9 @@
-import { fileURLToPath, URL } from 'node:url';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import dts from 'vite-plugin-dts';
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts'
 
-const resolve = (p: string) => fileURLToPath(new URL(p, import.meta.url));
+const resolve = (p: string) => fileURLToPath(new URL(p, import.meta.url))
 
 // Library build: emits only the reusable pieces (the `cursor/canvas` shim and
 // the web host runtime), never the demo app. The demo site is built by the
@@ -39,4 +39,4 @@ export default defineConfig({
       ],
     },
   },
-});
+})

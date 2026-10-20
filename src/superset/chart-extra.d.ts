@@ -2,10 +2,10 @@
  * Superset chart options, passed through the `extra` prop. The Cursor IDE
  * ignores `extra`, so the same canvas renders there with SDK defaults.
  */
-import type { YAxisProps } from 'recharts';
+import type { YAxisProps } from 'recharts'
 
 /** Recharts `scale` shortcuts (`auto` + d3 scale names). */
-export type CanvasChartScale = NonNullable<YAxisProps['scale']>;
+export type CanvasChartScale = NonNullable<YAxisProps['scale']>
 
 /**
  * Recharts props forwarded to the value axis: Y on column and line charts, X on
@@ -23,17 +23,17 @@ export type CanvasChartValueAxisExtra = Pick<
   | 'padding'
   | 'unit'
   | 'name'
->;
+>
 
 export type CanvasChartExtra = {
-  valueAxis?: CanvasChartValueAxisExtra;
-};
+  valueAxis?: CanvasChartValueAxisExtra
+}
 
-export type CanvasBarChartExtra = CanvasChartExtra;
+export type CanvasBarChartExtra = CanvasChartExtra
 
 export type CanvasLineChartExtra = CanvasChartExtra & {
   /** Curved (`monotone`) segments; the IDE draws straight segments. */
   smooth?: boolean;
   /** Stack the filled areas. Requires `fill`. */
-  stacked?: boolean;
-};
+  stacked?: boolean
+}
