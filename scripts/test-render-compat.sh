@@ -69,7 +69,7 @@ echo "test-render-compat: gates with synced vendor (working tree)"
 npm run typecheck
 npm test
 npm run check:sdk-exports
-tsx scripts/generate-contract-consumer.ts
+npm run generate:contract-consumer
 tsc --noEmit
 
 echo "test-render-compat: typecheck + smoke with HEAD SDK snapshot + current shim"

@@ -14,3 +14,9 @@ if ! npm run test:contract:fast; then
   echo "pre-push: test:contract:fast failed"
   exit 1
 fi
+
+if ! git diff --quiet -- src/contract/consumer.ts; then
+  echo "pre-push: src/contract/consumer.ts changed (SDK exports drift)."
+  echo "  Commit it: npm run generate:contract-consumer && git add src/contract/consumer.ts"
+  exit 1
+fi
