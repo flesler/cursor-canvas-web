@@ -10,11 +10,19 @@ if (typeof localStorage !== 'undefined') {
 	}
 }
 
+const pkg = {"name":"@flesler/open-canvas","version":"1.6.0","description":"Agent-friendly canvas visuals (charts, tables, UI) from .canvas.tsx to HTML, PNG, PDF, JPG, or IDE-ready canvas","type":"module","license":"MIT","repository":"github:flesler/open-canvas","bin":{"open-canvas":"./bin/open-canvas.js"},"engines":{"node":">=22.12.0","npm":">=10.0.0"},"scripts":{"build":"npm run build:cli","build:cli":"tsc -b tsconfig.cli.json --clean && tsc -b tsconfig.cli.json && find dist -name '*.d.ts' -delete && rm -rf dist/scripts dist/canvas-sdk-hash.js","build:github-pages":"npm run build:cli && bash bin/build-github-pages.sh","prepublishOnly":"npm run build:cli","prepare":"[ \"$CI\" != \"true\" ] && [ -d node_modules/husky ] && husky || true","eslint":"eslint --cache --cache-strategy content","lint":"npm run eslint -- 'src/**/*.ts' 'src/**/*.tsx' 'example/**/*.canvas.tsx'","lint:fix":"npm run lint -- --fix","vitest":"VITE_CJS_IGNORE_WARNING=true vitest","test":"npm run test:types && npm run test:unit","test:smoke":"bin/smoke.sh","test:smoke:global":"bin/smoke.sh --global","test:smoke:both":"bin/smoke.sh --both","test:contract":"bin/contract.sh","test:verify-canvases":"npm run build:cli && bash bin/verify-canvases.sh","test:unit":"npm run vitest -- run","test:types:cli":"tsc -p tsconfig.cli.json --noEmit","test:types:app":"tsc -p tsconfig.json","test:types":"npm run test:types:cli && npm run test:types:app","test:unit:min":"MINIMAL=1 npm run test:unit","test:unit:verbose":"VERBOSE=1 npm run test:unit","lint:full":"bin/parallel-run.sh test:types:cli test:types:app lint:fix","lint:full:silent":"bin/parallel-run.sh --silent test:types:cli test:types:app lint:fix && echo LINT OK","example:screenshot":"npm run build:cli && node dist/cli.js generate example/demo.canvas.tsx --title 'Open Canvas — SDK Showcase' --formats png --theme light --width 1280 --height 900 && cp example/out/showcase.png docs/showcase-light.png && node dist/cli.js generate example/demo.canvas.tsx --title 'Open Canvas — SDK Showcase' --formats png --theme dark --width 1280 --height 900 && cp example/out/showcase.png docs/showcase-dark.png","example:cursor":"npm run build:cli && node dist/cli.js generate example/demo.canvas.tsx --formats cursor","test:pack":"bash bin/check-npm-pack.sh","ci:local":"npm run build:cli && npm run lint:full && npm test && npm run test:pack && npm run test:contract && npm run test:smoke","agent:stop":"npm run -s lint:full:silent","changelog":"auto-changelog --commit-limit 100 --hide-credit"},"dependencies":{"@flesler/cursor-canvas-web":"^1.2.0","@mantine/charts":"^8.3.18","@mantine/core":"^8.3.18","@types/react":"^19.3.0","@types/react-dom":"^19.3.0","@vitejs/plugin-react":"^5.2.0","commander":"^13.1.0","d3-dsv":"^3.0.1","playwright":"^1.64.0","react":"^19.3.0","react-dom":"^19.3.0","recharts":"^3.10.1","ts-morph":"^28.0.0","typescript":"^5.9.3","vite":"^7.3.7","vite-plugin-singlefile":"^2.3.3","yaml":"^2.9.1"},"devDependencies":{"@eslint/js":"^10.0.1","@stylistic/eslint-plugin":"^5.10.0","@types/d3-dsv":"^3.0.7","@types/node":"^22.10.0","@typescript-eslint/eslint-plugin":"^8.68.0","@typescript-eslint/parser":"^8.68.0","auto-changelog":"^2.6.0","eslint":"^10.9.1","eslint-plugin-import-newlines":"^2.0.0","eslint-plugin-unused-imports":"^4.4.1","husky":"^9.1.7","jiti":"^2.7.0","tsx":"^4.21.0","type-fest":"^5.4.5","vitest":"^4.1.11"},"files":["bin/open-canvas.js","dist/**/*.js","LICENSE","src/shell","src/types","src/vendor/skill-bundle/**"]}
 const daily = [{"date":"2026-10-05","deploys":"582","totalDurationP90Sec":"388"},{"date":"2026-10-06","deploys":"601","totalDurationP90Sec":"401"},{"date":"2026-10-07","deploys":"593","totalDurationP90Sec":"395"},{"date":"2026-10-08","deploys":"612","totalDurationP90Sec":"407"},{"date":"2026-10-09","deploys":"598","totalDurationP90Sec":"412"},{"date":"2026-10-10","deploys":"604","totalDurationP90Sec":"418"},{"date":"2026-10-11","deploys":"597","totalDurationP90Sec":"421"}]
 const deployEvents = [{"date":"2026-10-09","app":"app-aurora-7f3","durationSec":2847},{"date":"2026-10-10","app":"app-mint-2c1","durationSec":2292},{"date":"2026-10-11","app":"app-orbit-9aa","durationSec":1904}]
 const outlierRows = [{"app":"app-aurora-7f3","stack":"node-20","total":"47m 27s","peak_rss":"4.6 GB","files_pack":"892k"},{"app":"app-mint-2c1","stack":"dockerfile","total":"38m 12s","peak_rss":"3.9 GB","files_pack":"1.1M"},{"app":"app-orbit-9aa","stack":"python-3.12","total":"31m 44s","peak_rss":"3.2 GB","files_pack":"214k"},{"app":"app-harbor-4d8","stack":"ruby-3.3","total":"28m 06s","peak_rss":"2.8 GB","files_pack":"156k"},{"app":"app-crest-1b0","stack":"go-1.22","total":"24m 51s","peak_rss":"2.4 GB","files_pack":"98k"},{"app":"app-lumen-6e2","stack":"node-20","total":"22m 33s","peak_rss":"3.1 GB","files_pack":"402k"},{"app":"app-pine-8c4","stack":"dockerfile","total":"21m 18s","peak_rss":"2.9 GB","files_pack":"678k"},{"app":"app-drift-3f7","stack":"python-3.12","total":"19m 57s","peak_rss":"2.6 GB","files_pack":"187k"}]
 const phaseRssMb = {"rows":[{"phase":"clone","p90":680},{"phase":"deps","p90":1843},{"phase":"compile","p90":2104},{"phase":"assets","p90":1320},{"phase":"pack","p90":918},{"phase":"release","p90":520}]}
 const report = {"meta":{"title":"Build plane — 7-day OLAP","periodStart":"2026-10-05","periodEnd":"2026-10-11","deployCount":4187},"kpis":[{"label":"Deploys (7d)","value":"4,187","hint":"successful only"},{"label":"Total duration p50","value":"89s","hint":"wall clock"},{"label":"Total duration p90","value":"412s","hint":"wall clock"},{"label":"Total duration max","value":"47m 27s","hint":"single outlier"},{"label":"Peak RSS p90","value":"2.1 GB","hint":"compile phase"},{"label":"Files (deps) p90","value":"118k","hint":"workspace"}],"durationByPhase":{"rows":[{"phase":"clone","p50":11.6,"p90":27.8},{"phase":"deps","p50":44.2,"p90":211.4},{"phase":"compile","p50":37.1,"p90":164.7},{"phase":"assets","p50":21.3,"p90":94.2},{"phase":"pack","p50":7.8,"p90":23.6},{"phase":"release","p50":5.9,"p90":13.8}]}}
+type PhaseRssMb = {
+	rows: { phase: string; p90: number }[]
+}
+
+const repoUrl = `https://github.com/${pkg.repository.replace(/^github:/, '')}`
+const shimDep = pkg.dependencies['@flesler/cursor-canvas-web']
+
 /** Bar/line height in the charts grid; pie `size` matches for visual parity. */
 const SHOWCASE_CHART_HEIGHT = 200
 
@@ -315,6 +323,165 @@ function DagDiagram() {
 	)
 }
 
+const SEQ_ACTORS = [
+	{ label: 'CI', sub: 'orchestrator' },
+	{ label: 'CLI', sub: 'runner' },
+	{ label: 'API', sub: 'service' },
+	{ label: 'Worker', sub: 'queue' },
+]
+
+type SeqKind = 'call' | 'return' | 'async'
+
+const SEQ_MESSAGES: {
+	from: number;
+	to: number;
+	label: string;
+	kind: SeqKind;
+	step?: string
+}[] = [
+	{ from: 0, to: 1, label: 'invoke', kind: 'call', step: '1' },
+	{ from: 1, to: 2, label: 'submit job', kind: 'call' },
+	{ from: 2, to: 1, label: 'accepted', kind: 'return' },
+	{ from: 2, to: 3, label: 'enqueue', kind: 'async' },
+	{ from: 3, to: 2, label: 'complete', kind: 'async' },
+	{ from: 1, to: 0, label: 'exit code', kind: 'return' },
+]
+
+function SequenceDiagram() {
+	const theme = useHostTheme()
+	const boxStroke = theme.stroke.primary
+	const lifelineStroke = theme.stroke.secondary
+	const width = 920
+	const headerH = 52
+	const rowH = 34
+	const gap = 14
+	const labelRail = 40
+	const boxW = 120
+	const slot = (width - labelRail - 12) / SEQ_ACTORS.length
+	const centers = SEQ_ACTORS.map(
+		(_, index) => labelRail + slot * index + slot / 2,
+	)
+	const rows = SEQ_MESSAGES.map((message, index) => {
+		const previous = SEQ_MESSAGES[index - 1]
+		const extra = message.step && previous ? gap : 0
+		return { message, extra }
+	})
+	let cursor = headerH + 16
+	const placed = rows.map((row) => {
+		cursor += row.extra
+		const y = cursor
+		cursor += rowH
+		return { ...row, y }
+	})
+	const height = cursor + 12
+	const highlight = 1
+
+	return (
+		<svg
+			viewBox={`0 0 ${width} ${height}`}
+			width="100%"
+			role="img"
+			aria-label="Sequence diagram: CI invokes a CLI that talks to an API and async worker"
+			style={{ display: 'block' }}
+		>
+			{SEQ_ACTORS.map((actor, index) => {
+				const x = centers[index] - boxW / 2
+				const primary = index === highlight
+				return (
+					<g key={actor.label}>
+						<rect
+							x={x}
+							y={8}
+							width={boxW}
+							height={40}
+							rx={6}
+							fill={primary ? theme.fill.tertiary : theme.bg.elevated}
+							stroke={primary ? theme.accent.primary : boxStroke}
+							strokeWidth={1.5}
+						/>
+						<text
+							x={centers[index]}
+							y={26}
+							textAnchor="middle"
+							fill={theme.text.primary}
+							fontSize={13}
+							fontWeight={600}
+						>
+							{actor.label}
+						</text>
+						<text
+							x={centers[index]}
+							y={40}
+							textAnchor="middle"
+							fill={theme.text.tertiary}
+							fontSize={10}
+						>
+							{actor.sub}
+						</text>
+						<line
+							x1={centers[index]}
+							y1={52}
+							x2={centers[index]}
+							y2={height - 8}
+							stroke={lifelineStroke}
+							strokeWidth={2}
+							strokeDasharray="4 5"
+						/>
+					</g>
+				)
+			})}
+			{placed.map(({ message, y }) => {
+				const x1 = centers[message.from]
+				const x2 = centers[message.to]
+				const dir = x2 >= x1 ? 1 : -1
+				const dashed = message.kind !== 'call'
+				const color = dashed ? theme.stroke.primary : theme.accent.primary
+				const lineWidth = dashed ? 2 : 2.5
+				const mid = (x1 + x2) / 2
+				const head = 8
+				const tip = x2 - dir * 2
+				return (
+					<g key={`${message.label}-${y}`}>
+						{message.step && (
+							<text
+								x={8}
+								y={y - 10}
+								fill={theme.text.tertiary}
+								fontSize={10}
+								fontWeight={600}
+							>
+								{message.step}
+							</text>
+						)}
+						<line
+							x1={x1}
+							y1={y}
+							x2={tip - dir * head}
+							y2={y}
+							stroke={color}
+							strokeWidth={lineWidth}
+							strokeDasharray={dashed ? '5 4' : undefined}
+						/>
+						<polygon
+							points={`${tip},${y} ${tip - dir * head},${y - 5} ${tip - dir * head},${y + 5}`}
+							fill={color}
+						/>
+						<text
+							x={mid}
+							y={y - 6}
+							textAnchor="middle"
+							fill={theme.text.primary}
+							fontSize={11}
+						>
+							{message.label}
+						</text>
+					</g>
+				)
+			})}
+		</svg>
+	)
+}
+
 /* --------------------------------------------------------------------- main */
 
 export default function ShowcaseCanvas() {
@@ -371,8 +538,7 @@ export default function ShowcaseCanvas() {
 			}),
 		[],
 	)
-	const rssRows =
-		(phaseRssMb as { rows?: Array<{ phase: string; p90: number }> }).rows ?? []
+	const rssRows = (phaseRssMb as PhaseRssMb).rows
 	const phases = durationByPhase.rows.map(r => r.phase)
 	const durationSeries: ChartSeries[] = [
 		{ name: 'p50', data: durationByPhase.rows.map(r => r.p50), tone: 'info' },
@@ -390,7 +556,7 @@ export default function ShowcaseCanvas() {
 			<Row gap={12} align="center">
 				<H1>Cursor Canvas SDK showcase</H1>
 				<Spacer />
-				<Link href="https://github.com/flesler/open-canvas">open-canvas</Link>
+				<Link href={repoUrl}>open-canvas</Link>
 				<Pill tone="info" active={live}>
 					{live ? 'live' : 'paused'}
 				</Pill>
@@ -408,9 +574,8 @@ export default function ShowcaseCanvas() {
 			</Row>
 
 			<Text tone="secondary">
-				Full <Code>cursor/canvas</Code> gallery plus <Code>./data/*</Code>{' '}
-				imports (JSON, YAML, TSV, CSV, JSONL) — one file for verify, smoke, and
-				exports.
+				Full <Code>cursor/canvas</Code> gallery — <Code>../package.json</Code>,{' '}
+				<Code>./data/*</Code> (JSON, YAML, TSV, CSV, JSONL).
 			</Text>
 
 			{/* How it works (stepped explanation, not a callout) -------------- */}
@@ -741,6 +906,20 @@ export default function ShowcaseCanvas() {
 								accent edge is a detected back-edge (cycle).
 							</Text>
 							<DagDiagram />
+						</Stack>
+					</CardBody>
+				</Card>
+			</Section>
+
+			<Section title="Sequence diagram (SVG)">
+				<Card>
+					<CardBody>
+						<Stack gap={8}>
+							<Text size="small" tone="secondary">
+								Solid arrows are synchronous calls; dashed arrows are returns or
+								async hand-offs. Same host tokens as the DAG chart above.
+							</Text>
+							<SequenceDiagram />
 						</Stack>
 					</CardBody>
 				</Card>
@@ -1123,6 +1302,23 @@ export default function ShowcaseCanvas() {
 
 			<Section title="Data imports (JSON, YAML, TSV, CSV, JSONL)">
 				<Stack gap={12}>
+					<Grid columns={3} gap={12}>
+						<Card>
+							<CardBody>
+								<Stat value={pkg.version} label="Version" />
+							</CardBody>
+						</Card>
+						<Card>
+							<CardBody>
+								<Stat value={shimDep} label="@flesler/cursor-canvas-web" />
+							</CardBody>
+						</Card>
+						<Card>
+							<CardBody>
+								<Stat value={pkg.license} label="License" />
+							</CardBody>
+						</Card>
+					</Grid>
 					<Text size="small" tone="secondary">
 						{meta.periodStart} → {meta.periodEnd} ·{' '}
 						{meta.deployCount.toLocaleString()} deploys · {deployEvents.length}{' '}
