@@ -22,5 +22,6 @@ if [[ ! -f "$EMIT" ]]; then
 fi
 
 sed 's/showcase\.canvas\.tsx/demo.canvas.tsx/g' "$EMIT" > "$DEST"
+rm -f "$REPO/.cursor/canvases/demo.canvas.data.json"
 rm -rf "$TMP"
 echo "Wrote $DEST (open-canvas --formats cursor --inline-state)"
