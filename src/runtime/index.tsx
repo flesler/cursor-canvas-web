@@ -10,10 +10,10 @@
  *   import '@mantine/core/styles.css';
  *   import '@mantine/charts/styles.css';
  */
-import { type MantineColorScheme } from '@mantine/core'
-import { StrictMode, type ReactNode } from 'react'
-import { createRoot, type Root } from 'react-dom/client'
-import { CanvasMantineRoot } from '../shim/canvas-mantine-root'
+import { type MantineColorScheme } from '@mantine/core';
+import { StrictMode, type ReactNode } from 'react';
+import { createRoot, type Root } from 'react-dom/client';
+import { CanvasMantineRoot } from '../shim/canvas-mantine-root';
 
 export interface CanvasRootProps {
   children: ReactNode;

@@ -1,8 +1,8 @@
-import { renderHook } from '@testing-library/react'
-import { useHostTheme } from 'cursor/canvas'
-import type { ReactNode } from 'react'
-import { describe, expect, it } from 'vitest'
-import { CanvasMantineRoot } from '../canvas-mantine-root'
+import { renderHook } from '@testing-library/react';
+import { useHostTheme } from 'cursor/canvas';
+import type { ReactNode } from 'react';
+import { describe, expect, it } from 'vitest';
+import { CanvasMantineRoot } from '../canvas-mantine-root';
 
 function wrapper({ children }: { children: ReactNode }) {
   return (

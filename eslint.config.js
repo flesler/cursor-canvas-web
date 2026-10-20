@@ -1,11 +1,12 @@
 import js from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'src/vendor', 'scripts/vendor-stubs', '.cursor/canvases'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -23,6 +24,21 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+    },
+  },
+  {
+    files: ['**/*.{js,ts,tsx}'],
+    plugins: { stylistic },
+    rules: {
+      'stylistic/semi': ['error', 'always'],
+      'stylistic/indent': ['error', 2],
+      'stylistic/quotes': ['error', 'single', { avoidEscape: true }],
+      'stylistic/comma-dangle': ['error', 'always-multiline'],
+      'stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
+      'stylistic/member-delimiter-style': ['error', {
+        multiline: { delimiter: 'semi', requireLast: true },
+        singleline: { delimiter: 'semi', requireLast: false },
+      }],
     },
   },
   {

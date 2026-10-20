@@ -49,10 +49,10 @@ describe('host-tokens', () => {
   it('resolveTheme reads IDE bridge brand', () => {
     (window as Window & { __cursorCanvas?: { state: { theme: object } } })
       .__cursorCanvas = {
-      state: {
-        theme: { kind: 'dark', brand: 'grok' },
-      },
-    };
+        state: {
+          theme: { kind: 'dark', brand: 'grok' },
+        },
+      };
     const theme = resolveThemeForColorScheme('dark');
     expect(theme.brand).toBe('grok');
     expect(theme.chart.palette.blue).toBe('#1084FEE0');

@@ -6,39 +6,39 @@
  * series descriptor. We reshape here and map `tone` -> color.
  */
 import type {
-    ChartReferenceLineProps,
-    LineChartCurveType,
-} from '@mantine/charts'
+  ChartReferenceLineProps,
+  LineChartCurveType,
+} from '@mantine/charts';
 import {
-    AreaChart,
-    ChartLegend,
-    DonutChart,
-    BarChart as MantineBarChart,
-    LineChart as MantineLineChart,
-    PieChart as MantinePieChart,
-} from '@mantine/charts'
-import { useState } from 'react'
-import { toneHex } from './theme'
-import { useHostTheme } from './use-tokens'
+  AreaChart,
+  ChartLegend,
+  DonutChart,
+  BarChart as MantineBarChart,
+  LineChart as MantineLineChart,
+  PieChart as MantinePieChart,
+} from '@mantine/charts';
+import { useState } from 'react';
+import { toneHex } from './theme';
+import { useHostTheme } from './use-tokens';
 
 export type {
-    BarChartProps,
-    ChartDataPoint,
-    ChartReferenceLine,
-    ChartSeries,
-    ChartTone,
-    LineChartProps,
-    PieChartProps
-} from '../vendor/canvas-sdk/chart-primitives.js'
+  BarChartProps,
+  ChartDataPoint,
+  ChartReferenceLine,
+  ChartSeries,
+  ChartTone,
+  LineChartProps,
+  PieChartProps,
+} from '../vendor/canvas-sdk/chart-primitives.js';
 
 import type {
-    BarChartProps,
-    ChartReferenceLine,
-    ChartSeries,
-    ChartTone,
-    LineChartProps,
-    PieChartProps,
-} from '../vendor/canvas-sdk/chart-primitives.js'
+  BarChartProps,
+  ChartReferenceLine,
+  ChartSeries,
+  ChartTone,
+  LineChartProps,
+  PieChartProps,
+} from '../vendor/canvas-sdk/chart-primitives.js';
 
 type ValueAxisProps = Pick<
   BarChartProps,
