@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0] — 2026-10-20
+
+- **Superset typings:** ship `src/superset/` on npm (`types` and `cursor/canvas` path for open-canvas); bar/line chart `extra` props and value-axis helpers.
+- **Toolchain:** npm (drop pnpm), Node `24.11.1` via `.nvmrc`, ESLint 10 + stylistic/import rules aligned with open-canvas; single-job CI on `setup-node`.
+- **Demo & docs:** expanded demo canvas with inlined state; README positions the repo as a standalone project (credit to upstream).
+- **Charts & host tokens:** continued IDE parity (reference lines, value axis, donut center labels, host theme wiring).
+
 ## [1.1.2] — 2026-10-14
 
 - Donut charts: center total + “Total” label via host typography and text colors (not Mantine `chartLabel` only).
