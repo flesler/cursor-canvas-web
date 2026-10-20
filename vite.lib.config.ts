@@ -10,33 +10,33 @@ const resolve = (p: string) => fileURLToPath(new URL(p, import.meta.url))
 // default `vite.config.ts`. Peer deps stay external so consumers supply their
 // own React/Mantine and we don't ship duplicate copies.
 export default defineConfig({
-  plugins: [
-    react(),
-    dts({
-      // Public types come from src/vendor/canvas-sdk — emit runtime declarations only.
-      entryRoot: 'src',
-      include: ['src/runtime'],
-      exclude: ['src/**/__tests__/**', 'src/**/*.test.*', 'src/test/**'],
-    }),
-  ],
-  build: {
-    lib: {
-      entry: {
-        'cursor-canvas': resolve('./src/shim/cursor-canvas.tsx'),
-        runtime: resolve('./src/runtime/index.tsx'),
-      },
-      formats: ['es', 'cjs'],
-    },
-    rollupOptions: {
-      external: [
-        'react',
-        'react/jsx-runtime',
-        'react-dom',
-        'react-dom/client',
-        '@mantine/core',
-        '@mantine/charts',
-        'recharts',
-      ],
-    },
-  },
+	plugins: [
+		react(),
+		dts({
+			// Public types come from src/vendor/canvas-sdk — emit runtime declarations only.
+			entryRoot: 'src',
+			include: ['src/runtime'],
+			exclude: ['src/**/__tests__/**', 'src/**/*.test.*', 'src/test/**'],
+		}),
+	],
+	build: {
+		lib: {
+			entry: {
+				'cursor-canvas': resolve('./src/shim/cursor-canvas.tsx'),
+				runtime: resolve('./src/runtime/index.tsx'),
+			},
+			formats: ['es', 'cjs'],
+		},
+		rollupOptions: {
+			external: [
+				'react',
+				'react/jsx-runtime',
+				'react-dom',
+				'react-dom/client',
+				'@mantine/core',
+				'@mantine/charts',
+				'recharts',
+			],
+		},
+	},
 })

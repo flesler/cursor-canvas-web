@@ -2,9 +2,9 @@ import { Container } from '@mantine/core'
 import DemoCanvas from '../.cursor/canvases/demo.canvas'
 
 export function App() {
-  return (
-    <Container size="md" py="xl">
-      <DemoCanvas />
-    </Container>
-  )
+	return (
+		<Container size="md" py="xl">
+			<DemoCanvas />
+		</Container>
+	)
 }

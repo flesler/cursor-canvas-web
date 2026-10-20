@@ -12,13 +12,13 @@ export * from '../vendor/canvas-sdk/index.js'
 export type * from './chart-extra.js'
 
 export type BarChartProps = SdkBarChartProps & {
-  extra?: CanvasBarChartExtra
+	extra?: CanvasBarChartExtra
 }
 
 export type LineChartProps = SdkLineChartProps & {
-  extra?: CanvasLineChartExtra;
-  /** @deprecated Use `extra.smooth`. */
-  smooth?: boolean
+	extra?: CanvasLineChartExtra;
+	/** @deprecated Use `extra.smooth`. */
+	smooth?: boolean
 }
 
 export declare function BarChart(props: BarChartProps): JSX.Element

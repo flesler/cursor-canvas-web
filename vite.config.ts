@@ -7,20 +7,20 @@ import { defineConfig } from 'vitest/config'
 const base = process.env.BASE_PATH ?? '/cursor-canvas-web/'
 
 export default defineConfig({
-  base,
-  plugins: [react()],
-  resolve: {
-    alias: {
-      // The single bridge: `cursor/canvas` resolves to the Mantine shim.
-      'cursor/canvas': fileURLToPath(
-        new URL('./src/shim/cursor-canvas.tsx', import.meta.url),
-      ),
-    },
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    css: true,
-  },
+	base,
+	plugins: [react()],
+	resolve: {
+		alias: {
+			// The single bridge: `cursor/canvas` resolves to the Mantine shim.
+			'cursor/canvas': fileURLToPath(
+				new URL('./src/shim/cursor-canvas.tsx', import.meta.url),
+			),
+		},
+	},
+	test: {
+		globals: true,
+		environment: 'jsdom',
+		setupFiles: ['./src/test/setup.ts'],
+		css: true,
+	},
 })

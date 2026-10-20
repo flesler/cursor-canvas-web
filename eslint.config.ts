@@ -9,13 +9,51 @@ import unusedImportsPlugin from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 import { defineConfig } from 'eslint/config'
 
+/** Shared with @flesler/open-canvas eslint.config.ts (stylistic + TS base). */
+const openCanvasStyleRules = {
+	'stylistic/semi': ['error', 'never'],
+	'stylistic/indent': ['error', 'tab'],
+	'stylistic/quotes': ['error', 'single', { avoidEscape: true }],
+	'stylistic/comma-dangle': ['error', 'always-multiline'],
+	'stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
+	'stylistic/brace-style': 'off',
+	'stylistic/space-before-function-paren': ['error', { anonymous: 'always', named: 'never' }],
+	'stylistic/member-delimiter-style': ['error', {
+		multiline: { delimiter: 'semi', requireLast: false },
+		singleline: { delimiter: 'semi', requireLast: false },
+	}],
+	'@typescript-eslint/consistent-type-imports': 'error',
+	'@typescript-eslint/no-explicit-any': 'off',
+	'@typescript-eslint/no-require-imports': 'off',
+	'@typescript-eslint/no-unused-vars': ['error', {
+		argsIgnorePattern: '^_',
+		varsIgnorePattern: '^_',
+		ignoreRestSiblings: true,
+	}],
+	'unused-imports/no-unused-imports': 'warn',
+	'import-newlines/enforce': ['error', { items: Infinity, semi: false }],
+	'object-curly-newline': ['error', { consistent: true }],
+	'arrow-parens': ['error', 'as-needed', { requireForBlockBody: true }],
+	'no-undef': 'off',
+	'no-redeclare': 'off',
+	'no-unused-vars': 'off',
+	'no-empty': 'off',
+	'no-console': 'off',
+} as const
+
 export default defineConfig([
 	{
-		ignores: ['dist', 'src/vendor', 'scripts/vendor-stubs', '.cursor/canvases'],
+		ignores: ['node_modules', 'dist', '**/*.tsbuildinfo', 'src/vendor', 'scripts/vendor-stubs', '.cursor/canvases'],
 	},
 	eslintJs.configs.recommended,
 	{
-		files: ['**/*.{ts,tsx}'],
+		files: [
+			'src/**/*.ts',
+			'src/**/*.tsx',
+			'scripts/**/*.ts',
+			'vite.config.ts',
+			'vite.lib.config.ts',
+		],
 		languageOptions: {
 			parser: tsParser,
 			parserOptions: {
@@ -41,28 +79,16 @@ export default defineConfig([
 				'warn',
 				{ allowConstantExport: true },
 			],
-			'stylistic/semi': ['error', 'never'],
-			'stylistic/indent': ['error', 2],
-			'stylistic/quotes': ['error', 'single', { avoidEscape: true }],
-			'stylistic/comma-dangle': ['error', 'always-multiline'],
-			'stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
-			'stylistic/member-delimiter-style': ['error', {
-				multiline: { delimiter: 'semi', requireLast: false },
-				singleline: { delimiter: 'semi', requireLast: false },
-			}],
-			'@typescript-eslint/consistent-type-imports': 'error',
-			'@typescript-eslint/no-explicit-any': 'off',
-			'@typescript-eslint/no-unused-vars': ['error', {
-				argsIgnorePattern: '^_',
-				varsIgnorePattern: '^_',
-				ignoreRestSiblings: true,
-			}],
-			'unused-imports/no-unused-imports': 'warn',
-			'import-newlines/enforce': ['error', { items: Infinity, semi: false }],
-			'object-curly-newline': ['error', { consistent: true }],
-			'no-undef': 'off',
-			'no-redeclare': 'off',
-			'no-unused-vars': 'off',
+			...openCanvasStyleRules,
+		},
+	},
+	{
+		files: ['scripts/**/*.ts', 'vite.config.ts', 'vite.lib.config.ts'],
+		languageOptions: {
+			globals: {
+				...globals.node,
+				...globals.browser,
+			},
 		},
 	},
 	{

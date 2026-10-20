@@ -7,7 +7,7 @@ import { resolveThemeForColorScheme, type ShimHostTheme } from './host-tokens'
  * Mantine color scheme + `prefers-color-scheme` defaults.
  */
 export function useHostTheme(): ShimHostTheme {
-  const scheme = useComputedColorScheme('light')
-  const polarity = scheme === 'dark' ? 'dark' : 'light'
-  return resolveThemeForColorScheme(polarity)
+	const scheme = useComputedColorScheme('light')
+	const polarity = scheme === 'dark' ? 'dark' : 'light'
+	return resolveThemeForColorScheme(polarity)
 }

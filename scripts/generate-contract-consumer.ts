@@ -7,8 +7,8 @@ const sdkIndex = path.join(root, 'src/vendor/canvas-sdk/index.d.ts')
 const outFile = path.join(root, 'src/contract/consumer.ts')
 
 if (!fs.existsSync(sdkIndex)) {
-  console.error('Run npm run sync:sdk first')
-  process.exit(1)
+	console.error('Run npm run sync:sdk first')
+	process.exit(1)
 }
 
 const raw = fs.readFileSync(sdkIndex, 'utf8')
@@ -16,45 +16,45 @@ const values: string[] = []
 const types: string[] = []
 
 function stripComments(text: string): string {
-  return text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')
+	return text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')
 }
 
 const cleaned = stripComments(raw)
 
 for (const match of cleaned.matchAll(
-  /export\s+type\s+\{([^}]+)\}\s+from\s+["'][^"']+["']/g,
+	/export\s+type\s+\{([^}]+)\}\s+from\s+["'][^"']+["']/g,
 )) {
-  for (const part of match[1].split(',')) {
-    const name = part.trim().split(/\s+/).pop()
-    if (name) {
-      types.push(name)
-    }
-  }
+	for (const part of match[1].split(',')) {
+		const name = part.trim().split(/\s+/).pop()
+		if (name) {
+			types.push(name)
+		}
+	}
 }
 
 for (const match of cleaned.matchAll(
-  /export\s+\{([^}]+)\}\s+from\s+["'][^"']+["']/g,
+	/export\s+\{([^}]+)\}\s+from\s+["'][^"']+["']/g,
 )) {
-  for (const part of match[1].split(',')) {
-    const bits = part.trim().split(/\s+as\s+/)
-    const name = bits[bits.length - 1].trim()
-    if (name) {
-      values.push(name)
-    }
-  }
+	for (const part of match[1].split(',')) {
+		const bits = part.trim().split(/\s+as\s+/)
+		const name = bits[bits.length - 1].trim()
+		if (name) {
+			values.push(name)
+		}
+	}
 }
 
 const uniqueValues = [...new Set(values)].sort()
 const uniqueTypes = [...new Set(types)].sort()
 
 function contractTypeEntry(name: string): string {
-  if (name === 'RefObject') {
-    return 'RefObject<HTMLDivElement>'
-  }
-  if (name === 'SetCanvasState') {
-    return 'SetCanvasState<number>'
-  }
-  return name
+	if (name === 'RefObject') {
+		return 'RefObject<HTMLDivElement>'
+	}
+	if (name === 'SetCanvasState') {
+		return 'SetCanvasState<number>'
+	}
+	return name
 }
 
 const body = `/**
@@ -65,7 +65,7 @@ import { ${uniqueValues.join(', ')} } from 'cursor/canvas';
 import type { ${uniqueTypes.join(', ')} } from 'cursor/canvas';
 
 const contractValues = {
-${uniqueValues.map((n) => `  ${n},`).join('\n')}
+${uniqueValues.map(n => `  ${n},`).join('\n')}
 };
 
 void contractValues;
@@ -73,7 +73,7 @@ void contractValues;
 export type ContractValueExports = typeof contractValues;
 
 export type ContractTypeExports =
-${uniqueTypes.map((n) => `  | ${contractTypeEntry(n)}`).join('\n')};
+${uniqueTypes.map(n => `  | ${contractTypeEntry(n)}`).join('\n')};
 
 import type { ShimHostTheme } from '../shim/theme';
 
@@ -86,12 +86,12 @@ export type ContractHostThemeExtras = Pick<
 fs.mkdirSync(path.dirname(outFile), { recursive: true })
 const prev = fs.existsSync(outFile) ? fs.readFileSync(outFile, 'utf8') : ''
 if (prev !== body) {
-  fs.writeFileSync(outFile, body)
-  console.log(
-    `Wrote ${outFile} (${uniqueValues.length} values, ${uniqueTypes.length} types)`,
-  )
+	fs.writeFileSync(outFile, body)
+	console.log(
+		`Wrote ${outFile} (${uniqueValues.length} values, ${uniqueTypes.length} types)`,
+	)
 } else {
-  console.log(
-    `Unchanged ${outFile} (${uniqueValues.length} values, ${uniqueTypes.length} types)`,
-  )
+	console.log(
+		`Unchanged ${outFile} (${uniqueValues.length} values, ${uniqueTypes.length} types)`,
+	)
 }
