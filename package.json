@@ -56,6 +56,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "sync:sdk": "bash scripts/sync-cursor-sdk-snapshot.sh",
+    "patch:vendor-paths": "tsx scripts/patch-vendor-paths.ts",
     "check:sdk-exports": "tsx scripts/diff-sdk-exports.ts --strict",
     "generate:contract-consumer": "tsx scripts/generate-contract-consumer.ts && npm run eslint -- --fix src/contract/consumer.ts",
     "test:contract": "npm run check:sdk-exports && npm run generate:contract-consumer && tsc --noEmit && npm run build:lib",

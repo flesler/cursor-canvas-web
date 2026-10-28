@@ -29,16 +29,5 @@ if [[ ! -f "$CANVAS_SKILL" ]]; then
 fi
 mkdir -p "$(dirname "$SKILL_REF")"
 cp "$CANVAS_SKILL" "$SKILL_REF"
-MANIFEST="$DEST/manifest.json"
-HASH="$(npx --no-install tsx "$ROOT/scripts/hash-canvas-sdk-tree.ts" "$DEST")"
-node -e "
-const fs = require('fs');
-const manifest = {
-  syncedAt: new Date().toISOString().slice(0, 10),
-  sdkSource: '~/.cursor/skills-cursor/canvas/sdk',
-  contentHash: process.argv[1],
-};
-fs.writeFileSync(process.argv[2], JSON.stringify(manifest, null, 2) + '\n');
-" "$HASH" "$MANIFEST"
+npm run patch:vendor-paths --silent
 echo "Synced from $SRC"
-echo "contentHash=$HASH"
