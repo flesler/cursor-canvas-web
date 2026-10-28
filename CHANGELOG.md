@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.1] — 2026-10-28
+
+- Vendor docs: rewrite `~/.cursor/skills-cursor/...` paths to `../canvas-sdk` / `../canvas/SKILL.md` for `open-canvas vendor-path` agents (`npm run patch:vendor-paths`; runs at end of `sync:sdk`).
+
 ## [1.2.0] — 2026-10-20
 
 - **Superset typings:** ship `src/superset/` on npm (`types` and `cursor/canvas` path for open-canvas); bar/line chart `extra` props and value-axis helpers.

@@ -1,7 +1,7 @@
 {
   "name": "@flesler/cursor-canvas-web",
   "private": false,
-  "version": "1.2.0",
+  "version": "1.2.1",
   "repository": "github:flesler/cursor-canvas-web",
   "type": "module",
   "description": "Deploy your Cursor canvases to the web.",
