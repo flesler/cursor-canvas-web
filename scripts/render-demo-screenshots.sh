@@ -32,7 +32,7 @@ mkdir -p "$OUT_DIR"
 shot() {
 	local mode="$1"
 	local dest="$2"
-	node "$CLI" generate "$CANVAS" --title "$TITLE" --formats png --theme "$mode" --width 1280 --height 900
+	node "$CLI" generate "$CANVAS" --title "$TITLE" --formats png --theme "$mode" --width 1280
 	cp "$GEN_OUT/demo.png" "$OUT_DIR/$dest"
 }
 

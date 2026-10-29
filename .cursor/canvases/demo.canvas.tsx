@@ -1,4 +1,4 @@
-import { BarChart, Button, Callout, Card, CardBody, CardHeader, Checkbox, Code, CollapsibleSection, DiffStats, DiffView, Divider, Grid, H1, H2, H3, IconButton, LineChart, Link, PieChart, Pill, Row, Select, Spacer, Stack, Stat, Swatch, Table, Text, TextArea, TextInput, TodoList, TodoListCard, Toggle, UsageBar, canvasPaletteGrokDark, canvasPaletteGrokLight, computeDAGLayout, mergeStyle, usageColorSequence, useCanvasAction, useCanvasState, useEffect, useHostTheme, useMemo, useRef, useState, type ChartSeries, type Color, type DiffLineData, type StackProps, type TableRowTone, type TodoItem } from 'cursor/canvas'
+import { BarChart, Button, Callout, Card, CardBody, CardHeader, Checkbox, Code, CollapsibleSection, DiffStats, DiffView, Divider, Grid, H1, H2, H3, LineChart, Link, PieChart, Pill, Row, Select, Spacer, Stack, Stat, Swatch, Table, Text, TextArea, TextInput, TodoList, TodoListCard, Toggle, UsageBar, canvasPaletteGrokDark, canvasPaletteGrokLight, computeDAGLayout, mergeStyle, usageColorSequence, useCanvasAction, useCanvasState, useEffect, useHostTheme, useMemo, useRef, useState, type ChartSeries, type Color, type DiffLineData, type StackProps, type TableRowTone, type TodoItem } from 'cursor/canvas'
 
 const __canvasJsonState = {"show.env":"staging","show.note":"Hydrated from .canvas.data.json on export","show.live":false} as Record<string, unknown>
 if (typeof localStorage !== 'undefined') {
@@ -10,7 +10,7 @@ if (typeof localStorage !== 'undefined') {
 	}
 }
 
-const pkg = {"name":"@flesler/open-canvas","version":"1.6.0","description":"Agent-friendly canvas visuals (charts, tables, UI) from .canvas.tsx to HTML, PNG, PDF, JPG, or IDE-ready canvas","type":"module","license":"MIT","repository":"github:flesler/open-canvas","bin":{"open-canvas":"./bin/open-canvas.js"},"engines":{"node":">=22.12.0","npm":">=10.0.0"},"scripts":{"build":"npm run build:cli","build:cli":"tsc -b tsconfig.cli.json --clean && tsc -b tsconfig.cli.json && find dist -name '*.d.ts' -delete && rm -rf dist/scripts dist/canvas-sdk-hash.js","build:github-pages":"npm run build:cli && bash bin/build-github-pages.sh","prepublishOnly":"npm run build:cli","prepare":"[ \"$CI\" != \"true\" ] && [ -d node_modules/husky ] && husky || true","eslint":"eslint --cache --cache-strategy content","lint":"npm run eslint -- 'src/**/*.ts' 'src/**/*.tsx' 'example/**/*.canvas.tsx'","lint:fix":"npm run lint -- --fix","vitest":"VITE_CJS_IGNORE_WARNING=true vitest","test":"npm run test:types && npm run test:unit","test:smoke":"bin/smoke.sh","test:smoke:global":"bin/smoke.sh --global","test:smoke:both":"bin/smoke.sh --both","test:contract":"bin/contract.sh","test:verify-canvases":"npm run build:cli && bash bin/verify-canvases.sh","test:unit":"npm run vitest -- run","test:types:cli":"tsc -p tsconfig.cli.json --noEmit","test:types:app":"tsc -p tsconfig.json","test:types":"npm run test:types:cli && npm run test:types:app","test:unit:min":"MINIMAL=1 npm run test:unit","test:unit:verbose":"VERBOSE=1 npm run test:unit","lint:full":"bin/parallel-run.sh test:types:cli test:types:app lint:fix","lint:full:silent":"bin/parallel-run.sh --silent test:types:cli test:types:app lint:fix && echo LINT OK","example:screenshot":"npm run build:cli && node dist/cli.js generate example/demo.canvas.tsx --title 'Open Canvas — SDK Showcase' --formats png --theme light --width 1280 --height 900 && cp example/out/showcase.png docs/showcase-light.png && node dist/cli.js generate example/demo.canvas.tsx --title 'Open Canvas — SDK Showcase' --formats png --theme dark --width 1280 --height 900 && cp example/out/showcase.png docs/showcase-dark.png","example:cursor":"npm run build:cli && node dist/cli.js generate example/demo.canvas.tsx --formats cursor","test:pack":"bash bin/check-npm-pack.sh","ci:local":"npm run build:cli && npm run lint:full && npm test && npm run test:pack && npm run test:contract && npm run test:smoke","agent:stop":"npm run -s lint:full:silent","changelog":"auto-changelog --commit-limit 100 --hide-credit"},"dependencies":{"@flesler/cursor-canvas-web":"^1.2.0","@mantine/charts":"^8.3.18","@mantine/core":"^8.3.18","@types/react":"^19.3.0","@types/react-dom":"^19.3.0","@vitejs/plugin-react":"^5.2.0","commander":"^13.1.0","d3-dsv":"^3.0.1","playwright":"^1.64.0","react":"^19.3.0","react-dom":"^19.3.0","recharts":"^3.10.1","ts-morph":"^28.0.0","typescript":"^5.9.3","vite":"^7.3.7","vite-plugin-singlefile":"^2.3.3","yaml":"^2.9.1"},"devDependencies":{"@eslint/js":"^10.0.1","@stylistic/eslint-plugin":"^5.10.0","@types/d3-dsv":"^3.0.7","@types/node":"^22.10.0","@typescript-eslint/eslint-plugin":"^8.68.0","@typescript-eslint/parser":"^8.68.0","auto-changelog":"^2.6.0","eslint":"^10.9.1","eslint-plugin-import-newlines":"^2.0.0","eslint-plugin-unused-imports":"^4.4.1","husky":"^9.1.7","jiti":"^2.7.0","tsx":"^4.21.0","type-fest":"^5.4.5","vitest":"^4.1.11"},"files":["bin/open-canvas.js","dist/**/*.js","LICENSE","src/shell","src/types","src/vendor/skill-bundle/**"]}
+const pkg = {"name":"@flesler/open-canvas","version":"1.8.0","description":"Agent-friendly canvas visuals (charts, tables, UI) from .canvas.tsx to HTML, PNG, PDF, JPG, or IDE-ready canvas","type":"module","license":"MIT","repository":"github:flesler/open-canvas","bin":{"open-canvas":"./bin/open-canvas.js"},"engines":{"node":">=22.12.0","npm":">=10.0.0"},"scripts":{"build":"npm run build:cli","build:cli":"tsc -b tsconfig.cli.json --clean && tsc -b tsconfig.cli.json && find dist -name '*.d.ts' -delete && rm -rf dist/scripts dist/canvas-sdk-hash.js","build:github-pages":"npm run build:cli && bash bin/build-github-pages.sh","prepublishOnly":"npm run build:cli","prepare":"[ \"$CI\" != \"true\" ] && [ -d node_modules/husky ] && husky || true","eslint":"eslint --cache --cache-strategy content","lint":"npm run eslint -- 'src/**/*.ts' 'src/**/*.tsx' 'example/**/*.canvas.tsx'","lint:fix":"npm run lint -- --fix","vitest":"VITE_CJS_IGNORE_WARNING=true vitest","test":"npm run test:types && npm run test:unit","test:smoke":"bin/smoke.sh","test:smoke:global":"bin/smoke.sh --global","test:smoke:both":"bin/smoke.sh --both","test:contract":"bin/contract.sh","test:verify-canvases":"npm run build:cli && bash bin/verify-canvases.sh","test:unit":"npm run vitest -- run","test:types:cli":"tsc -p tsconfig.cli.json --noEmit","test:types:app":"tsc -p tsconfig.json","test:types":"npm run test:types:cli && npm run test:types:app","test:unit:min":"MINIMAL=1 npm run test:unit","test:unit:verbose":"VERBOSE=1 npm run test:unit","lint:full":"bin/parallel-run.sh test:types:cli test:types:app lint:fix","lint:full:silent":"bin/parallel-run.sh --silent test:types:cli test:types:app lint:fix && echo LINT OK","example:screenshot":"npm run build:cli && node dist/cli.js generate example/demo.canvas.tsx --title 'Open Canvas — SDK Showcase' --formats png --theme light --width 1280 && cp example/out/showcase.png docs/showcase-light.png && node dist/cli.js generate example/demo.canvas.tsx --title 'Open Canvas — SDK Showcase' --formats png --theme dark --width 1280 && cp example/out/showcase.png docs/showcase-dark.png","example:cursor":"npm run build:cli && node dist/cli.js generate example/demo.canvas.tsx --formats cursor","test:pack":"bash bin/check-npm-pack.sh","ci:local":"npm run build:cli && npm run lint:full && npm test && npm run test:pack && npm run test:contract && npm run test:smoke","agent:stop":"npm run -s lint:full:silent","changelog":"auto-changelog --commit-limit 100 --hide-credit"},"dependencies":{"@flesler/cursor-canvas-web":"^1.2.1","@mantine/charts":"^8.3.18","@mantine/core":"^8.3.18","@types/react":"^19.3.0","@types/react-dom":"^19.3.0","@vitejs/plugin-react":"^5.2.0","commander":"^13.1.0","d3-dsv":"^3.0.1","playwright":"^1.64.0","react":"^19.3.0","react-dom":"^19.3.0","recharts":"^3.10.1","ts-morph":"^28.0.0","typescript":"^5.9.3","vite":"^7.3.7","vite-plugin-singlefile":"^2.3.3","yaml":"^2.9.1"},"devDependencies":{"@eslint/js":"^10.0.1","@stylistic/eslint-plugin":"^5.10.0","@types/d3-dsv":"^3.0.7","@types/node":"^22.10.0","@typescript-eslint/eslint-plugin":"^8.68.0","@typescript-eslint/parser":"^8.68.0","auto-changelog":"^2.6.0","eslint":"^10.9.1","eslint-plugin-import-newlines":"^2.0.0","eslint-plugin-unused-imports":"^4.4.1","husky":"^9.1.7","jiti":"^2.7.0","tsx":"^4.21.0","type-fest":"^5.4.5","vitest":"^4.1.11"},"files":["bin/open-canvas.js","dist/**/*.js","LICENSE","src/shell","src/types","src/vendor/skill-bundle/**"]}
 const daily = [{"date":"2026-10-05","deploys":"582","totalDurationP90Sec":"388"},{"date":"2026-10-06","deploys":"601","totalDurationP90Sec":"401"},{"date":"2026-10-07","deploys":"593","totalDurationP90Sec":"395"},{"date":"2026-10-08","deploys":"612","totalDurationP90Sec":"407"},{"date":"2026-10-09","deploys":"598","totalDurationP90Sec":"412"},{"date":"2026-10-10","deploys":"604","totalDurationP90Sec":"418"},{"date":"2026-10-11","deploys":"597","totalDurationP90Sec":"421"}]
 const deployEvents = [{"date":"2026-10-09","app":"app-aurora-7f3","durationSec":2847},{"date":"2026-10-10","app":"app-mint-2c1","durationSec":2292},{"date":"2026-10-11","app":"app-orbit-9aa","durationSec":1904}]
 const outlierRows = [{"app":"app-aurora-7f3","stack":"node-20","total":"47m 27s","peak_rss":"4.6 GB","files_pack":"892k"},{"app":"app-mint-2c1","stack":"dockerfile","total":"38m 12s","peak_rss":"3.9 GB","files_pack":"1.1M"},{"app":"app-orbit-9aa","stack":"python-3.12","total":"31m 44s","peak_rss":"3.2 GB","files_pack":"214k"},{"app":"app-harbor-4d8","stack":"ruby-3.3","total":"28m 06s","peak_rss":"2.8 GB","files_pack":"156k"},{"app":"app-crest-1b0","stack":"go-1.22","total":"24m 51s","peak_rss":"2.4 GB","files_pack":"98k"},{"app":"app-lumen-6e2","stack":"node-20","total":"22m 33s","peak_rss":"3.1 GB","files_pack":"402k"},{"app":"app-pine-8c4","stack":"dockerfile","total":"21m 18s","peak_rss":"2.9 GB","files_pack":"678k"},{"app":"app-drift-3f7","stack":"python-3.12","total":"19m 57s","peak_rss":"2.6 GB","files_pack":"187k"}]
@@ -22,6 +22,21 @@ type PhaseRssMb = {
 
 const repoUrl = `https://github.com/${pkg.repository.replace(/^github:/, '')}`
 const shimDep = pkg.dependencies['@flesler/cursor-canvas-web']
+
+/** GitHub Pages: dark export → `./`; light (or anything else) → `./dark.html`. */
+function ExportThemeToggleLink() {
+	const { kind, text } = useHostTheme()
+	const dark = kind === 'dark'
+	return (
+		<a
+			href={dark ? './' : './dark.html'}
+			target="_self"
+			style={{ color: text.link }}
+		>
+			{dark ? 'Light mode' : 'Dark mode'}
+		</a>
+	)
+}
 
 /** Bar/line height in the charts grid; pie `size` matches for visual parity. */
 const SHOWCASE_CHART_HEIGHT = 200
@@ -556,21 +571,8 @@ export default function ShowcaseCanvas() {
 			<Row gap={12} align="center">
 				<H1>Cursor Canvas SDK showcase</H1>
 				<Spacer />
+				<ExportThemeToggleLink />
 				<Link href={repoUrl}>open-canvas</Link>
-				<Pill tone="info" active={live}>
-					{live ? 'live' : 'paused'}
-				</Pill>
-				<IconButton
-					title="Ask about this canvas in chat"
-					onClick={() =>
-						dispatch({
-							type: 'newComposerChat',
-							userPrompt: 'Explain this canvas',
-						})
-					}
-				>
-					?
-				</IconButton>
 			</Row>
 
 			<Text tone="secondary">

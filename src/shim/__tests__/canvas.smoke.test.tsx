@@ -8,16 +8,16 @@ import { renderWithProvider } from '../../test/render'
 beforeEach(() => localStorage.clear())
 
 describe('DemoCanvas showcase', () => {
-	it('renders the header, live pill and chat IconButton', () => {
+	it('renders the header theme toggle and repo link', () => {
 		renderWithProvider(<DemoCanvas />)
 
 		expect(
 			screen.getByRole('heading', { name: 'Cursor Canvas SDK showcase' }),
 		).toBeInTheDocument()
-		expect(screen.getByText('live')).toBeInTheDocument()
 		expect(
-			screen.getByRole('button', { name: 'Ask about this canvas in chat' }),
+			screen.getByRole('link', { name: /^(Dark mode|Light mode)$/ }),
 		).toBeInTheDocument()
+		expect(screen.getByRole('link', { name: 'open-canvas' })).toBeInTheDocument()
 	})
 
 	it('renders every section heading', () => {
