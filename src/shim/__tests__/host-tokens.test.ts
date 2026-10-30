@@ -1,5 +1,17 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { applyPrimaryColor, buildHostTokens, canvasPaletteGrokDark, chartThemeForBrand, parseCanvasHostThemeBrand, resolveThemeForColorScheme } from '../host-tokens'
+import { applyPrimaryColor, buildHostTokens, canvasPaletteDark, canvasPaletteGrokDark, canvasPaletteLight, categoryPaletteDark, categoryPaletteLight, chartThemeForBrand, colorPalette, parseCanvasHostThemeBrand, resolveThemeForColorScheme, type Color } from '../host-tokens'
+
+const CATEGORY_HUES: readonly Color[] = [
+	'gray',
+	'purple',
+	'green',
+	'yellow',
+	'cyan',
+	'pink',
+	'blue',
+	'orange',
+	'red',
+]
 
 describe('host-tokens', () => {
 	afterEach(() => {
@@ -56,5 +68,39 @@ describe('host-tokens', () => {
 	it('applyPrimaryColor ignores invalid hex', () => {
 		const base = buildHostTokens('dark', {}).palette
 		expect(applyPrimaryColor(base, 'not-a-color')).toBe(base)
+	})
+
+	describe('category palette', () => {
+		it('uses foregroundTertiary for gray on static exports', () => {
+			expect(categoryPaletteDark.gray).toBe(
+				canvasPaletteDark.foregroundTertiary,
+			)
+			expect(categoryPaletteLight.gray).toBe(
+				canvasPaletteLight.foregroundTertiary,
+			)
+			expect(categoryPaletteDark.gray).not.toBe(categoryPaletteLight.gray)
+		})
+
+		it('keeps colorPalette as the dark table alias', () => {
+			expect(colorPalette).toBe(categoryPaletteDark)
+		})
+
+		it.each(CATEGORY_HUES)(
+			'buildHostTokens resolves category.%s in dark and light',
+			(hue) => {
+				const dark = buildHostTokens('dark', {}).tokens.category[hue]
+				const light = buildHostTokens('light', {}).tokens.category[hue]
+				expect(dark).toMatch(/^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$/)
+				expect(light).toMatch(/^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$/)
+			},
+		)
+
+		it('recomputes category gray after workbench foreground override', () => {
+			const { tokens } = buildHostTokens('dark', {
+				editorForeground: '#aabbcc',
+			})
+			expect(tokens.category.gray).toBe('#aabbcc')
+			expect(tokens.text.tertiary).toBe(tokens.category.gray)
+		})
 	})
 })

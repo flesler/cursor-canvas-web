@@ -1,8 +1,8 @@
 /**
  * Runtime mirror of vendored `canvas-tokens.d.ts` + `theme.d.ts` token helpers.
  */
-import type { CanvasHostTheme } from '../vendor/canvas-sdk/hooks.js'
 import type { CanvasHostThemeBrand, CanvasHostThemeOverrides, CanvasPalette, CanvasTokens, CategoryPalette, Color } from '../vendor/canvas-sdk/canvas-tokens.js'
+import type { CanvasHostTheme } from '../vendor/canvas-sdk/hooks.js'
 import type { CanvasRadius, CanvasTypography } from '../vendor/canvas-sdk/theme.js'
 
 export type {
@@ -98,8 +98,10 @@ export const canvasPaletteGrokLight: CanvasPalette = {
 	...grokAccentLight,
 }
 
-export const categoryPaletteDark: CategoryPalette = {
-	gray: '#8888A8E0',
+/** Chromatic category hues only; `gray` is taken from the active canvas palette. */
+type CategoryChromatic = Readonly<Record<Exclude<Color, 'gray'>, string>>
+
+const cursorCategoryChromaticDark: CategoryChromatic = {
 	purple: '#7B64B8F0',
 	green: '#1F8A65E8',
 	yellow: '#E8C030E0',
@@ -110,20 +112,13 @@ export const categoryPaletteDark: CategoryPalette = {
 	red: '#C04848E0',
 }
 
-export const categoryPaletteLight: CategoryPalette = {
-	gray: '#8888A8E0',
-	purple: '#7B64B8F0',
-	green: '#1F8A65E8',
-	yellow: '#E8C030E0',
-	cyan: '#2A9A8AE0',
-	pink: '#C85898E0',
-	blue: '#2E79B5E0',
+const cursorCategoryChromaticLight: CategoryChromatic = {
+	...cursorCategoryChromaticDark,
 	orange: '#F0A088E0',
 	red: '#CF2D56E0',
 }
 
-export const categoryPaletteGrokDark: CategoryPalette = {
-	gray: '#777777E0',
+const grokCategoryChromatic: CategoryChromatic = {
 	purple: '#9159FEF0',
 	green: '#00C972E8',
 	yellow: '#FF9800E0',
@@ -134,9 +129,32 @@ export const categoryPaletteGrokDark: CategoryPalette = {
 	red: '#FF263CE0',
 }
 
-export const categoryPaletteGrokLight: CategoryPalette = {
-	...categoryPaletteGrokDark,
+function categoryPaletteFor(
+	chromatic: CategoryChromatic,
+	palette: CanvasPalette,
+): CategoryPalette {
+	return {
+		gray: palette.foregroundTertiary,
+		...chromatic,
+	}
 }
+
+export const categoryPaletteDark = categoryPaletteFor(
+	cursorCategoryChromaticDark,
+	canvasPaletteDark,
+)
+export const categoryPaletteLight = categoryPaletteFor(
+	cursorCategoryChromaticLight,
+	canvasPaletteLight,
+)
+export const categoryPaletteGrokDark = categoryPaletteFor(
+	grokCategoryChromatic,
+	canvasPaletteGrokDark,
+)
+export const categoryPaletteGrokLight = categoryPaletteFor(
+	grokCategoryChromatic,
+	canvasPaletteGrokLight,
+)
 
 export const colorPalette = categoryPaletteDark
 
@@ -473,18 +491,22 @@ export function buildHostTokens(
 	const brand = parseCanvasHostThemeBrand(overrides?.brand)
 	const light = isLightKind(kind)
 	let palette: CanvasPalette
-	let category: CategoryPalette
 	if (brand === 'grok') {
 		palette = light ? canvasPaletteGrokLight : canvasPaletteGrokDark
-		category = light ? categoryPaletteGrokLight : categoryPaletteGrokDark
 	} else {
 		palette = light ? canvasPaletteLight : canvasPaletteDark
-		category = light ? categoryPaletteLight : categoryPaletteDark
 	}
 	palette = applyWorkbenchSurfaces(palette, overrides ?? {})
 	if (brand !== 'grok' && typeof overrides?.primary === 'string') {
 		palette = applyPrimaryColor(palette, overrides.primary)
 	}
+	const chromatic =
+		brand === 'grok'
+			? grokCategoryChromatic
+			: light
+				? cursorCategoryChromaticLight
+				: cursorCategoryChromaticDark
+	const category = categoryPaletteFor(chromatic, palette)
 	const tokens = tokensFromPalette(palette, category)
 	return { tokens, palette, brand }
 }
