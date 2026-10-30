@@ -15,13 +15,6 @@ import { toneHex } from './theme'
 import { useHostTheme } from './use-tokens'
 
 export type {
-	ChartDataPoint,
-	ChartReferenceLine,
-	ChartSeries,
-	ChartTone,
-	PieChartProps,
-} from '../vendor/canvas-sdk/chart-primitives.js'
-export type {
 	CanvasBarChartExtra,
 	CanvasChartExtra,
 	CanvasChartScale,
@@ -29,6 +22,13 @@ export type {
 	CanvasLineChartExtra,
 } from '../superset/chart-extra'
 export type { BarChartProps, LineChartProps } from '../superset/index'
+export type {
+	ChartDataPoint,
+	ChartReferenceLine,
+	ChartSeries,
+	ChartTone,
+	PieChartProps,
+} from '../vendor/canvas-sdk/chart-primitives.js'
 
 import type { ChartReferenceLine, ChartSeries, ChartTone, PieChartProps } from '../vendor/canvas-sdk/chart-primitives.js'
 
@@ -279,7 +279,6 @@ export function LineChart({
 			...CHART_LEGEND_STYLES,
 			legendItemName: { color: chartColors.textColor },
 		},
-		...chartColors,
 		...axis,
 		style,
 	}
@@ -349,7 +348,6 @@ export function BarChart({
 				...CHART_LEGEND_STYLES,
 				legendItemName: { color: chartColors.textColor },
 			}}
-			{...chartColors}
 			{...axis}
 			style={style}
 		/>

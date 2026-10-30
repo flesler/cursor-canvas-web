@@ -63,15 +63,14 @@ describe('DemoCanvas showcase', () => {
 	it('shows charts and callouts on the default tab', () => {
 		renderWithProvider(<DemoCanvas />)
 
-		// LineChart / BarChart / PieChart cards (chart bodies do not render in
-		// jsdom, so assert the card headers that frame them).
+		// Chart bodies mount in jsdom once ResizeObserver reports layout size.
 		expect(screen.getByText('Latency (ms)')).toBeInTheDocument()
 		expect(screen.getByText('Requests by source')).toBeInTheDocument()
 		expect(screen.getByText('Test outcomes (pie)')).toBeInTheDocument()
 		expect(screen.getByText('Test outcomes (donut)')).toBeInTheDocument()
 		expect(screen.getAllByText(/75%/).length).toBeGreaterThanOrEqual(1)
 		expect(screen.getAllByText(/9\.9%/).length).toBeGreaterThanOrEqual(1)
-		expect(screen.getByText('Total')).toBeInTheDocument()
+		expect(screen.getAllByText('Total').length).toBeGreaterThanOrEqual(1)
 		// Callout tones.
 		expect(screen.getByText('Deployed')).toBeInTheDocument()
 		expect(screen.getByText('1 service degraded.')).toBeInTheDocument()

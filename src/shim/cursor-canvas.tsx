@@ -257,6 +257,9 @@ const TEXT_WEIGHT: Record<TextWeight, number> = {
 	bold: 700,
 }
 
+/** Avoid invalid `<p>` inside `<p>` when canvases nest `<Text>` (common in rich copy). */
+const TextParentContext = createContext(false)
+
 export function Text({
 	children,
 	tone = 'primary',
@@ -268,22 +271,30 @@ export function Text({
 	style,
 }: TextProps) {
 	const theme = useHostTheme()
+	const nestedInText = useContext(TextParentContext)
+	const component = nestedInText && as === 'p' ? 'span' : as
+	const blockParagraph = as === 'p'
 	return (
-		<MantineText
-			component={as}
-			size={size === 'small' ? 'xs' : 'sm'}
-			fw={TEXT_WEIGHT[weight]}
-			c={tone === 'primary' ? undefined : theme.text[tone]}
-			truncate={truncate}
-			style={{
-				fontStyle: italic ? 'italic' : undefined,
-				...(tone === 'primary' ? { color: theme.text.primary } : undefined),
-				fontFamily: theme.typography.fontFamily,
-				...style,
-			}}
-		>
-			{children}
-		</MantineText>
+		<TextParentContext.Provider value={true}>
+			<MantineText
+				component={component}
+				size={size === 'small' ? 'xs' : 'sm'}
+				fw={TEXT_WEIGHT[weight]}
+				c={tone === 'primary' ? undefined : theme.text[tone]}
+				truncate={truncate}
+				style={{
+					fontStyle: italic ? 'italic' : undefined,
+					...(tone === 'primary' ? { color: theme.text.primary } : undefined),
+					...(blockParagraph && component === 'span'
+						? { display: 'block' }
+						: undefined),
+					fontFamily: theme.typography.fontFamily,
+					...style,
+				}}
+			>
+				{children}
+			</MantineText>
+		</TextParentContext.Provider>
 	)
 }
 
