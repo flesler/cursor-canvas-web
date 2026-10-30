@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.0] — 2026-10-30
+
+- Host tokens: category `gray` follows the active canvas palette `foregroundTertiary` (SDK rule); category tables rebuild after workbench foreground overrides so `useHostTheme().category.gray` stays aligned with `text.tertiary`.
+- Tests for category hues, Swatch light/dark gray, and UsageBar segment colors; refreshed `docs/demo-*.png` baselines.
+- Test harness: jsdom `ResizeObserver` layout mock, chart prop fixes (no invalid DOM attrs), nested `Text` coercion; quiet `prepublishOnly` / smoke stderr.
+
 ## [1.2.1] — 2026-10-28
 
 - Vendor docs: rewrite `~/.cursor/skills-cursor/...` paths to `../canvas-sdk` / `../canvas/SKILL.md` for `open-canvas vendor-path` agents (`npm run patch:vendor-paths`; runs at end of `sync:sdk`).
