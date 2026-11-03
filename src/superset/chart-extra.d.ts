@@ -12,7 +12,7 @@ export type CanvasChartScale = NonNullable<YAxisProps['scale']>
  * horizontal bar charts. Non-linear scales default `domain` to `[1, 'dataMax']`.
  */
 export type CanvasChartValueAxisExtra = Pick<
-	Omit<YAxisProps, 'ref'>,
+  Omit<YAxisProps, 'ref'>,
   | 'scale'
   | 'domain'
   | 'type'
@@ -26,20 +26,20 @@ export type CanvasChartValueAxisExtra = Pick<
 >
 
 export type CanvasChartExtra = {
-	valueAxis?: CanvasChartValueAxisExtra
+  valueAxis?: CanvasChartValueAxisExtra
 }
 
 export type CanvasBarChartExtra = CanvasChartExtra & {
-	/** Category (y) axis on `horizontal` bar charts. */
-	categoryAxis?: {
-		/** Label column width in px; labels truncate to fit. Default 96. */
-		width?: number
-	}
+  /** Category (y) axis on `horizontal` bar charts. */
+  categoryAxis?: {
+    /** Label column width in px; labels truncate to fit. Default 96. */
+    width?: number
+  }
 }
 
 export type CanvasLineChartExtra = CanvasChartExtra & {
-	/** Curved (`monotone`) segments; the IDE draws straight segments. */
-	smooth?: boolean;
-	/** Stack the filled areas. Requires `fill`. */
-	stacked?: boolean
+  /** Curved (`monotone`) segments; the IDE draws straight segments. */
+  smooth?: boolean;
+  /** Stack the filled areas. Requires `fill`. */
+  stacked?: boolean
 }
