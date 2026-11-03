@@ -29,7 +29,13 @@ export type CanvasChartExtra = {
 	valueAxis?: CanvasChartValueAxisExtra
 }
 
-export type CanvasBarChartExtra = CanvasChartExtra
+export type CanvasBarChartExtra = CanvasChartExtra & {
+	/** Category (y) axis on `horizontal` bar charts. */
+	categoryAxis?: {
+		/** Label column width in px; labels truncate to fit. Default 96. */
+		width?: number
+	}
+}
 
 export type CanvasLineChartExtra = CanvasChartExtra & {
 	/** Curved (`monotone`) segments; the IDE draws straight segments. */

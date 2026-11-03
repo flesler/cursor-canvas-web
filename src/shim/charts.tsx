@@ -169,24 +169,44 @@ function defaultShowBarValues(
 	return series.length === 1 && categories.length <= 8
 }
 
-const HORIZONTAL_CATEGORY_LABEL_MAX = 14
-
-function truncateCategoryAxisLabel(text: string): string {
-	if (text.length <= HORIZONTAL_CATEGORY_LABEL_MAX) {
-		return text
+/** SDK single-series bars get one palette color per category. */
+export function withPerCategoryBarColors(
+	data: Record<string, string | number>[],
+	series: ChartSeries[],
+	seriesColor: (tone: ChartTone | undefined, index: number) => string,
+): Record<string, string | number>[] {
+	if (series.length !== 1 || series[0].tone) {
+		return data
 	}
-	return `${text.slice(0, HORIZONTAL_CATEGORY_LABEL_MAX - 1)}…`
+	return data.map((row, index) => ({
+		...row,
+		color: seriesColor(undefined, index),
+	}))
 }
 
-function horizontalCategoryAxisTick(props: {
-	x?: string | number;
-	y?: string | number;
-	payload?: { value?: string | number }
-}) {
+const HORIZONTAL_CATEGORY_AXIS_WIDTH = 96
+/** Approximate px per character at the 12px tick font. */
+const CATEGORY_LABEL_CHAR_WIDTH = 6.5
+
+function truncateCategoryAxisLabel(text: string, max: number): string {
+	if (text.length <= max) {
+		return text
+	}
+	return `${text.slice(0, max - 1)}…`
+}
+
+function horizontalCategoryAxisTick(
+	labelMax: number,
+	props: {
+		x?: string | number;
+		y?: string | number;
+		payload?: { value?: string | number }
+	},
+) {
 	const x = typeof props.x === 'number' ? props.x : Number(props.x) || 0
 	const y = typeof props.y === 'number' ? props.y : Number(props.y) || 0
 	const full = String(props.payload?.value ?? '')
-	const display = truncateCategoryAxisLabel(full)
+	const display = truncateCategoryAxisLabel(full, labelMax)
 	return (
 		<g transform={`translate(${x},${y})`}>
 			<text
@@ -211,15 +231,29 @@ function barValueLabelProps(barLabelColor: string) {
 	}
 }
 
-function horizontalBarProps() {
+function horizontalBarValueLabelProps(barLabelColor: string) {
+	return {
+		...barValueLabelProps(barLabelColor),
+		position: 'right' as const,
+	}
+}
+
+export function horizontalBarProps(
+	width = HORIZONTAL_CATEGORY_AXIS_WIDTH,
+	withValueLabel = false,
+) {
+	const labelMax = Math.floor(width / CATEGORY_LABEL_CHAR_WIDTH)
 	return {
 		yAxisProps: {
-			tick: horizontalCategoryAxisTick,
-			width: 96,
+			tick: (props: Parameters<typeof horizontalCategoryAxisTick>[1]) =>
+				horizontalCategoryAxisTick(labelMax, props),
+			width,
 		},
 		barChartProps: {
-			margin: { right: 32 },
+			margin: { right: withValueLabel ? 48 : 32 },
 		},
+		/** Value-axis grid only; Mantine's default `x` draws a line per category row. */
+		gridAxis: 'y' as const,
 	}
 }
 
@@ -308,7 +342,11 @@ export function BarChart({
 }: BarChartProps) {
 	const seriesColor = useSeriesColor()
 	const chartColors = useChartColorProps()
-	const data = reshapeLineChartData(categories, series)
+	const data = withPerCategoryBarColors(
+		reshapeLineChartData(categories, series),
+		series,
+		seriesColor,
+	)
 	const type = normalized ? 'percent' : stacked ? 'stacked' : 'default'
 	const axis = valueAxisChartProps({
 		beginAtZero,
@@ -337,10 +375,14 @@ export function BarChart({
 			valueFormatter={valueFormatter(valueSuffix, valuePrefix)}
 			withBarValueLabel={withBarValueLabel}
 			{...(withBarValueLabel
-				? { valueLabelProps: barValueLabelProps(chartColors.barLabelColor) }
+				? {
+					valueLabelProps: horizontal
+						? horizontalBarValueLabelProps(chartColors.barLabelColor)
+						: barValueLabelProps(chartColors.barLabelColor),
+				}
 				: {})}
 			{...(horizontal
-				? horizontalBarProps()
+				? horizontalBarProps(extra?.categoryAxis?.width, withBarValueLabel)
 				: withBarValueLabel
 					? verticalBarLabelProps()
 					: {})}

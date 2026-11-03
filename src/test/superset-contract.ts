@@ -23,5 +23,8 @@ export const lineChartSample: Superset.LineChartProps = {
 export const barChartSample: Superset.BarChartProps = {
 	categories: [],
 	series: [],
-	extra: { valueAxis: { scale: 'sqrt', tickCount: 4 } },
+	extra: {
+		valueAxis: { scale: 'sqrt', tickCount: 4 },
+		categoryAxis: { width: 200 },
+	},
 }

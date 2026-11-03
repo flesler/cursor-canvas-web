@@ -60,7 +60,7 @@ Features beyond the IDE SDK. A canvas using them still renders in Cursor, minus 
 
 | Component   | `extra` fields                                                         |
 | ----------- | ---------------------------------------------------------------------- |
-| `BarChart`  | `valueAxis` (Recharts value-axis passthrough: `scale`, `domain`, …)    |
+| `BarChart`  | `valueAxis` (Recharts value-axis passthrough: `scale`, `domain`, …), `categoryAxis.width` (horizontal label column) |
 | `LineChart` | `valueAxis`, `smooth`, `stacked` (with `fill`)                         |
 
 To add one:
