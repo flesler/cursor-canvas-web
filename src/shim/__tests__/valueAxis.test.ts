@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { valueAxisChartProps } from '../charts'
+import { valueAxisChartProps } from '../chart-shared'
 
 describe('valueAxisChartProps', () => {
 	it('keeps the SDK zero-based domain without extra', () => {

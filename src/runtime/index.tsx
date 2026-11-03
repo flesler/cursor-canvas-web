@@ -6,9 +6,9 @@
  * helpers are web-only glue (a Mantine provider + a mount helper) that replace
  * the boilerplate a consuming app would otherwise copy from `main.tsx`.
  *
- * Consumers must still import Mantine's stylesheets once in their app:
+ * Consumers must still import Mantine's core stylesheet once in their app:
  *   import '@mantine/core/styles.css';
- *   import '@mantine/charts/styles.css';
+ * Chart canvases: `@mantine/charts/styles.css` is imported by bar/line/pie shim modules.
  */
 import { type MantineColorScheme } from '@mantine/core'
 import { StrictMode, type ReactNode } from 'react'

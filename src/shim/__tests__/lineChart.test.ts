@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ChartSeries } from 'cursor/canvas'
-import { reshapeLineChartData } from '../charts'
+import { reshapeLineChartData } from '../chart-shared'
 
 describe('reshapeLineChartData', () => {
 	it('reshapes parallel categories + series into row objects', () => {

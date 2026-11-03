@@ -20,9 +20,13 @@
     "node": ">=22.12.0",
     "npm": ">=10.0.0"
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist",
+    "src/shim",
+    "src/runtime",
     "src/vendor",
     "src/superset"
   ],

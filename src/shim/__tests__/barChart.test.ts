@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { horizontalBarProps, withPerCategoryBarColors } from '../charts'
+import { horizontalBarProps, withPerCategoryBarColors } from '../chart-shared'
 
 const seriesColor = (tone: string | undefined, index: number) =>
 	tone ?? `c${index}`

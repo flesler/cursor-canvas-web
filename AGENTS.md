@@ -30,9 +30,9 @@ into the IDE-managed canvases folder so it renders in Cursor too.
   `src/superset/`, exposed on SDK components only through an `extra` prop the
   IDE ignores. Recipe in [`COMPAT.md`](./COMPAT.md#superset).
 - All adaptation lives under `src/shim/` behind the `cursor-canvas.tsx` barrel
-  (split into `charts.tsx`, `diff.tsx`, `dag.ts`, `todo.tsx`, `theme.ts`,
-  `use-tokens.ts`). Add new canvas API surface there, implemented with Mantine,
-  mirroring the SDK declarations, and re-export it from the barrel.
+  (split into `chart-shared.tsx`, chart modules, `diff.tsx`, `dag.ts`, `todo.tsx`,
+  `theme.ts`, `use-tokens.ts`). Add new canvas API surface there, implemented with
+  Mantine, mirroring the SDK declarations, and re-export it from the barrel.
 - **SDK upkeep:** `npm run sync:sdk` copies the IDE declarations into
   `src/vendor/canvas-sdk/` and updates `manifest.json`. Release policy and
   intentional IDE vs web gaps: [`COMPAT.md`](./COMPAT.md). We do **not** keep
@@ -43,7 +43,7 @@ into the IDE-managed canvases folder so it renders in Cursor too.
     `useHostTheme()` though `hooks.d.ts` is narrower
   - `cursor-canvas.tsx` — `useCanvasState` (`localStorage`), `useCanvasAction`
     (no-op + dev log)
-  - `charts.tsx` — Mantine/Recharts mapping; fork-only `reshapeLineChartData`
+  - `chart-shared.tsx` — Mantine/Recharts mapping; fork-only `reshapeLineChartData`
 - Semantic colors go through `tone` → `src/shim/theme.ts` (`toneColor`), never
   hard-coded in components.
 - Two settings must stay in sync when changing the alias: `resolve.alias` in

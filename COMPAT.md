@@ -48,7 +48,7 @@ Published npm **types** resolve to `src/superset/index.d.ts`: the vendored SDK p
 | `useHostTheme().chart`                               | Not in public `hooks.d.ts` today; some canvases use `theme.chart.palette.*` at runtime | `{ palette: chartPalette, sequence: chartColorSequence }`               |
 | `useHostTheme().radius` / `.typography` / `.spacing` | Declared in `theme.d.ts`, not on `CanvasHostTheme` in `hooks.d.ts`                     | Exposed for canvases that read layout tokens from the theme hook        |
 | `Pill` `tone`                                        | Deprecated; IDE renders neutral only                                                   | Accepts `tone` for older canvases; ignored at render (neutral styling)  |
-| `reshapeLineChartData`                               | Not in IDE `index.d.ts`                                                                | Internal helper in `charts.tsx` (not barrel-exported)                   |
+| `reshapeLineChartData`                               | Not in IDE `index.d.ts`                                                                | Internal helper in `chart-shared.tsx` (not barrel-exported)           |
 | Host `brand: grok`                                   | Grok palettes, chart sequence, Sand radii/typography                                   | `resolveTheme` / `useHostTheme`; web defaults to `cursor` + Mantine scheme |
 
 ## Superset
