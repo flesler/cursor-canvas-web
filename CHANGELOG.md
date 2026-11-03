@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0] — 2026-11-03
+
+- Bar charts: SDK-matched series colors, horizontal value labels and grid; single-series per-category bar fills; `extra.categoryAxis.width` in superset typings.
+- Demo canvas synced with open-canvas showcase; refreshed `docs/demo-*.png` baselines.
+- Contract consumer regenerated in repo style; bar chart unit tests.
+- `package.json` `repository` field normalized for npm; `.prettierrc.json` with `requirePragma` so external format-on-save hooks skip sources.
+
 ## [1.3.0] — 2026-10-30
 
 - Host tokens: category `gray` follows the active canvas palette `foregroundTertiary` (SDK rule); category tables rebuild after workbench foreground overrides so `useHostTheme().category.gray` stays aligned with `text.tertiary`.
