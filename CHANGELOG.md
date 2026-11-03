@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.0] — 2026-11-03
+
+- Split `cursor-canvas` shim into tree-shakeable modules (`chart-shared`, per-chart files, `ui/*`); publish `src/shim` and `src/runtime` on npm; lazy `pie-donut` chunk.
+- Drop test-only `charts.tsx` barrel; chart unit tests import `chart-shared` directly.
+- ESLint formatting aligned with typescript-starter (2-space indent); contract consumer generator matches eslint output.
+
 ## [1.4.0] — 2026-11-03
 
 - Bar charts: SDK-matched series colors, horizontal value labels and grid; single-series per-category bar fills; `extra.categoryAxis.width` in superset typings.
