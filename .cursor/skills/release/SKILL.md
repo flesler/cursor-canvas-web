@@ -8,7 +8,7 @@ SDK sync gates: [sdk-sync-compat](../sdk-sync-compat/SKILL.md).
 ## Agents
 
 - **Never** `npm publish` — the user publishes to npm only.
-- **Never** `git push`, tags, or `gh release` unless the user explicitly asks you to run a release.
+- On `/release` (or explicit release request): run the full checklist — do not stop after tag push without `gh release create`.
 - Do not chain multiple `git push` commands (branch then tag); use one push. Do not run `npm publish`.
 
 ## Commit shape
@@ -36,7 +36,7 @@ node -p "require('./package.json').version"
 
 Ship when `ci:local` is green, changelog matches the diff since the previous git tag, and working tree is committed except the deliberate version bump commit.
 
-## Tag (no editor)
+## Tag, GitHub release, and push (agent)
 
 NEVER run bare `git tag` (opens an editor). Pass name and message on the CLI:
 
@@ -46,15 +46,16 @@ git tag -a "v${VERSION}" -m "v${VERSION}"
 git push origin main "v${VERSION}"
 ```
 
-One push for branch + tag. User runs push when ready.
+One push for branch + tag.
 
-Optional GitHub release (user only, explicit OK):
+Then create the GitHub release for that tag:
 
 ```bash
-gh release create "v${VERSION}" --notes-file CHANGELOG.md --title "v${VERSION}"
+# /tmp/cursor-canvas-web-release-notes/v${VERSION}.md = that version’s CHANGELOG section only
+gh release create "v${VERSION}" --title "v${VERSION}" --notes-file "/tmp/cursor-canvas-web-release-notes/v${VERSION}.md"
 ```
 
-Trim notes to that version’s section if the file lists multiple releases.
+Use `--latest` on the newest semver when backfilling older tags.
 
 ## Publish (user only)
 
@@ -64,11 +65,16 @@ npm publish --access public --tag latest
 
 `prepublishOnly` runs `typecheck`, `test`, `check:sdk-exports`, and `build:lib`. Scoped package needs `--access public` and npm 2FA.
 
-## Checklist (user)
+## Checklist (agent)
 
 1. Product commits on `main`
 2. `npm run ci:local` (+ SDK screenshot gates if vendor touched)
 3. Version-only commit: `package.json`, `CHANGELOG.md` (± lockfile) — subject `X.Y.Z`
 4. `git tag -a vX.Y.Z -m vX.Y.Z` → `git push origin main vX.Y.Z`
-5. `npm publish --access public --tag latest`
-6. `npm view @flesler/cursor-canvas-web version`
+5. `gh release create vX.Y.Z` with notes from that version’s CHANGELOG section
+6. Tell the user to `npm publish --access public --tag latest`
+
+## Checklist (user)
+
+1. `npm publish --access public --tag latest`
+2. `npm view @flesler/cursor-canvas-web version`
