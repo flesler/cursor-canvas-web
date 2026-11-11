@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.5.2] — 2026-11-11
+
+- `useCanvasState`: tolerate sandboxed `localStorage` (SecurityError) and hydrate from `globalThis.__canvasJsonState` when export inlines sidecar state.
+
 ## [1.5.1] — 2026-11-11
 
 - Charts: disable Recharts 3 default legend/tooltip sorting so multi-series labels follow SDK `series[]` order.

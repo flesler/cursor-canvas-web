@@ -16,7 +16,16 @@ SDK sync gates: [sdk-sync-compat](../sdk-sync-compat/SKILL.md).
 NEVER squash product work into the version commit. NEVER use one commit that mixes features with `package.json` / `CHANGELOG.md` for the release (including subjects like `Release 1.1.0: …` that bundle both).
 
 1. Land normal commits on `main` (shim, vendor, demo, docs, scripts) — plain descriptive subjects (no `feat:` / `chore:` prefixes).
-2. Last commit before the tag: only `package.json` version (and lockfile if you bump it), plus `CHANGELOG.md` for that version. Subject is **exactly the version number**, e.g. `1.1.0`.
+2. Last commit before the tag: **only** `package.json` version, **`package-lock.json`**, and `CHANGELOG.md` for that version. Subject is **exactly the version number**, e.g. `1.1.0`.
+
+   Bump `package.json` `version`, then sync the lockfile in the **same** commit:
+
+   ```bash
+   npm version X.Y.Z --no-git-tag-version --allow-same-version   # if package.json already shows X.Y.Z
+   # or: npm version patch|minor|major --no-git-tag-version
+   ```
+
+   `package-lock.json` must match: root `version` and `packages[""].version` (not only `package.json`).
 
 `CHANGELOG.md` uses `## [X.Y.Z] — YYYY-MM-DD` sections. Write the section in the version-only commit (or ensure it matches what already shipped in prior commits — do not duplicate narrative in the tag message).
 
@@ -69,7 +78,7 @@ npm publish --access public --tag latest
 
 1. Product commits on `main`
 2. `npm run ci:local` (+ SDK screenshot gates if vendor touched)
-3. Version-only commit: `package.json`, `CHANGELOG.md` (± lockfile) — subject `X.Y.Z`
+3. Version-only commit: `package.json`, `package-lock.json`, `CHANGELOG.md` — subject `X.Y.Z`
 4. `git tag -a vX.Y.Z -m vX.Y.Z` → `git push origin main vX.Y.Z`
 5. `gh release create vX.Y.Z` with notes from that version’s CHANGELOG section
 6. Tell the user to `npm publish --access public --tag latest`

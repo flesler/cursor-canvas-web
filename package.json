@@ -1,7 +1,7 @@
 {
   "name": "@flesler/cursor-canvas-web",
   "private": false,
-  "version": "1.5.1",
+  "version": "1.5.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/flesler/cursor-canvas-web.git"
