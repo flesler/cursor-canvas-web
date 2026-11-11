@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.5.1] — 2026-11-11
+
+- Charts: disable Recharts 3 default legend/tooltip sorting so multi-series labels follow SDK `series[]` order.
+
 ## [1.5.0] — 2026-11-03
 
 - Split `cursor-canvas` shim into tree-shakeable modules (`chart-shared`, per-chart files, `ui/*`); publish `src/shim` and `src/runtime` on npm; lazy `pie-donut` chunk.
