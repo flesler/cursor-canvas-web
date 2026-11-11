@@ -2,7 +2,7 @@
  * Shared chart data shaping and axis helpers (no @mantine/charts component imports).
  */
 import type { ChartReferenceLineProps } from '@mantine/charts'
-import type { XAxisProps, YAxisProps } from 'recharts'
+import type { LegendProps, XAxisProps, YAxisProps } from 'recharts'
 import type { CanvasChartValueAxisExtra } from '../superset/chart-extra'
 import type { BarChartProps } from '../superset/index'
 import { toneHex } from './theme'
@@ -26,9 +26,16 @@ export type {
 
 import type { ChartReferenceLine, ChartSeries, ChartTone } from '../vendor/canvas-sdk/chart-primitives.js'
 
+/** Recharts 3 defaults to sorting legend rows; keep SDK `series[]` order. */
 export const CHART_LEGEND_PROPS = {
   verticalAlign: 'bottom' as const,
   align: 'center' as const,
+  itemSorter: null,
+} satisfies Pick<LegendProps, 'verticalAlign' | 'align' | 'itemSorter'>
+
+/** Same for tooltip series rows (default `itemSorter: 'name'`). `null` disables sort at runtime. */
+export const CHART_TOOLTIP_PROPS = {
+  itemSorter: null as never,
 }
 
 export const CHART_LEGEND_STYLES = {

@@ -1,7 +1,7 @@
 import { BarChart as MantineBarChart } from '@mantine/charts'
 import '@mantine/charts/styles.css'
 import type { BarChartProps } from '../superset/index'
-import { barValueLabelProps, CHART_LEGEND_PROPS, CHART_LEGEND_STYLES, defaultShowBarValues, horizontalBarProps, horizontalBarValueLabelProps, reshapeLineChartData, toMantineSeries, useChartColorProps, useSeriesColor, valueAxisChartProps, valueFormatter, verticalBarLabelProps, withPerCategoryBarColors } from './chart-shared'
+import { barValueLabelProps, CHART_LEGEND_PROPS, CHART_LEGEND_STYLES, CHART_TOOLTIP_PROPS, defaultShowBarValues, horizontalBarProps, horizontalBarValueLabelProps, reshapeLineChartData, toMantineSeries, useChartColorProps, useSeriesColor, valueAxisChartProps, valueFormatter, verticalBarLabelProps, withPerCategoryBarColors } from './chart-shared'
 
 export function BarChart({
   categories,
@@ -52,6 +52,7 @@ export function BarChart({
       orientation={horizontal ? 'vertical' : 'horizontal'}
       withLegend={series.length > 1}
       legendProps={CHART_LEGEND_PROPS}
+      tooltipProps={CHART_TOOLTIP_PROPS}
       valueFormatter={valueFormatter(valueSuffix, valuePrefix)}
       withBarValueLabel={withBarValueLabel}
       {...(withBarValueLabel

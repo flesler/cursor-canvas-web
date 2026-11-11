@@ -2,7 +2,7 @@ import type { LineChartCurveType } from '@mantine/charts'
 import { AreaChart, LineChart as MantineLineChart } from '@mantine/charts'
 import '@mantine/charts/styles.css'
 import type { LineChartProps } from '../superset/index'
-import { CHART_LEGEND_PROPS, CHART_LEGEND_STYLES, reshapeLineChartData, toMantineSeries, useChartColorProps, useSeriesColor, valueAxisChartProps, valueFormatter } from './chart-shared'
+import { CHART_LEGEND_PROPS, CHART_LEGEND_STYLES, CHART_TOOLTIP_PROPS, reshapeLineChartData, toMantineSeries, useChartColorProps, useSeriesColor, valueAxisChartProps, valueFormatter } from './chart-shared'
 
 export function LineChart({
   categories,
@@ -46,7 +46,10 @@ export function LineChart({
     legendProps: CHART_LEGEND_PROPS,
     valueFormatter: valueFormatter(valueSuffix, valuePrefix),
     withPointLabels: showValues ?? categories.length <= 20,
-    tooltipProps: showHoverGuide ? undefined : { cursor: false },
+    tooltipProps: {
+      ...CHART_TOOLTIP_PROPS,
+      ...(!showHoverGuide && { cursor: false }),
+    },
     styles: {
       ...CHART_LEGEND_STYLES,
       legendItemName: { color: chartColors.textColor },
