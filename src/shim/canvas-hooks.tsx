@@ -8,13 +8,15 @@ export function useCanvasState<T>(
   const storageKey = `canvas:${key}`
 
   const [state, setState] = useState<T>(() => {
-    if (typeof localStorage === 'undefined') return defaultValue
     try {
       const raw = localStorage.getItem(storageKey)
-      return raw === null ? defaultValue : (JSON.parse(raw) as T)
+      if (raw !== null) return JSON.parse(raw) as T
     } catch {
-      return defaultValue
+      // Sandboxed, SSR, or unavailable; fall through to inlined export state.
     }
+    const inline = inlineCanvasState<T>(key)
+    if (inline !== undefined) return inline
+    return defaultValue
   })
 
   const set = useCallback<SetCanvasState<T>>(
@@ -25,7 +27,7 @@ export function useCanvasState<T>(
             ? (action as (prev: T) => T)(prev)
             : action
         try {
-          localStorage?.setItem(storageKey, JSON.stringify(next))
+          localStorage.setItem(storageKey, JSON.stringify(next))
         } catch {
           // Ignore quota / unavailable storage; state still updates in memory.
         }
@@ -54,4 +56,14 @@ export function mergeStyle(
   override?: CSSProperties,
 ): CSSProperties {
   return { ...base, ...override }
+}
+
+function inlineCanvasState<T>(key: string): T | undefined {
+  try {
+    const bag = (globalThis as { __canvasJsonState?: Record<string, unknown> }).__canvasJsonState
+    if (!bag || !Object.hasOwn(bag, key)) return undefined
+    return bag[key] as T
+  } catch {
+    return undefined
+  }
 }

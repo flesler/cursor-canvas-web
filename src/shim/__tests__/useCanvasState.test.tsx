@@ -32,4 +32,36 @@ describe('useCanvasState', () => {
 
     expect(result.current[0]).toBe(true)
   })
+
+  it('falls back to __canvasJsonState when localStorage throws', () => {
+    const storage = Object.getOwnPropertyDescriptor(globalThis, 'localStorage')
+    Object.defineProperty(globalThis, 'localStorage', {
+      configurable: true,
+      get() {
+        throw new DOMException('sandboxed', 'SecurityError')
+      },
+    })
+    ;(globalThis as { __canvasJsonState?: Record<string, unknown> }).__canvasJsonState = {
+      label: 'from-sidecar',
+    }
+
+    const { result } = renderHook(() => useCanvasState('label', 'default'))
+
+    expect(result.current[0]).toBe('from-sidecar')
+    delete (globalThis as { __canvasJsonState?: Record<string, unknown> }).__canvasJsonState
+    if (storage) {
+      Object.defineProperty(globalThis, 'localStorage', storage)
+    }
+  })
+
+  it('reads global __canvasJsonState when localStorage has no value', () => {
+    ;(globalThis as { __canvasJsonState?: Record<string, unknown> }).__canvasJsonState = {
+      label: 'from-sidecar',
+    }
+
+    const { result } = renderHook(() => useCanvasState('label', 'default'))
+
+    expect(result.current[0]).toBe('from-sidecar')
+    delete (globalThis as { __canvasJsonState?: Record<string, unknown> }).__canvasJsonState
+  })
 })
