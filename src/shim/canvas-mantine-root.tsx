@@ -111,7 +111,7 @@ export function CanvasMantineRoot({
         data-cursor-canvas-host
         style={{
           minHeight: 'inherit',
-          background: host.bg.editor,
+          background: 'transparent',
           color: host.text.primary,
           fontFamily: host.typography.fontFamily,
         }}

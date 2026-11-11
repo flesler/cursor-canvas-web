@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.3] — 2026-11-11
+
+- Dark theme text/fill/stroke tokens use `#F0F0F0` base (cursor-core parity).
+- Export host wrapper uses a transparent background so the page shell owns surface color.
+- Demo canvas synced from open-canvas showcase.
+
 ## [1.5.2] — 2026-11-11
 
 - `useCanvasState`: tolerate sandboxed `localStorage` (SecurityError) and hydrate from `globalThis.__canvasJsonState` when export inlines sidecar state.
