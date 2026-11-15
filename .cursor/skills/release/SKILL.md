@@ -57,14 +57,20 @@ git push origin main "v${VERSION}"
 
 One push for branch + tag.
 
-Then create the GitHub release for that tag:
+Then create the GitHub release for that tag. **`--title` is already the version** — notes must **not** repeat `## [X.Y.Z]` (or the dated title line); body starts at content under that section:
 
 ```bash
-# /tmp/cursor-canvas-web-release-notes/v${VERSION}.md = that version’s CHANGELOG section only
+VERSION=1.1.0
+mkdir -p "/tmp/cursor-canvas-web-release-notes"
+awk -v ver="${VERSION}" '
+  $0 ~ "^## \\[" ver "\\]" { body=1; next }
+  body && /^## / { exit }
+  body { print }
+' CHANGELOG.md > "/tmp/cursor-canvas-web-release-notes/v${VERSION}.md"
 gh release create "v${VERSION}" --title "v${VERSION}" --notes-file "/tmp/cursor-canvas-web-release-notes/v${VERSION}.md"
 ```
 
-Use `--latest` on the newest semver when backfilling older tags.
+Use `--latest` when backfilling older tags. Fix duplicates: `gh release edit "v${VERSION}" --notes-file "…"`.
 
 ## Publish (user only)
 
@@ -80,7 +86,7 @@ npm publish --access public --tag latest
 2. `npm run ci:local` (+ SDK screenshot gates if vendor touched)
 3. Version-only commit: `package.json`, `package-lock.json`, `CHANGELOG.md` — subject `X.Y.Z`
 4. `git tag -a vX.Y.Z -m vX.Y.Z` → `git push origin main vX.Y.Z`
-5. `gh release create vX.Y.Z` with notes from that version’s CHANGELOG section
+5. `gh release create vX.Y.Z` with notes = that CHANGELOG section **without** the `## [X.Y.Z]` line
 6. Tell the user to `npm publish --access public --tag latest`
 
 ## Checklist (user)
