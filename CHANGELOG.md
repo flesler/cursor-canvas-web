@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0] — 2026-11-15
+
+- Superset `DomForwardProps`: native host attrs on primitives (`aria-*`, `data-*`, `id`, …); shim forwards to Mantine or wrapper hosts; bar/line charts use an outer `div` for DOM attrs.
+- `src/superset/shim-props.d.ts` and barrel re-exports align in-repo `cursor/canvas` types with npm `types`.
+- DOM forwarding render tests; superset contract sample for `aria-label` on `Stack`.
+- Refreshed `docs/demo-*.png` for current open-canvas export height.
+
 ## [1.6.0] — 2026-11-11
 
 - Dark theme text/fill/stroke tokens use `#F0F0F0` base (cursor-core parity).
