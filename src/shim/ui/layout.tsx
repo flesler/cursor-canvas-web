@@ -1,9 +1,9 @@
 import { Group, Divider as MantineDivider, Stack as MantineStack } from '@mantine/core'
-import type { DividerProps, GridProps, RowProps, StackProps } from '../../vendor/canvas-sdk/ui-primitives.js'
+import type { DividerProps, GridProps, RowProps, StackProps } from '../../superset/shim-props.js'
 
-export function Stack({ children, gap, style }: StackProps) {
+export function Stack({ children, gap, style, ...rest }: StackProps) {
   return (
-    <MantineStack gap={gap} style={style}>
+    <MantineStack {...rest} gap={gap} style={style}>
       {children}
     </MantineStack>
   )
@@ -24,9 +24,11 @@ export function Row({
   justify = 'start',
   wrap = false,
   style,
+  ...rest
 }: RowProps) {
   return (
     <Group
+      {...rest}
       gap={gap}
       align={FLEX[align]}
       justify={FLEX[justify]}
@@ -42,13 +44,14 @@ export function Spacer() {
   return <div style={{ flex: 1 }} />
 }
 
-export function Grid({ children, columns, gap = 16, align, style }: GridProps) {
+export function Grid({ children, columns, gap = 16, align, style, ...rest }: GridProps) {
   const gridTemplateColumns =
     typeof columns === 'number'
       ? `repeat(${columns}, minmax(0, 1fr))`
       : columns
   return (
     <div
+      {...rest}
       style={{
         display: 'grid',
         gridTemplateColumns,
@@ -62,6 +65,6 @@ export function Grid({ children, columns, gap = 16, align, style }: GridProps) {
   )
 }
 
-export function Divider({ style }: DividerProps) {
-  return <MantineDivider style={style} />
+export function Divider({ style, ...rest }: DividerProps) {
+  return <MantineDivider {...rest} style={style} />
 }

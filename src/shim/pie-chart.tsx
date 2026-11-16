@@ -1,7 +1,7 @@
 import { ChartLegend, PieChart as MantinePieChart } from '@mantine/charts'
 import '@mantine/charts/styles.css'
 import { lazy, Suspense, useState } from 'react'
-import type { PieChartProps } from '../vendor/canvas-sdk/chart-primitives.js'
+import type { PieChartProps } from '../superset/shim-props.js'
 import { useSeriesColor } from './chart-shared'
 import { useHostTheme } from './use-tokens'
 
@@ -45,7 +45,7 @@ function pieLegendSeries(
   }))
 }
 
-export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
+export function PieChart({ data, size = 200, donut, style, ...rest }: PieChartProps) {
   const [highlighted, setHighlighted] = useState<string | null>(null)
   const theme = useHostTheme()
   const seriesColor = useSeriesColor()
@@ -83,6 +83,7 @@ export function PieChart({ data, size = 200, donut, style }: PieChartProps) {
   )
   return (
     <div
+      {...rest}
       style={{
         width: '100%',
         display: 'flex',

@@ -55,8 +55,9 @@ Published npm **types** resolve to `src/superset/index.d.ts`: the vendored SDK p
 
 Features beyond the IDE SDK. A canvas using them still renders in Cursor, minus the extras.
 
-- **Typings:** `src/superset/index.d.ts` re-exports the vendored SDK (`export *`) and overrides only the components it extends; local exports win over the star export. open-canvas points `cursor/canvas` at this file.
+- **Typings:** `src/superset/index.d.ts` re-exports the vendored SDK (`export *`) and overrides only the components it extends; local exports win over the star export. open-canvas points `cursor/canvas` at this file (npm `types` and package export map). In this repo, `tsconfig` paths map `cursor/canvas` to `src/shim/cursor-canvas.tsx`, which re-exports the same widened component prop types from `src/superset/shim-props.d.ts`.
 - **Props on SDK components** go under `extra`, which the IDE ignores. Never add superset props at the top level: they could collide with a future SDK prop. (`LineChart` `smooth` is a deprecated top-level alias for `extra.smooth`.)
+- **Native DOM attrs** (`aria-*`, `data-*`, `id`, `className`, …) on primitives are a web-shim superset via `DomForwardProps` in `shim-props.d.ts`. The shim forwards them to the rendered host (Mantine root, or a wrapper `div`/`span` for charts). The IDE still typechecks against the vendored SDK only; extra attrs are ignored there. Conflicting host keys (`Toggle` `size`, `IconButton` `color`, form `defaultValue`/`defaultChecked`) stay SDK-owned.
 
 | Component   | `extra` fields                                                         |
 | ----------- | ---------------------------------------------------------------------- |

@@ -3,17 +3,13 @@
  * wraps them in a bordered, collapsible surface with an "N of M Done" summary.
  */
 import { useState } from 'react'
+import type { TodoListCardProps, TodoListProps } from '../superset/shim-props.js'
+import type { TodoStatus } from '../vendor/canvas-sdk/todo-list.js'
 import { toneHex } from './theme'
 import { useHostTheme } from './use-tokens'
 
-export type {
-  TodoItem,
-  TodoListCardProps,
-  TodoListProps,
-  TodoStatus,
-} from '../vendor/canvas-sdk/todo-list.js'
-
-import type { TodoListCardProps, TodoListProps, TodoStatus } from '../vendor/canvas-sdk/todo-list.js'
+export type { TodoItem, TodoStatus } from '../vendor/canvas-sdk/todo-list.js'
+export type { TodoListCardProps, TodoListProps } from '../superset/shim-props.js'
 
 function StatusIcon({ status }: { status: TodoStatus }) {
   const theme = useHostTheme()
@@ -62,11 +58,12 @@ export function TodoList({
   dimmedTodoIds,
   onTodoClick,
   style,
+  ...rest
 }: TodoListProps) {
   const theme = useHostTheme()
   if (todos.length === 0) return null
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', ...style }}>
+    <div {...rest} style={{ display: 'flex', flexDirection: 'column', ...style }}>
       {todos.map((todo) => {
         const dimmed = dimmedTodoIds?.has(todo.id)
         return (
@@ -79,24 +76,22 @@ export function TodoList({
               gap: 8,
               alignItems: 'flex-start',
               width: '100%',
-              textAlign: 'left',
-              padding: '4px 6px',
-              background: 'transparent',
+              padding: '6px 4px',
               border: 'none',
-              cursor: onTodoClick ? 'pointer' : 'default',
-              color: theme.text.primary,
-              fontSize: 14,
-              lineHeight: '20px',
-              opacity: dimmed ? 0.45 : 1,
+              background: 'transparent',
+              cursor: onTodoClick ? 'pointer' : undefined,
+              color: dimmed ? theme.text.quaternary : theme.text.primary,
+              textAlign: 'left',
+              fontFamily: theme.typography.fontFamily,
             }}
           >
             <StatusIcon status={todo.status} />
             <span
               style={{
+                fontSize: 13,
+                lineHeight: 1.35,
                 textDecoration:
                   todo.status === 'cancelled' ? 'line-through' : undefined,
-                color:
-                  todo.status === 'cancelled' ? theme.text.tertiary : undefined,
               }}
             >
               {todo.content}
@@ -114,6 +109,7 @@ export function TodoListCard({
   defaultExpanded = false,
   onTodoClick,
   style,
+  ...rest
 }: TodoListCardProps) {
   const theme = useHostTheme()
   const [open, setOpen] = useState(defaultExpanded)
@@ -121,6 +117,7 @@ export function TodoListCard({
   const done = todos.filter(t => t.status === 'completed').length
   return (
     <div
+      {...rest}
       style={{
         border: `1px solid ${theme.stroke.primary}`,
         borderRadius: 6,

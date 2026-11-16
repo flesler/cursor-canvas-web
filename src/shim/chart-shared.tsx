@@ -15,13 +15,16 @@ export type {
   CanvasChartValueAxisExtra,
   CanvasLineChartExtra,
 } from '../superset/chart-extra'
-export type { BarChartProps, LineChartProps } from '../superset/index'
+export type {
+  BarChartProps,
+  LineChartProps,
+  PieChartProps,
+} from '../superset/shim-props.js'
 export type {
   ChartDataPoint,
   ChartReferenceLine,
   ChartSeries,
   ChartTone,
-  PieChartProps,
 } from '../vendor/canvas-sdk/chart-primitives.js'
 
 import type { ChartReferenceLine, ChartSeries, ChartTone } from '../vendor/canvas-sdk/chart-primitives.js'

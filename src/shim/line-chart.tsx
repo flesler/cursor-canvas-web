@@ -20,6 +20,7 @@ export function LineChart({
   style,
   extra,
   smooth: legacySmooth,
+  ...rest
 }: LineChartProps) {
   const smooth = extra?.smooth ?? legacySmooth
   const seriesColor = useSeriesColor()
@@ -55,11 +56,14 @@ export function LineChart({
       legendItemName: { color: chartColors.textColor },
     },
     ...axis,
-    style,
   }
-  return fill ? (
-    <AreaChart {...common} type={stacked ? 'stacked' : 'default'} />
-  ) : (
-    <MantineLineChart {...common} />
+  return (
+    <div {...rest} style={{ width: '100%' }}>
+      {fill ? (
+        <AreaChart {...common} style={style} type={stacked ? 'stacked' : 'default'} />
+      ) : (
+        <MantineLineChart {...common} style={style} />
+      )}
+    </div>
   )
 }

@@ -18,66 +18,67 @@ export type {
   ChartPalette,
   Color,
 } from '../vendor/canvas-sdk/canvas-tokens.js'
-export type { CollapsibleSectionProps } from '../vendor/canvas-sdk/collapsible-section.js'
-export type {
-  CheckboxProps,
-  IconButtonProps,
-  SelectOption,
-  SelectProps,
-  TextAreaProps,
-  TextInputProps,
-  ToggleProps,
-} from '../vendor/canvas-sdk/form-primitives.js'
+export type { SelectOption } from '../vendor/canvas-sdk/form-primitives.js'
 export type {
   CanvasAction,
   CanvasHostTheme,
   SetCanvasState,
 } from '../vendor/canvas-sdk/hooks.js'
-export type { SwatchProps } from '../vendor/canvas-sdk/swatch.js'
 export type {
   CanvasPalette,
   CanvasTokens,
 } from '../vendor/canvas-sdk/theme.js'
 export type {
+  CalloutTone,
+  CardSize,
+  CardVariant,
+  PillSize,
+  PillTone,
+  StatTone,
+  TableColumnAlign,
+  TableRowTone,
+  TextWeight,
+} from '../vendor/canvas-sdk/ui-primitives.js'
+export type { UsageBarSegment } from '../vendor/canvas-sdk/usage-bar.js'
+export type {
+  BarChartProps,
   ButtonProps,
   CalloutProps,
-  CalloutTone,
   CardBodyProps,
   CardHeaderProps,
   CardProps,
-  CardSize,
-  CardVariant,
+  CheckboxProps,
   CodeProps,
+  CollapsibleSectionProps,
   DividerProps,
+  DomForwardProps,
   GridProps,
   H1Props,
   H2Props,
   H3Props,
+  IconButtonProps,
+  LineChartProps,
   LinkProps,
+  PieChartProps,
   PillProps,
-  PillSize,
-  PillTone,
   RowProps,
+  SelectProps,
   StackProps,
   StatProps,
-  StatTone,
-  TableColumnAlign,
+  SwatchProps,
   TableProps,
-  TableRowTone,
+  TextAreaProps,
+  TextInputProps,
   TextProps,
-  TextWeight,
-} from '../vendor/canvas-sdk/ui-primitives.js'
-export type {
+  ToggleProps,
   UsageBarProps,
-  UsageBarSegment,
-} from '../vendor/canvas-sdk/usage-bar.js'
+} from '../superset/shim-props.js'
 
 export { mergeStyle, useCanvasAction, useCanvasState } from './canvas-hooks'
 export { BarChart } from './bar-chart'
 export { LineChart } from './line-chart'
 export { PieChart } from './pie-chart'
 export type {
-  BarChartProps,
   CanvasBarChartExtra,
   CanvasChartExtra,
   CanvasChartScale,
@@ -87,8 +88,6 @@ export type {
   ChartReferenceLine,
   ChartSeries,
   ChartTone,
-  LineChartProps,
-  PieChartProps,
 } from './chart-shared'
 export { computeDAGLayout } from './dag'
 export type {

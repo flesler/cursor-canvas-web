@@ -1,5 +1,6 @@
 import { Table as MantineTable } from '@mantine/core'
-import type { TableProps, TableRowTone } from '../../vendor/canvas-sdk/ui-primitives.js'
+import type { TableProps } from '../../superset/shim-props.js'
+import type { TableRowTone } from '../../vendor/canvas-sdk/ui-primitives.js'
 
 const ROW_TONE_BG: Record<TableRowTone, string> = {
   success: 'rgba(31,138,101,0.12)',
@@ -19,9 +20,11 @@ export function Table({
   stickyHeader,
   style,
   emptyMessage,
+  ...rest
 }: TableProps) {
   return (
     <MantineTable
+      {...rest}
       withTableBorder={framed}
       withColumnBorders={false}
       striped={striped}

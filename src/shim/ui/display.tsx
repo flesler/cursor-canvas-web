@@ -1,16 +1,17 @@
 import { Alert, Badge, Text as MantineText } from '@mantine/core'
-import type { CalloutProps, PillProps, StatProps } from '../../vendor/canvas-sdk/ui-primitives.js'
+import type { CalloutProps, PillProps, StatProps } from '../../superset/shim-props.js'
 import { toneColor, toneHex } from '../theme'
 import { useHostTheme } from '../use-tokens'
 
-export function Stat({ value, label, tone, style }: StatProps) {
+export function Stat({ value, label, tone, style, ...rest }: StatProps) {
   const host = useHostTheme()
   return (
-    <div style={style}>
+    <div style={style} {...rest}>
       <MantineText
         fz={22}
         fw={700}
         lh={1.2}
+        data-canvas-stat-value=""
         style={{
           color: tone ? toneHex[tone] : host.text.primary,
           fontFamily: host.typography.fontFamily,
@@ -38,21 +39,19 @@ export function Pill({
   size = 'md',
   leadingContent,
   keyboardHint,
-  title,
   style,
-  onClick,
+  ...rest
 }: PillProps) {
   return (
     <Badge
+      {...rest}
       color={toneColor[tone]}
       variant={active ? 'filled' : 'light'}
       size={size === 'sm' ? 'sm' : 'md'}
       leftSection={leadingContent}
       rightSection={keyboardHint}
-      title={title}
-      onClick={onClick}
       style={{
-        cursor: onClick ? 'pointer' : undefined,
+        cursor: rest.onClick ? 'pointer' : undefined,
         textTransform: 'none',
         ...style,
       }}
@@ -65,15 +64,13 @@ export function Pill({
 export function Callout({
   children,
   tone = 'neutral',
-  title,
-  icon,
   style,
+  ...rest
 }: CalloutProps) {
   return (
     <Alert
+      {...rest}
       color={toneColor[tone]}
-      title={title}
-      icon={icon}
       variant="light"
       style={style}
     >

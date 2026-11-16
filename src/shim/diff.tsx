@@ -6,24 +6,29 @@
  * coloring on the web is plain text until a lightweight highlighter lands
  * (see open-canvas `docs/TODO.md` — Shiki is IDE-only and too heavy to ship).
  */
-import type { CSSProperties } from 'react'
+import type { DiffStatsProps, DiffViewProps } from '../superset/shim-props.js'
 import { toneHex } from './theme'
 import { useHostTheme } from './use-tokens'
 
-export type DiffStatsProps = {
-  additions?: number;
-  deletions?: number;
-  style?: CSSProperties
-}
+export type { DiffLineData, DiffLineType } from '../vendor/canvas-sdk/diff-view.js'
+export type { DiffStatsProps, DiffViewProps } from '../superset/shim-props.js'
+
+const SIGN = {
+  added: '+',
+  removed: '-',
+  unchanged: ' ',
+} as const
 
 export function DiffStats({
   additions = 0,
   deletions = 0,
   style,
+  ...rest
 }: DiffStatsProps) {
   if (additions === 0 && deletions === 0) return null
   return (
     <span
+      {...rest}
       style={{
         display: 'inline-flex',
         gap: 8,
@@ -43,53 +48,31 @@ export function DiffStats({
   )
 }
 
-export type DiffLineType = 'added' | 'removed' | 'unchanged'
-export type DiffLineData = {
-  type: DiffLineType;
-  content: string;
-  lineNumber?: number
-}
-
-export type DiffViewProps = {
-  lines: DiffLineData[];
-  path?: string;
-  language?: string;
-  showLineNumbers?: boolean;
-  coloredLineNumbers?: boolean;
-  showAccentStrip?: boolean;
-  style?: CSSProperties
-}
-
-const SIGN: Record<DiffLineType, string> = {
-  added: '+',
-  removed: '-',
-  unchanged: ' ',
-}
-
 export function DiffView({
   lines,
   showLineNumbers = true,
   coloredLineNumbers = true,
   showAccentStrip = true,
   style,
+  ...rest
 }: DiffViewProps) {
   const theme = useHostTheme()
 
-  const lineBg = (type: DiffLineType) =>
+  const lineBg = (type: (typeof lines)[number]['type']) =>
     type === 'added'
       ? theme.diff.insertedLine
       : type === 'removed'
         ? theme.diff.removedLine
         : 'transparent'
 
-  const stripColor = (type: DiffLineType) =>
+  const stripColor = (type: (typeof lines)[number]['type']) =>
     type === 'added'
       ? theme.diff.stripAdded
       : type === 'removed'
         ? theme.diff.stripRemoved
         : 'transparent'
 
-  const numberColor = (type: DiffLineType) => {
+  const numberColor = (type: (typeof lines)[number]['type']) => {
     if (coloredLineNumbers && type === 'added') return toneHex.added
     if (coloredLineNumbers && type === 'removed') return toneHex.deleted
     return theme.text.tertiary
@@ -97,6 +80,7 @@ export function DiffView({
 
   return (
     <div
+      {...rest}
       style={{
         fontFamily:
           'ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Code", monospace',

@@ -21,14 +21,19 @@ into the IDE-managed canvases folder so it renders in Cursor too.
 - The shim **must stay API-compatible with the real SDK**. The authoritative
   contract is the vendored declarations at `src/vendor/canvas-sdk/*.d.ts`
   (synced from `~/.cursor/skills-cursor/canvas/sdk/`). Shim sources import
-  prop types from that tree; npm `types` point at `src/superset/index.d.ts`
+  prop types from that tree unless widened by `src/superset/shim-props.d.ts`
+  (DOM passthrough); the runtime barrel re-exports those prop types so in-repo
+  `cursor/canvas` matches npm `types` at `src/superset/index.d.ts`
   (that tree plus superset features), not generated Mantine declarations. A canvas that compiles here
   must also compile/render unchanged in the IDE — match tone vocabularies
   (`StatTone`, `PillTone`, `CalloutTone`, `ChartTone`, `Text` tones). Do not
   invent exports (e.g. a generic `Tone`) that the real SDK lacks.
-- **Superset** features beyond the SDK are the one exception: typed in
-  `src/superset/`, exposed on SDK components only through an `extra` prop the
-  IDE ignores. Recipe in [`COMPAT.md`](./COMPAT.md#superset).
+- **Superset** (web shim only): `src/superset/` — chart fields under `extra`
+  (`chart-extra.d.ts`); native host attrs via `DomForwardProps` in
+  `shim-props.d.ts`. IDE ignores both at typecheck. Maintainers adding superset:
+  see [`COMPAT.md`](./COMPAT.md#superset). **open-canvas verify / export:** use the
+  [**open-canvas** skill](~/.claude/skills/open-canvas/SKILL.md) and
+  `open-canvas vendor-path` — not this file.
 - All adaptation lives under `src/shim/` behind the `cursor-canvas.tsx` barrel
   (split into `chart-shared.tsx`, chart modules, `diff.tsx`, `dag.ts`, `todo.tsx`,
   `theme.ts`, `use-tokens.ts`). Add new canvas API surface there, implemented with

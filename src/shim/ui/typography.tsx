@@ -1,6 +1,7 @@
 import { Text as MantineText, Title } from '@mantine/core'
 import { createContext, useContext, type CSSProperties } from 'react'
-import type { CodeProps, H1Props, H2Props, H3Props, LinkProps, TextProps, TextWeight } from '../../vendor/canvas-sdk/ui-primitives.js'
+import type { CodeProps, H1Props, H2Props, H3Props, LinkProps, TextProps } from '../../superset/shim-props.js'
+import type { TextWeight } from '../../vendor/canvas-sdk/ui-primitives.js'
 import { useHostTheme } from '../use-tokens'
 
 function headingStyle(
@@ -20,28 +21,28 @@ function headingStyle(
   }
 }
 
-export function H1({ children, style }: H1Props) {
+export function H1({ children, style, ...rest }: H1Props) {
   const host = useHostTheme()
   return (
-    <Title order={1} style={headingStyle(host, 'h1', style)}>
+    <Title {...rest} order={1} style={headingStyle(host, 'h1', style)}>
       {children}
     </Title>
   )
 }
 
-export function H2({ children, style }: H2Props) {
+export function H2({ children, style, ...rest }: H2Props) {
   const host = useHostTheme()
   return (
-    <Title order={2} style={headingStyle(host, 'h2', style)}>
+    <Title {...rest} order={2} style={headingStyle(host, 'h2', style)}>
       {children}
     </Title>
   )
 }
 
-export function H3({ children, style }: H3Props) {
+export function H3({ children, style, ...rest }: H3Props) {
   const host = useHostTheme()
   return (
-    <Title order={3} style={headingStyle(host, 'h3', style)}>
+    <Title {...rest} order={3} style={headingStyle(host, 'h3', style)}>
       {children}
     </Title>
   )
@@ -65,6 +66,7 @@ export function Text({
   italic,
   truncate,
   style,
+  ...rest
 }: TextProps) {
   const theme = useHostTheme()
   const nestedInText = useContext(TextParentContext)
@@ -73,6 +75,7 @@ export function Text({
   return (
     <TextParentContext.Provider value={true}>
       <MantineText
+        {...rest}
         component={component}
         size={size === 'small' ? 'xs' : 'sm'}
         fw={TEXT_WEIGHT[weight]}
@@ -94,10 +97,11 @@ export function Text({
   )
 }
 
-export function Code({ children, style }: CodeProps) {
+export function Code({ children, style, ...rest }: CodeProps) {
   const host = useHostTheme()
   return (
     <code
+      {...rest}
       style={{
         fontFamily:
           'ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Code", monospace',
@@ -114,11 +118,11 @@ export function Code({ children, style }: CodeProps) {
   )
 }
 
-export function Link({ children, href, style }: LinkProps) {
+export function Link({ children, style, ...rest }: LinkProps) {
   const host = useHostTheme()
   return (
     <a
-      href={href}
+      {...rest}
       target="_blank"
       rel="noreferrer"
       style={{ color: host.text.link, ...style }}

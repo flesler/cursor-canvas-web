@@ -19,6 +19,7 @@ export function BarChart({
   referenceLines,
   style,
   extra,
+  ...rest
 }: BarChartProps) {
   const seriesColor = useSeriesColor()
   const chartColors = useChartColorProps()
@@ -43,36 +44,38 @@ export function BarChart({
     !normalized &&
     defaultShowBarValues(showValues, series, categories)
   return (
-    <MantineBarChart
-      h={height}
-      data={data}
-      dataKey="category"
-      series={toMantineSeries(series, seriesColor)}
-      type={type}
-      orientation={horizontal ? 'vertical' : 'horizontal'}
-      withLegend={series.length > 1}
-      legendProps={CHART_LEGEND_PROPS}
-      tooltipProps={CHART_TOOLTIP_PROPS}
-      valueFormatter={valueFormatter(valueSuffix, valuePrefix)}
-      withBarValueLabel={withBarValueLabel}
-      {...(withBarValueLabel
-        ? {
-          valueLabelProps: horizontal
-            ? horizontalBarValueLabelProps(chartColors.barLabelColor)
-            : barValueLabelProps(chartColors.barLabelColor),
-        }
-        : {})}
-      {...(horizontal
-        ? horizontalBarProps(extra?.categoryAxis?.width, withBarValueLabel)
-        : withBarValueLabel
-          ? verticalBarLabelProps()
+    <div {...rest} style={{ width: '100%' }}>
+      <MantineBarChart
+        h={height}
+        data={data}
+        dataKey="category"
+        series={toMantineSeries(series, seriesColor)}
+        type={type}
+        orientation={horizontal ? 'vertical' : 'horizontal'}
+        withLegend={series.length > 1}
+        legendProps={CHART_LEGEND_PROPS}
+        tooltipProps={CHART_TOOLTIP_PROPS}
+        valueFormatter={valueFormatter(valueSuffix, valuePrefix)}
+        withBarValueLabel={withBarValueLabel}
+        {...(withBarValueLabel
+          ? {
+            valueLabelProps: horizontal
+              ? horizontalBarValueLabelProps(chartColors.barLabelColor)
+              : barValueLabelProps(chartColors.barLabelColor),
+          }
           : {})}
-      styles={{
-        ...CHART_LEGEND_STYLES,
-        legendItemName: { color: chartColors.textColor },
-      }}
-      {...axis}
-      style={style}
-    />
+        {...(horizontal
+          ? horizontalBarProps(extra?.categoryAxis?.width, withBarValueLabel)
+          : withBarValueLabel
+            ? verticalBarLabelProps()
+            : {})}
+        styles={{
+          ...CHART_LEGEND_STYLES,
+          legendItemName: { color: chartColors.textColor },
+        }}
+        {...axis}
+        style={style}
+      />
+    </div>
   )
 }

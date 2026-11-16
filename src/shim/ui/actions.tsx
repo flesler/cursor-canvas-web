@@ -1,6 +1,6 @@
 import { ActionIcon, Button as MantineButton } from '@mantine/core'
-import type { IconButtonProps } from '../../vendor/canvas-sdk/form-primitives.js'
-import type { ButtonProps } from '../../vendor/canvas-sdk/ui-primitives.js'
+import type { IconButtonProps } from '../../superset/shim-props.js'
+import type { ButtonProps } from '../../superset/shim-props.js'
 
 const BUTTON_VARIANT = {
   primary: 'filled',
@@ -11,19 +11,15 @@ const BUTTON_VARIANT = {
 export function Button({
   children,
   variant = 'secondary',
-  disabled,
-  type = 'button',
   style,
-  onClick,
+  ...rest
 }: ButtonProps) {
   return (
     <MantineButton
+      {...rest}
       variant={BUTTON_VARIANT[variant]}
       color={variant === 'primary' ? 'accent' : undefined}
       size="xs"
-      disabled={disabled}
-      type={type}
-      onClick={onClick}
       style={style}
     >
       {children}
@@ -33,23 +29,21 @@ export function Button({
 
 export function IconButton({
   children,
-  onClick,
-  disabled,
-  title,
   variant = 'default',
   size = 'md',
+  title,
   style,
+  ...rest
 }: IconButtonProps) {
   return (
     <ActionIcon
+      {...rest}
       variant={variant === 'circle' ? 'light' : 'subtle'}
       radius={variant === 'circle' ? 'xl' : 'sm'}
       size={size === 'sm' ? 'sm' : 'md'}
       color="gray"
-      disabled={disabled}
       title={title}
       aria-label={title}
-      onClick={onClick}
       style={style}
     >
       {children}

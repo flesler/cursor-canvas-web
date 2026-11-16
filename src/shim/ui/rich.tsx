@@ -1,15 +1,14 @@
 import { useState } from 'react'
-import type { CollapsibleSectionProps } from '../../vendor/canvas-sdk/collapsible-section.js'
-import type { SwatchProps } from '../../vendor/canvas-sdk/swatch.js'
-import type { UsageBarProps } from '../../vendor/canvas-sdk/usage-bar.js'
+import type { CollapsibleSectionProps, SwatchProps, UsageBarProps } from '../../superset/shim-props.js'
 import { usageColorSequence } from '../theme'
 import { useHostTheme } from '../use-tokens'
 import { Chevron } from './chevron'
 
-export function Swatch({ color, style }: SwatchProps) {
+export function Swatch({ color, style, ...rest }: SwatchProps) {
   const theme = useHostTheme()
   return (
     <span
+      {...rest}
       style={{
         display: 'inline-block',
         width: 14,
@@ -29,6 +28,7 @@ export function UsageBar({
   topLeftLabel,
   topRightLabel,
   style,
+  ...rest
 }: UsageBarProps) {
   const theme = useHostTheme()
   const safeTotal = total > 0 ? total : 1
@@ -38,7 +38,7 @@ export function UsageBar({
   )
   const remainder = Math.max(0, safeTotal - used)
   return (
-    <div style={style}>
+    <div {...rest} style={style}>
       {(topLeftLabel != null || topRightLabel != null) && (
         <div
           style={{
@@ -97,11 +97,12 @@ export function CollapsibleSection({
   children,
   defaultOpen = false,
   style,
+  ...rest
 }: CollapsibleSectionProps) {
   const theme = useHostTheme()
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div style={style}>
+    <div {...rest} style={style}>
       <div
         onClick={() => setOpen(o => !o)}
         style={{
