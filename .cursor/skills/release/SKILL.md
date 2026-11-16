@@ -16,7 +16,7 @@ SDK sync gates: [sdk-sync-compat](../sdk-sync-compat/SKILL.md).
 NEVER squash product work into the version commit. NEVER use one commit that mixes features with `package.json` / `CHANGELOG.md` for the release (including subjects like `Release 1.1.0: …` that bundle both).
 
 1. Land normal commits on `main` (shim, vendor, demo, docs, scripts) — plain descriptive subjects (no `feat:` / `chore:` prefixes).
-2. Last commit before the tag: **only** `package.json` version, **`package-lock.json`**, and `CHANGELOG.md` for that version. Subject is **exactly the version number**, e.g. `1.1.0`.
+2. Last commit before the tag: **only** `package.json` version, `package-lock.json`, and `CHANGELOG.md` for that version. Subject is **exactly the version number**, e.g. `1.1.0`.
 
    Bump `package.json` `version`, then sync the lockfile in the **same** commit:
 
@@ -57,7 +57,7 @@ git push origin main "v${VERSION}"
 
 One push for branch + tag.
 
-Then create the GitHub release for that tag. **`--title` is already the version** — notes must **not** repeat `## [X.Y.Z]` (or the dated title line); body starts at content under that section:
+Then create the GitHub release for that tag. `--title` is already the version — notes must **not** repeat `## [X.Y.Z]` (or the dated title line); body starts at content under that section:
 
 ```bash
 VERSION=1.1.0

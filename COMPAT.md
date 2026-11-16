@@ -4,11 +4,11 @@
 
 We implement **one** `cursor/canvas` surface: the IDE SDK snapshot in this repo. There is no runtime `v1 → v2` adapter chain.
 
-| Change                         | What to do                                                                    |
-| ------------------------------ | ----------------------------------------------------------------------------- |
-| New SDK export / optional prop | Implement in `src/shim/`, `npm run sync:sdk`, contract green → **patch** npm |
-| Breaking SDK change            | Fix shim or **major** bump; document minimum Cursor / skill date here         |
-| Old Cursor / old skill         | Not supported on `main`; use an older shim release from git/npm               |
+|Change|What to do|
+|---|---|
+|New SDK export / optional prop|Implement in `src/shim/`, `npm run sync:sdk`, contract green → **patch** npm|
+|Breaking SDK change|Fix shim or **major** bump; document minimum Cursor / skill date here|
+|Old Cursor / old skill|Not supported on `main`; use an older shim release from git/npm|
 
 **Defensive / back-compat** (extra fields, web-only behavior) lives only at documented boundaries — see `AGENTS.md` — with a short comment or dev log at the call site, not scattered version checks.
 
@@ -24,13 +24,13 @@ Published npm **types** resolve to `src/superset/index.d.ts`: the vendored SDK p
 
 ## Contract tests
 
-| Script                    | What it checks                                                                                                                                                                       |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `npm run sync:sdk`       | **Manual.** Copy IDE `sdk/*.d.ts` into `src/vendor/canvas-sdk/`, refresh `manifest.json`, restore `internal/canvas-action-dispatch.d.ts` stub if the skill bundle omits `internal/`. |
-| `npm run test:contract`  | Strict export parity (`src/shim/cursor-canvas.tsx` vs vendored `index.d.ts`), consumer `tsc`, then `build:lib`.                                                                      |
-| `npm run check:sdk-live` | Diff live Cursor SDK vs the shim barrel (does not write files).                                                                                                                      |
-| `npm run test:render-compat` | **Local only** when vendor differs from HEAD: contract on synced tree, then smoke with HEAD vendor + current shim. Not CI. See `.cursor/skills/sdk-sync-compat/SKILL.md`. |
-| `npm run test:demo-screenshots` | **Local only** (needs sibling open-canvas): render demo light/dark, compare to `docs/demo-*.png`. `test:demo-screenshots:update` refreshes baselines after review. |
+|Script|What it checks|
+|---|---|
+|`npm run sync:sdk`|**Manual.** Copy IDE `sdk/*.d.ts` into `src/vendor/canvas-sdk/`, refresh `manifest.json`, restore `internal/canvas-action-dispatch.d.ts` stub if the skill bundle omits `internal/`.|
+|`npm run test:contract`|Strict export parity (`src/shim/cursor-canvas.tsx` vs vendored `index.d.ts`), consumer `tsc`, then `build:lib`.|
+|`npm run check:sdk-live`|Diff live Cursor SDK vs the shim barrel (does not write files).|
+|`npm run test:render-compat`|**Local only** when vendor differs from HEAD: contract on synced tree, then smoke with HEAD vendor + current shim. Not CI. See `.cursor/skills/sdk-sync-compat/SKILL.md`.|
+|`npm run test:demo-screenshots`|**Local only** (needs sibling open-canvas): render demo light/dark, compare to `docs/demo-*.png`. `test:demo-screenshots:update` refreshes baselines after review.|
 
 ## Stack
 
@@ -38,18 +38,18 @@ Published npm **types** resolve to `src/superset/index.d.ts`: the vendored SDK p
 
 ## Intentional shim differences
 
-| Area                                                 | IDE SDK                                                                                | This shim                                                               |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `useCanvasState`                                     | `.canvas.data.json` sidecar                                                            | `localStorage`                                                          |
-| `useCanvasAction`                                    | IDE dispatch                                                                           | no-op (dev log)                                                         |
-| Charts                                               | Pure SVG                                                                               | Mantine + Recharts; [superset](#superset) `extra` on bar/line charts    |
-| `DiffView` syntax                                    | Shiki per-line tokens                                                                  | Plain text (`path`/`language` ignored for color; diff chrome unchanged) |
-| Host theme SSE / workbench overrides                 | live host                                                                              | Mantine light/dark only                                                 |
-| `useHostTheme().chart`                               | Not in public `hooks.d.ts` today; some canvases use `theme.chart.palette.*` at runtime | `{ palette: chartPalette, sequence: chartColorSequence }`               |
-| `useHostTheme().radius` / `.typography` / `.spacing` | Declared in `theme.d.ts`, not on `CanvasHostTheme` in `hooks.d.ts`                     | Exposed for canvases that read layout tokens from the theme hook        |
-| `Pill` `tone`                                        | Deprecated; IDE renders neutral only                                                   | Accepts `tone` for older canvases; ignored at render (neutral styling)  |
-| `reshapeLineChartData`                               | Not in IDE `index.d.ts`                                                                | Internal helper in `chart-shared.tsx` (not barrel-exported)           |
-| Host `brand: grok`                                   | Grok palettes, chart sequence, Sand radii/typography                                   | `resolveTheme` / `useHostTheme`; web defaults to `cursor` + Mantine scheme |
+|Area|IDE SDK|This shim|
+|---|---|---|
+|`useCanvasState`|`.canvas.data.json` sidecar|`localStorage`|
+|`useCanvasAction`|IDE dispatch|no-op (dev log)|
+|Charts|Pure SVG|Mantine + Recharts; [superset](#superset) `extra` on bar/line charts|
+|`DiffView` syntax|Shiki per-line tokens|Plain text (`path`/`language` ignored for color; diff chrome unchanged)|
+|Host theme SSE / workbench overrides|live host|Mantine light/dark only|
+|`useHostTheme().chart`|Not in public `hooks.d.ts` today; some canvases use `theme.chart.palette.*` at runtime|`{ palette: chartPalette, sequence: chartColorSequence }`|
+|`useHostTheme().radius` / `.typography` / `.spacing`|Declared in `theme.d.ts`, not on `CanvasHostTheme` in `hooks.d.ts`|Exposed for canvases that read layout tokens from the theme hook|
+|`Pill` `tone`|Deprecated; IDE renders neutral only|Accepts `tone` for older canvases; ignored at render (neutral styling)|
+|`reshapeLineChartData`|Not in IDE `index.d.ts`|Internal helper in `chart-shared.tsx` (not barrel-exported)|
+|Host `brand: grok`|Grok palettes, chart sequence, Sand radii/typography|`resolveTheme` / `useHostTheme`; web defaults to `cursor` + Mantine scheme|
 
 ## Superset
 
@@ -59,10 +59,10 @@ Features beyond the IDE SDK. A canvas using them still renders in Cursor, minus 
 - **Props on SDK components** go under `extra`, which the IDE ignores. Never add superset props at the top level: they could collide with a future SDK prop. (`LineChart` `smooth` is a deprecated top-level alias for `extra.smooth`.)
 - **Native DOM attrs** (`aria-*`, `data-*`, `id`, `className`, …) on primitives are a web-shim superset via `DomForwardProps` in `shim-props.d.ts`. The shim forwards them to the rendered host (Mantine root, or a wrapper `div`/`span` for charts). The IDE still typechecks against the vendored SDK only; extra attrs are ignored there. Conflicting host keys (`Toggle` `size`, `IconButton` `color`, form `defaultValue`/`defaultChecked`) stay SDK-owned.
 
-| Component   | `extra` fields                                                         |
-| ----------- | ---------------------------------------------------------------------- |
-| `BarChart`  | `valueAxis` (Recharts value-axis passthrough: `scale`, `domain`, …), `categoryAxis.width` (horizontal label column) |
-| `LineChart` | `valueAxis`, `smooth`, `stacked` (with `fill`)                         |
+|Component|`extra` fields|
+|---|---|
+|`BarChart`|`valueAxis` (Recharts value-axis passthrough: `scale`, `domain`, …), `categoryAxis.width` (horizontal label column)|
+|`LineChart`|`valueAxis`, `smooth`, `stacked` (with `fill`)|
 
 To add one:
 

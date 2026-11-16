@@ -44,10 +44,10 @@ npm install react react-dom @mantine/core@^8 @mantine/charts@^8 recharts@^2
 
 The package ships two entry points:
 
-| Import                               | Provides                                      |
-| ------------------------------------ | --------------------------------------------- |
-| `@flesler/cursor-canvas-web`         | The `cursor/canvas` shim (components, hooks). |
-| `@flesler/cursor-canvas-web/runtime` | `CanvasRoot` + `mountCanvas` web host glue.   |
+|Import|Provides|
+|---|---|
+|`@flesler/cursor-canvas-web`|The `cursor/canvas` shim (components, hooks).|
+|`@flesler/cursor-canvas-web/runtime`|`CanvasRoot` + `mountCanvas` web host glue.|
 
 ## Use it in your project
 
@@ -176,16 +176,16 @@ npm run build          # typecheck + vite build -> dist/
 
 ### Layout
 
-| Path                               | Role                                                  |
-| ---------------------------------- | ----------------------------------------------------- |
-| `.cursor/canvases/demo.canvas.tsx` | The example canvas; imports **only** `cursor/canvas`. |
-| `src/shim/cursor-canvas.tsx`       | Mantine implementation matching the real SDK API.     |
-| `src/shim/theme.ts`                | Tone→color map + host-theme tokens.                   |
-| `src/runtime/index.tsx`            | Web host glue (`CanvasRoot`, `mountCanvas`).          |
-| `src/main.tsx`                     | Mounts React inside `MantineProvider`.                |
-| `vite.config.ts`                   | `resolve.alias` for `cursor/canvas` + Pages base.     |
-| `vite.lib.config.ts`               | Library build (shim + runtime) for publishing.        |
-| `tsconfig.json`                    | `paths` maps `cursor/canvas` to the shim.             |
+|Path|Role|
+|---|---|
+|`.cursor/canvases/demo.canvas.tsx`|The example canvas; imports **only** `cursor/canvas`.|
+|`src/shim/cursor-canvas.tsx`|Mantine implementation matching the real SDK API.|
+|`src/shim/theme.ts`|Tone→color map + host-theme tokens.|
+|`src/runtime/index.tsx`|Web host glue (`CanvasRoot`, `mountCanvas`).|
+|`src/main.tsx`|Mounts React inside `MantineProvider`.|
+|`vite.config.ts`|`resolve.alias` for `cursor/canvas` + Pages base.|
+|`vite.lib.config.ts`|Library build (shim + runtime) for publishing.|
+|`tsconfig.json`|`paths` maps `cursor/canvas` to the shim.|
 
 ### Extending the shim
 
